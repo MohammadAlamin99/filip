@@ -32,6 +32,24 @@ export interface RecommendedGig {
   seasonal?: boolean;
 }
 
+export interface NewestGig {
+  id: string;
+  title: string;
+  company: string;
+  distance: string;
+  rate: string;
+  date: string;
+  time?: string;
+  duration?: string;
+  tags: string[];
+  spotsLeft?: string;
+  user: {
+    name: string;
+    avatar: any;
+  };
+  bookmarked: boolean;
+}
+
 export const recommendedGigs: RecommendedGig[] = [
   {
     id: '1',
@@ -67,5 +85,40 @@ export const recommendedGigs: RecommendedGig[] = [
       verified: true,
     },
     seasonal: true,
+  },
+];
+
+export const newestGigs: NewestGig[] = [
+  {
+    id: '3',
+    title: 'Catering Staff',
+    company: 'Creative Event',
+    distance: '31 Mi',
+    rate: '€20/Hr',
+    date: 'Sat Oct 26',
+    duration: '2 Days Left',
+    tags: [],
+    spotsLeft: '5 spots left',
+    user: {
+      name: 'John Doe',
+      avatar: require('../../assets/images/user3.png'),
+    },
+    bookmarked: true,
+  },
+  {
+    id: '4',
+    title: 'House Staff',
+    company: 'Burger Joint',
+    distance: '12.2 Mi',
+    rate: '€20/Hr',
+    date: 'Today',
+    time: '5 PM - 11 PM',
+    tags: ['Dishwashing'],
+    spotsLeft: '5 spots left',
+    user: {
+      name: 'Jane Smith',
+      avatar: require('../../assets/images/user4.png'),
+    },
+    bookmarked: true,
   },
 ];
