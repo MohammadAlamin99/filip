@@ -4,14 +4,12 @@ export const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingTop: 16,
-    paddingBottom: 20,
     backgroundColor: '#1a1a1a',
   },
   topRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
   },
   greetingContainer: {
     flexDirection: 'row',

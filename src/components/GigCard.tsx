@@ -61,21 +61,20 @@ const GigCard = ({gig}: GigCardProps): React.JSX.Element => {
             )}
           </View>
         </View>
-
-<View style={styles.bottomRow}>
-  {gig.tags.length > 0 && (
-    <View style={styles.tagsContainer}>
-      {gig.tags.map((tag, index) => (
-        <View key={index} style={styles.tag}>
-          <Text style={styles.tagText}>{tag}</Text>
+        <View style={styles.bottomRow}>
+          {gig.tags.length > 0 && (
+            <View style={styles.tagsContainer}>
+              {gig.tags.map((tag, index) => (
+                <View key={index} style={styles.tag}>
+                  <Text style={styles.tagText}>{tag}</Text>
+                </View>
+              ))}
+            </View>
+          )}
+          {gig.spotsLeft && (
+            <Text style={styles.spotsLeft}>{gig.spotsLeft}</Text>
+          )}
         </View>
-      ))}
-    </View>
-  )}
-  {gig.spotsLeft && (
-    <Text style={styles.spotsLeft}>{gig.spotsLeft}</Text>
-  )}
-</View>
       </View>
     </TouchableOpacity>
   );

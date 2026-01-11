@@ -97,7 +97,7 @@ export const newestGigs: NewestGig[] = [
     rate: '€20/Hr',
     date: 'Sat Oct 26',
     duration: '2 Days Left',
-    tags: [],
+    tags: ['Dishwashing'],
     spotsLeft: '5 spots left',
     user: {
       name: 'John Doe',

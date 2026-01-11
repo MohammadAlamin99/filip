@@ -10,12 +10,10 @@ import {styles} from '../styles/FeedScreenStyles';
 const FeedScreen = (): React.JSX.Element => {
   const insets = useSafeAreaInsets();
 
-  // Dummy data array with single item to use FlatList
   const sections = [{id: 'content'}];
 
   const renderContent = () => (
     <>
-      <Header />
       <RecommendedSection />
       <NewestGigsSection />
     </>
@@ -23,6 +21,7 @@ const FeedScreen = (): React.JSX.Element => {
 
   return (
     <View style={[styles.container, {paddingTop: insets.top}]}>
+      <Header />
       <FlatList
         data={sections}
         renderItem={renderContent}

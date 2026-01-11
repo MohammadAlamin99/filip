@@ -55,15 +55,17 @@ export const styles = StyleSheet.create({
     padding: 4,
   },
   rateBox: {
-    backgroundColor: '#FFD700',
+    backgroundColor: '#1d1d1d',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 6,
+    borderWidth: 0.6,
+    borderColor: '#ffffff',
   },
   rateText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#000',
+    color: '#FFD700',
   },
   dateText: {
     fontSize: 13,
@@ -76,7 +78,7 @@ export const styles = StyleSheet.create({
     marginRight: 8,
   },
   tag: {
-    backgroundColor: '#3a3a3a',
+    backgroundColor: '#1d1d1d',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,

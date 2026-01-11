@@ -1,7 +1,6 @@
 import React from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import SearchBar from './SearchBar';
 import {styles} from '../styles/HeaderStyles';
 import {userData} from '../data/dummyData';
 
@@ -31,8 +30,6 @@ const Header = (): React.JSX.Element => {
           </View>
         </TouchableOpacity>
       </View>
-
-      <SearchBar />
     </View>
   );
 };

@@ -4,6 +4,7 @@ import RecommendedCard from './RecommendedCard';
 import {styles} from '../styles/RecommendedSectionStyles';
 import {recommendedGigs} from '../data/dummyData';
 import type {RecommendedGig} from '../data/dummyData';
+import SearchBar from './SearchBar';
 
 const RecommendedSection = (): React.JSX.Element => {
   const handleSeeAll = () => {
@@ -16,6 +17,7 @@ const RecommendedSection = (): React.JSX.Element => {
 
   return (
     <View style={styles.container}>
+      <SearchBar />
       <View style={styles.header}>
         <Text style={styles.title}>Recommended For You</Text>
         <TouchableOpacity onPress={handleSeeAll} activeOpacity={0.7}>
