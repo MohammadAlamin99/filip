@@ -10,7 +10,7 @@ const COLORS = {
   disabled: '#F3F4F6',
 };
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background },
+  container: { flex: 1, backgroundColor: COLORS.background, paddingBottom: 40 },
   scrollContent: { padding: 20, paddingBottom: 40 },
   header: {
     flexDirection: 'row',

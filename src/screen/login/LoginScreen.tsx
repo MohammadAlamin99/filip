@@ -5,8 +5,10 @@ import { Eye, EyeOff } from 'lucide-react-native';
 import styles from '../login/style';
 import GoogleIcon from '../../components/svg/GoogleIcon';
 import AppleIcon from '../../components/svg/AppleIcon';
+import { useNavigation } from '@react-navigation/native';
 
 const LoginScreen = () => {
+  const navigation = useNavigation<any>();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   return (
@@ -54,7 +56,10 @@ const LoginScreen = () => {
       </TouchableOpacity>
 
       {/* login button */}
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('BottomTabs')}
+      >
         <Text style={styles.loginButton}>Log In</Text>
       </TouchableOpacity>
       <View style={styles.orContinueWrapper}>
