@@ -13,13 +13,11 @@ import Worker from '../../@types/Worker.type';
 import { Bell, Search } from 'lucide-react-native';
 import SparkleIcon from '../../components/svg/SparkelIcon';
 import WorkerCard from '../../components/WorkerCard';
-import { useNavigation } from '@react-navigation/native';
 
 const COLORS = {
   secondaryText: '#9E9E9E',
 };
 const AvailabilityScreen = () => {
-  const navigator = useNavigation<any>();
   const workers: Worker[] = [
     {
       id: '1',
@@ -62,6 +60,10 @@ const AvailabilityScreen = () => {
       image: 'https://i.pravatar.cc/150?u=elena',
     },
   ];
+
+  const handleSendOffers = () => {
+    navigation.navigate('Membership');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -113,10 +115,7 @@ const AvailabilityScreen = () => {
             Post A Verified Shift To Attract Our Highest-Rated Professionals
             Instantly
           </Text>
-          <TouchableOpacity
-            style={styles.premiumBtn}
-            onPress={() => navigator.navigate('membership')}
-          >
+          <TouchableOpacity style={styles.premiumBtn}>
             <Text style={styles.filledBtnText}>Send Offers</Text>
           </TouchableOpacity>
         </View>
