@@ -139,6 +139,18 @@ const PurchaseScreen = () => {
                       <Text style={styles.upgradeButtonText}>Upgrade Now</Text>
                      <ArrowRight />
                   </TouchableOpacity>
+
+                  {/* terms and restore purchase */}
+                  <View style={styles.termsContainer}>
+                      <TouchableOpacity>
+                          <Text style={styles.termsText}>Terms of Service</Text>
+                      </TouchableOpacity>
+                      
+                      <TouchableOpacity>
+                          <Text style={styles.termsText}>Restore Purchase</Text>
+                      </TouchableOpacity>
+
+                  </View>
               
            </View>
       </ScrollView>

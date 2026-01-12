@@ -187,7 +187,20 @@ const styles = StyleSheet.create({
         fontFamily: 'InterDisplayBold',
         fontWeight: 700,
     },
-   
+    termsContainer: {
+        flexDirection: 'row',
+        gap: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 42,
+    },
+    termsText: {
+        color: '#94A3B8',
+        fontSize: 12,
+        fontFamily: 'InterDisplayRegular',
+        fontWeight: 400,
+        lineHeight: 16,
+    }
 
 });
 
