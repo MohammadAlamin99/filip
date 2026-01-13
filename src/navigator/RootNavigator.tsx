@@ -6,6 +6,7 @@ import BottomTabs from './Buttomtabs';
 import MemberShipScreen from '../screen/membership/MemberShipScreen';
 import PurchaseScreen from '../screen/purchase/PurchaseScreen';
 import ChatScreen from '../screen/chat/ChatScreen';
+import ChatDetailScreen from '../screen/chat/ChatDetailScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -16,6 +17,7 @@ export type RootStackParamList = {
   Seasonal: undefined;
   fulltime: undefined;
   chat: undefined;
+  ChatDetailScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -32,6 +34,7 @@ const RootNavigator: React.FC = () => {
       <Stack.Screen name="purchase" component={PurchaseScreen} />
       <Stack.Screen name="fulltime" component={ChatScreen} />
       <Stack.Screen name="chat" component={ChatScreen} />
+      <Stack.Screen name="ChatDetailScreen" component={ChatDetailScreen} />
       <Stack.Screen name="BottomTabs" component={BottomTabs} />
     </Stack.Navigator>
   );

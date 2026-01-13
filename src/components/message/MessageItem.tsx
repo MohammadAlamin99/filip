@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { MessageData } from '../../@types/MessageData.type';
+import { useNavigation } from '@react-navigation/native';
 
 interface MessageItemProps {
   item: MessageData;
 }
 
 const MessageItem: React.FC<MessageItemProps> = React.memo(({ item }) => {
+  const navigation = useNavigation<any>();
   return (
-    <TouchableOpacity style={styles.card} activeOpacity={0.7}>
+    <TouchableOpacity style={styles.card} activeOpacity={0.7} onPress={() => navigation.navigate('ChatDetailScreen', { userId: item.id })}>
       <Image source={{ uri: item.image }} style={styles.avatar} />
       <View style={styles.contentContainer}>
         <View style={styles.row}>
