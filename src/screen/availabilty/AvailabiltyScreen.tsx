@@ -74,9 +74,7 @@ const AvailabilityScreen = () => {
           <View style={styles.notifDot} />
         </View>
       </View>
-
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {/* Search Bar */}
+  {/* Search Bar */}
         <View style={styles.searchContainer}>
           <Search width={24} height={24} color="white" />
           <TextInput
@@ -85,7 +83,7 @@ const AvailabilityScreen = () => {
             style={styles.input}
           />
         </View>
-
+      <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Filters */}
         <View style={styles.filterRow}>
           <TouchableOpacity style={[styles.chip, styles.activeChip]}>

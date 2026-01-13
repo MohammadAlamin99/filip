@@ -87,8 +87,7 @@ const FeedScreen = () => {
           <View style={styles.notifDot} />
         </View>
       </View>
-      <ScrollView>
-        {/* Search Bar */}
+      {/* Search Bar */}
         <View style={styles.searchContainer}>
           <Search width={24} height={24} color="white" />
           <TextInput
@@ -97,7 +96,7 @@ const FeedScreen = () => {
             style={styles.input}
           />
         </View>
-
+      <ScrollView>
         <View style={styles.headerRow}>
           <Text style={styles.sectionTitle}>Recommended For You</Text>
           <TouchableOpacity>
