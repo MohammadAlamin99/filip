@@ -168,7 +168,7 @@ const SeasonAvailabiltyScreen = () => {
         </View>
 
         {item.isLocked ? (
-          <TouchableOpacity style={styles.lockButton}>
+          <TouchableOpacity style={styles.lockButton} onPress={() => navigation.navigate('membership')}>
             <Lock size={18} color="#FFF" />
             <Text style={styles.lockButtonText}>Upgrade To Contact</Text>
           </TouchableOpacity>

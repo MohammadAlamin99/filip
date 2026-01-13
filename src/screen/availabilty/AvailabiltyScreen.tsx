@@ -112,7 +112,7 @@ const AvailabilityScreen = () => {
             Post A Verified Shift To Attract Our Highest-Rated Professionals
             Instantly
           </Text>
-          <TouchableOpacity style={styles.premiumBtn} onPress={() => navigator.navigate('membership')}>
+          <TouchableOpacity style={styles.premiumBtn}>
             <Text style={styles.filledBtnText}>Send Offers</Text>
           </TouchableOpacity>
         </View>
