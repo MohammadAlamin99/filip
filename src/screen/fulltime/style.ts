@@ -70,7 +70,7 @@ export const styles = StyleSheet.create({
   filterScroll: {
     alignItems: 'center',
     height: 90,
-    marginBottom: 10,
+    marginBottom: 24,
   },
   listHeader: {
     flexDirection: 'row',
