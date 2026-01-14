@@ -1,8 +1,8 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#111' },
-  
+
   // Header
   header: {
     flexDirection: 'row',
@@ -13,10 +13,17 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(247, 254, 231, 0.20)',
   },
-    headerLeft: {
+  headerLeft: {
     flexDirection: 'row',
-    alignItems: 'center' },
-    headerAvatar: { width: 36, height: 36, borderRadius: 20, marginHorizontal: 8, objectFit: 'cover' },
+    alignItems: 'center',
+  },
+  headerAvatar: {
+    width: 36,
+    height: 36,
+    borderRadius: 20,
+    marginHorizontal: 8,
+    objectFit: 'cover',
+  },
   headerName: {
     color: '#fff',
     fontSize: 16,
@@ -35,7 +42,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#1D1D1D',
     marginHorizontal: 20,
-    marginTop:12,
+    marginTop: 12,
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderRadius: 12,
@@ -56,15 +63,15 @@ export const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 500,
     fontFamily: 'InterDisplayMedium',
-    fontSize: 16
+    fontSize: 16,
   },
   shiftSubtitle: {
     color: '#F5F5F5',
     fontSize: 12,
     marginTop: 2,
-    fontWeight:400,
+    fontWeight: 400,
     fontFamily: 'InterDisplayMedium',
-    opacity:0.7
+    opacity: 0.7,
   },
 
   // Messages
@@ -75,7 +82,7 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 8,
     fontFamily: 'InterDisplayRegular',
-    fontWeight:400,
+    fontWeight: 400,
   },
   matchText: {
     color: '#fff',
@@ -85,7 +92,7 @@ export const styles = StyleSheet.create({
     fontWeight: 400,
     maxWidth: 210,
   },
-  
+
   otherMessageWrapper: { marginBottom: 20 },
   senderName: {
     color: '#F5F5F5',
@@ -94,7 +101,7 @@ export const styles = StyleSheet.create({
     marginBottom: 8,
     fontFamily: 'InterDisplayRegular',
     fontWeight: 400,
-    opacity:0.8
+    opacity: 0.8,
   },
   otherMessageRow: { flexDirection: 'row', alignItems: 'flex-end' },
   chatAvatar: { width: 35, height: 35, borderRadius: 17.5, marginRight: 10 },
@@ -127,7 +134,7 @@ export const styles = StyleSheet.create({
     marginTop: 4,
     fontFamily: 'InterDisplayRegular',
     fontWeight: 400,
-    opacity:0.82
+    opacity: 0.82,
   },
 
   // Input

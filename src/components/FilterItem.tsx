@@ -1,5 +1,5 @@
-import { StyleSheet, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React from 'react';
 import { ChevronDown } from 'lucide-react-native';
 type FilterItemProps = {
   label: string;
@@ -8,34 +8,22 @@ type FilterItemProps = {
 };
 const FilterItem = ({ label, active, onPress }: FilterItemProps) => {
   return (
- <TouchableOpacity
-      style={[
-        styles.filterBtn,
-        active && styles.filterBtnActive,
-      ]}
+    <TouchableOpacity
+      style={[styles.filterBtn, active && styles.filterBtnActive]}
       activeOpacity={0.8}
       onPress={onPress}
     >
-      <Text
-        style={
-          active
-            ? styles.filterBtnTextActive
-            : styles.filterBtnText
-        }
-      >
+      <Text style={active ? styles.filterBtnTextActive : styles.filterBtnText}>
         {label}
       </Text>
 
-      <ChevronDown
-        size={20}
-        color={active ? '#000' : '#FFF'}
-      />
+      <ChevronDown size={20} color={active ? '#000' : '#FFF'} />
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
-      filterBtn: {
+  filterBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
@@ -46,22 +34,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#2A2A2A',
     gap: 8,
-    },
-      filterBtnTextActive: {
+  },
+  filterBtnTextActive: {
     color: '#000',
     fontWeight: '600',
     marginRight: 5,
-    },
-        filterBtnText: {
+  },
+  filterBtnText: {
     color: '#FFF',
     marginRight: 5,
-    },
-        
+  },
+
   filterBtnActive: {
     backgroundColor: '#FFD900',
   },
+});
 
-})
-
-export default FilterItem
-
+export default FilterItem;

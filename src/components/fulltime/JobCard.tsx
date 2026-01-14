@@ -1,12 +1,6 @@
 import { Banknote, Bookmark, Clock, MapPin } from 'lucide-react-native';
 import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 interface JobCardProps {
   job: {
@@ -22,22 +16,40 @@ interface JobCardProps {
 }
 
 // Sub-component for the small info tags (Location, Salary, Type)
-const InfoTag = ({ text, iconType }: { text: string; iconType: 'location' | 'salary' | 'time' }) => {
+const InfoTag = ({
+  text,
+  iconType,
+}: {
+  text: string;
+  iconType: 'location' | 'salary' | 'time';
+}) => {
   const getIcon = () => {
-    if (iconType === 'location') return <MapPin width={16} height={16} color="white" />;
-    if (iconType === 'salary') return <Banknote width={16} height={16} color="white" />;
+    if (iconType === 'location')
+      return <MapPin width={16} height={16} color="white" />;
+    if (iconType === 'salary')
+      return <Banknote width={16} height={16} color="white" />;
     return <Clock width={16} height={16} color="white" />;
   };
 
   return (
-    <View style={[styles.tagContainer, iconType === 'salary' && styles.salaryTag]}>
+    <View
+      style={[styles.tagContainer, iconType === 'salary' && styles.salaryTag]}
+    >
       <Text style={styles.tagIcon}>{getIcon()}</Text>
-      <Text style={[styles.tagText, iconType === 'salary' && styles.salaryText]}>{text}</Text>
+      <Text
+        style={[styles.tagText, iconType === 'salary' && styles.salaryText]}
+      >
+        {text}
+      </Text>
     </View>
   );
 };
 
-export const JobCard: React.FC<JobCardProps> = ({ job, onApply, onBookmark }) => {
+export const JobCard: React.FC<JobCardProps> = ({
+  job,
+  onApply,
+  onBookmark,
+}) => {
   return (
     <View style={styles.card}>
       {/* Header Row: Image, Title, and Bookmark */}
@@ -50,7 +62,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onApply, onBookmark }) =>
           </View>
         </View>
         <TouchableOpacity onPress={onBookmark}>
-           <Bookmark width={24} height={24} color="white" />
+          <Bookmark width={24} height={24} color="white" />
         </TouchableOpacity>
       </View>
 
@@ -77,8 +89,8 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#121212',
     borderRadius: 16,
-    paddingHorizontal:18,
-    paddingVertical:12,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
     marginBottom: 16,
     borderWidth: 1,
     borderColor: 'rgba(245, 245, 245, 0.07)',
@@ -96,20 +108,20 @@ const styles = StyleSheet.create({
   avatar: {
     width: 56,
     height: 56,
-      borderRadius: 12,
+    borderRadius: 12,
     objectFit: 'cover',
     marginRight: 12,
   },
   jobTitle: {
     color: '#FFFFFF',
     fontSize: 18,
-      fontWeight: 700,
+    fontWeight: 700,
     fontFamily: 'InterDisplayBold',
   },
   companyName: {
     color: '#fff',
     fontSize: 14,
-      marginTop: 2,
+    marginTop: 2,
     fontFamily: 'InterDisplayRegular',
     fontWeight: 400,
   },
@@ -158,7 +170,7 @@ const styles = StyleSheet.create({
     color: '#1F2937',
     fontSize: 16,
     fontWeight: 500,
-      fontFamily: 'InterDisplayMedium',
+    fontFamily: 'InterDisplayMedium',
     lineHeight: 24,
   },
 });

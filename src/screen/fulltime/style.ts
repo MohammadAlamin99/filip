@@ -46,7 +46,7 @@ export const styles = StyleSheet.create({
     gap: 12,
   },
   searchContainer: {
-    width:width * 0.78 -12,
+    width: width * 0.78 - 12,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#1A1A1A',
@@ -64,7 +64,6 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: 'rgba(249, 250, 251, 0.10)',
-
   },
 
   filterScroll: {
@@ -97,6 +96,4 @@ export const styles = StyleSheet.create({
     fontWeight: 500,
     lineHeight: 20,
   },
-
-  
 });

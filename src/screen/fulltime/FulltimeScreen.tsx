@@ -82,11 +82,11 @@ const MOCK_JOBS = [
 const FulltimeScreen = () => {
   const [filters, setFilters] = useState<Filter[]>(INITIAL_FILTERS);
   const onFilterPress = useCallback((id: string) => {
-    setFilters((prev) =>
-      prev.map((item) => ({
+    setFilters(prev =>
+      prev.map(item => ({
         ...item,
         active: item.id === id,
-      }))
+      })),
     );
   }, []);
   const renderFilterItem: ListRenderItem<Filter> = useCallback(
@@ -97,7 +97,7 @@ const FulltimeScreen = () => {
         onPress={() => onFilterPress(item.id)}
       />
     ),
-    [onFilterPress]
+    [onFilterPress],
   );
 
   return (
@@ -134,7 +134,7 @@ const FulltimeScreen = () => {
         data={filters}
         horizontal
         renderItem={renderFilterItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.filterScroll}
         removeClippedSubviews
@@ -142,7 +142,7 @@ const FulltimeScreen = () => {
         maxToRenderPerBatch={5}
         windowSize={5}
       />
-        <View style={styles.listHeader}>
+      <View style={styles.listHeader}>
         <Text style={styles.countText}>24 Available Candidate</Text>
         <TouchableOpacity style={styles.sortRow}>
           <Text style={styles.sortText}>Sort by</Text>
@@ -152,16 +152,15 @@ const FulltimeScreen = () => {
       {/* job apply list */}
       <FlatList
         data={MOCK_JOBS}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
         renderItem={({ item }) => (
-          <JobCard 
-            job={item} 
+          <JobCard
+            job={item}
             onApply={() => console.log(`Applying for ${item.title}`)}
           />
         )}
       />
     </SafeAreaView>
-    
   );
 };
 

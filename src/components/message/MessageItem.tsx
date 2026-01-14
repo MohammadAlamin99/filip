@@ -10,7 +10,13 @@ interface MessageItemProps {
 const MessageItem: React.FC<MessageItemProps> = React.memo(({ item }) => {
   const navigation = useNavigation<any>();
   return (
-    <TouchableOpacity style={styles.card} activeOpacity={0.7} onPress={() => navigation.navigate('ChatDetailScreen', { userId: item.id })}>
+    <TouchableOpacity
+      style={styles.card}
+      activeOpacity={0.7}
+      onPress={() =>
+        navigation.navigate('ChatDetailScreen', { userId: item.id })
+      }
+    >
       <Image source={{ uri: item.image }} style={styles.avatar} />
       <View style={styles.contentContainer}>
         <View style={styles.row}>
@@ -24,7 +30,9 @@ const MessageItem: React.FC<MessageItemProps> = React.memo(({ item }) => {
               {item.status}
             </Text>
           </View>
-          {item.role !== '' && <Text style={styles.roleText}> • {item.role}</Text>}
+          {item.role !== '' && (
+            <Text style={styles.roleText}> • {item.role}</Text>
+          )}
         </View>
 
         <Text numberOfLines={1} style={styles.messageSnippet}>
@@ -42,9 +50,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#1E1E1E',
     borderRadius: 16,
     flexDirection: 'row',
-        marginBottom: 12,
-        paddingHorizontal: 15,
-    paddingVertical:8,
+    marginBottom: 12,
+    paddingHorizontal: 15,
+    paddingVertical: 8,
   },
   avatar: {
     width: 56,
@@ -83,29 +91,29 @@ const styles = StyleSheet.create({
   badge: {
     paddingHorizontal: 10,
     paddingVertical: 4,
-      borderRadius: 8,
+    borderRadius: 8,
     borderWidth: 1,
-      borderColor: '#383119',
+    borderColor: '#383119',
     backgroundColor: '#383119',
   },
-    badgeText: {
-      color:'#fff',
+  badgeText: {
+    color: '#fff',
     fontSize: 14,
     fontWeight: 400,
-      fontFamily: 'InterDisplayRegular',
+    fontFamily: 'InterDisplayRegular',
   },
   roleText: {
     color: '#fff',
     fontSize: 13,
-      marginLeft: 4,
-     fontWeight: 400,
-      fontFamily: 'InterDisplayRegular',
+    marginLeft: 4,
+    fontWeight: 400,
+    fontFamily: 'InterDisplayRegular',
   },
   messageSnippet: {
     color: '#fff',
     fontSize: 14,
     marginTop: 12,
-     fontWeight: 400,
-      fontFamily: 'InterDisplayRegular',
+    fontWeight: 400,
+    fontFamily: 'InterDisplayRegular',
   },
 });

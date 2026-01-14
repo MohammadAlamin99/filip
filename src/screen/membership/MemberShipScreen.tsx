@@ -11,7 +11,6 @@ import { useNavigation } from '@react-navigation/native';
 import styles from './style';
 import { ArrowLeft, Check } from 'lucide-react-native';
 
-
 const MemberShipScreen = () => {
   const navigation = useNavigation<any>();
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>(

@@ -36,7 +36,8 @@ const DATA: MessageData[] = [
     statusTextColor: '#86b33e',
     message: 'Shift Confirmed For Saturday, Please...',
     time: '1h Ago',
-    image: 'https://images.unsplash.com/photo-1551882547-ff43c63efe81?auto=format&fit=crop&w=100&q=80',
+    image:
+      'https://images.unsplash.com/photo-1551882547-ff43c63efe81?auto=format&fit=crop&w=100&q=80',
   },
   {
     id: '3',
@@ -120,19 +121,19 @@ const ChatScreen: React.FC = () => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
-         <ChevronLeft width={24} height={24} color="white" />
+          <ChevronLeft width={24} height={24} color="white" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Messages</Text>
       </View>
       {/* Search Bar */}
-        <View style={styles.searchContainer}>
-          <Search width={24} height={24} color="white" />
-          <TextInput
-            placeholder="Search"
-            placeholderTextColor='#9E9E9E'
-            style={styles.input}
-          />
-        </View>
+      <View style={styles.searchContainer}>
+        <Search width={24} height={24} color="white" />
+        <TextInput
+          placeholder="Search"
+          placeholderTextColor="#9E9E9E"
+          style={styles.input}
+        />
+      </View>
 
       {/* Tabs */}
       {/* <View style={styles.tabContainer}>
@@ -165,4 +166,3 @@ const ChatScreen: React.FC = () => {
 };
 
 export default ChatScreen;
-

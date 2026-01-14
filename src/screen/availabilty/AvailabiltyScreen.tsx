@@ -74,23 +74,25 @@ const AvailabilityScreen = () => {
           <View style={styles.notifDot} />
         </View>
       </View>
-  {/* Search Bar */}
-        <View style={styles.searchContainer}>
-          <Search width={24} height={24} color="white" />
-          <TextInput
-            placeholder="Search"
-            placeholderTextColor={COLORS.secondaryText}
-            style={styles.input}
-          />
-        </View>
+      {/* Search Bar */}
+      <View style={styles.searchContainer}>
+        <Search width={24} height={24} color="white" />
+        <TextInput
+          placeholder="Search"
+          placeholderTextColor={COLORS.secondaryText}
+          style={styles.input}
+        />
+      </View>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Filters */}
         <View style={styles.filterRow}>
           <TouchableOpacity style={[styles.chip, styles.activeChip]}>
             <Text style={styles.activeChipText}>Anytime</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.chip}
-          onPress={() => navigator.navigate('Seasonal')}>
+          <TouchableOpacity
+            style={styles.chip}
+            onPress={() => navigator.navigate('Seasonal')}
+          >
             <Text style={styles.chipText}>Seasonal</Text>
           </TouchableOpacity>
         </View>

@@ -27,10 +27,7 @@ const ChatMessageItem: React.FC<ChatMessageItemProps> = ({ message }) => {
 
       <View style={styles.otherMessageRow}>
         {message.avatar && (
-          <Image
-            source={{ uri: message.avatar }}
-            style={styles.chatAvatar}
-          />
+          <Image source={{ uri: message.avatar }} style={styles.chatAvatar} />
         )}
 
         <View style={styles.otherBubble}>

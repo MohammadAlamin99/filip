@@ -13,14 +13,8 @@ const Stack = createNativeStackNavigator<FindJobsStackParamList>();
 const FindJobsStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen
-        name="FindJobsHome"
-        component={AvailabilityScreen}
-      />
-      <Stack.Screen
-        name="Seasonal"
-        component={SeasonAvailabiltyScreen}
-      />
+      <Stack.Screen name="FindJobsHome" component={AvailabilityScreen} />
+      <Stack.Screen name="Seasonal" component={SeasonAvailabiltyScreen} />
     </Stack.Navigator>
   );
 };
