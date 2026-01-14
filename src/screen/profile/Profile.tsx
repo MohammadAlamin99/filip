@@ -38,7 +38,7 @@ const Profile = () => {
       label: 'Credit',
       icon: Gem,
       onPress: () => {
-        navigation.navigate('Credits');
+        navigation.navigate('credit');
       },
     },
     {
