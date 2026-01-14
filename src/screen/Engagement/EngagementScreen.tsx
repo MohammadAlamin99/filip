@@ -11,8 +11,8 @@ import { ArrowLeft, Clock4 } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from './style';
 
-import TrophyIcon from '../../components/svg/glass';
-import BadgeIcon from '../../components/svg/eventsentry';
+import TrophyIcon from '../../components/svg/TrophyIcon';
+import BadgeIcon from '../../components/svg/BadgeIcon';
 
 const EngagementScreen = () => {
   const navigation = useNavigation();
