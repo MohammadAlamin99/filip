@@ -89,20 +89,12 @@ const CANDIDATES: Candidate[] = [
     isLocked: false,
   },
 ];
-
-/* =======================
-   Screen
-======================= */
 const SeasonAvailabiltyScreen = () => {
   const navigation = useNavigation<any>();
 
   const handleBack = () => {
     navigation.goBack();
   };
-
-  /* =======================
-     Candidate Card Renderer
-  ======================= */
   const renderCandidate = (item: Candidate) => (
     <View style={styles.card}>
       <Image source={{ uri: item.image }} style={styles.candidateImage} />
@@ -183,10 +175,6 @@ const SeasonAvailabiltyScreen = () => {
       </View>
     </View>
   );
-
-  /* =======================
-     JSX
-  ======================= */
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />

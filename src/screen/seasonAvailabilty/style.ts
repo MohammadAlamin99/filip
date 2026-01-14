@@ -77,6 +77,8 @@ export const styles = StyleSheet.create({
   listHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 24,
+    marginTop: 20,
   },
   countText: {
     color: '#FFF',
