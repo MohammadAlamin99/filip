@@ -17,7 +17,6 @@ import {
   Info, 
   Coffee, 
   Plus, 
-  SendHorizonal, 
   Send
 } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
