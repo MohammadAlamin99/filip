@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, TextInput, View, TouchableOpacity } from 'react-native';
+import { Text, TextInput, View, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Eye, EyeOff } from 'lucide-react-native';
 import styles from '../login/style';
@@ -13,7 +13,8 @@ const LoginScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>
+      <ScrollView>
+        <Text style={styles.title}>
         Welcome to <Text style={styles.span}>GoldShift</Text>
       </Text>
       <Text style={styles.subtext}>
@@ -85,6 +86,7 @@ const LoginScreen = () => {
           <Text style={styles.textStyle_text}>Sign up</Text>
         </TouchableOpacity>
       </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

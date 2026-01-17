@@ -2,6 +2,12 @@ import { StyleSheet } from 'react-native';
 
 const bgColor = '#111';
 const buttonColor = '#FFD900';
+const inter = 'Inter_24pt-Bold';
+const interDisplayBlack = 'InterDisplay-ExtraBold';
+const interDisplayMedium = 'InterDisplay-Medium';
+const interDisplayRegular = 'InterDisplay-Regular';
+const interDisplayThin = 'InterDisplay-Thin';
+const interDisplayBold = 'InterDisplay-Bold';
 
 const styles = StyleSheet.create({
   signupContainer: {
@@ -12,13 +18,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: bgColor,
     paddingHorizontal: 20,
-    paddingTop: 40,
-    justifyContent: 'center',
+    paddingTop: 60,
   },
   SignupTittle: {
     fontSize: 24,
     fontWeight: 500,
-    fontFamily: 'InterDisplayMedium',
+    fontFamily: interDisplayMedium,
     textAlign: 'center',
     marginBottom: 32,
     color: 'white',
@@ -26,7 +31,7 @@ const styles = StyleSheet.create({
   title: {
     color: '#fff',
     fontSize: 32,
-    fontFamily: 'InterDisplayBold',
+    fontFamily: inter,
     fontWeight: 700,
     textAlign: 'center',
     marginBottom: 8,
@@ -36,11 +41,14 @@ const styles = StyleSheet.create({
   },
   span: {
     fontStyle: 'italic',
+    fontWeight:900,
+    fontFamily:interDisplayBlack,
   },
 
   subtext: {
     color: '#9CA3AF',
-    fontFamily: 'InterDisplayRegular',
+    fontFamily: interDisplayRegular,
+    fontWeight:400,
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 64,
@@ -52,7 +60,8 @@ const styles = StyleSheet.create({
 
   label: {
     color: '#E5E7EB',
-    fontFamily: 'InterDisplayMedium',
+    fontFamily: interDisplayMedium,
+    fontWeight:500, 
     fontSize: 14,
     marginBottom: 8,
   },
@@ -63,7 +72,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingHorizontal: 20,
     paddingVertical: 14,
-    fontFamily: 'InterDisplayRegular',
+    fontFamily: interDisplayThin,
+    fontWeight:300,
     fontSize: 14,
     color: '#fff',
     marginBottom: 16,
@@ -81,7 +91,8 @@ const styles = StyleSheet.create({
   passwordInput: {
     flex: 1,
     paddingVertical: 14,
-    fontFamily: 'InterDisplayRegular',
+    fontFamily: interDisplayThin,
+    fontWeight:300,
     fontSize: 14,
     color: '#fff',
   },
@@ -91,7 +102,7 @@ const styles = StyleSheet.create({
   },
   forgetPassText: {
     color: '#FFD900',
-    fontFamily: 'InterDisplayRegular',
+    fontFamily: interDisplayRegular,
     fontSize: 14,
     fontWeight: 400,
     textAlign: 'right',
@@ -100,7 +111,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     color: '#1F2937',
-    fontFamily: 'InterDisplayBold',
+    fontFamily: interDisplayBold,
     fontSize: 16,
     fontWeight: 700,
   },
@@ -115,7 +126,8 @@ const styles = StyleSheet.create({
   },
   orContinue: {
     color: '#fff',
-    fontFamily: 'InterDisplayMedium',
+    fontFamily: interDisplayMedium,
+    fontWeight:500,
     fontSize: 14,
   },
   lineBar: {
@@ -153,13 +165,13 @@ const styles = StyleSheet.create({
   },
   googleText: {
     color: '#fff',
-    fontFamily: 'InterDisplayMedium',
+    fontFamily: interDisplayMedium,
     fontSize: 16,
     fontWeight: 500,
   },
   dontText: {
     color: '#9CA3AF',
-    fontFamily: 'InterDisplayRegular',
+    fontFamily: interDisplayRegular,
     fontSize: 16,
     fontWeight: 400,
   },
@@ -208,7 +220,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     flex: 1,
     fontSize: 12,
-    fontFamily: 'InterDisplayRegular',
+    fontFamily: interDisplayRegular,
     fontWeight: 400,
     maxWidth: 280,
     lineHeight: 16,
