@@ -122,7 +122,8 @@ const ChatDetailScreen = () => {
 
       {/* --- CHAT AREA --- */}
   <FlatList
-  data={MESSAGES}
+        data={MESSAGES}
+        showsVerticalScrollIndicator={false}
   keyExtractor={(item) => item.id}
   renderItem={({ item }) => (
     <ChatMessageItem message={item} />

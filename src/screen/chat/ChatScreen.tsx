@@ -4,8 +4,8 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  ScrollView,
   StatusBar,
+  FlatList,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MessageItem from '../../components/message/MessageItem';
@@ -98,22 +98,6 @@ const DATA: MessageData[] = [
 
 const ChatScreen: React.FC = () => {
   const navigation = useNavigation<any>();
-  // const [activeTab, setActiveTab] = useState<string>('All');
-  // const [searchText, setSearchText] = useState<string>('');
-
-  // Filter messages based on tab + search text
-  // const filteredData = DATA.filter(item => {
-  //   const matchTab =
-  //     activeTab === 'All'
-  //       ? true
-  //       : activeTab === 'Employers'
-  //       ? item.role !== ''
-  //       : item.role === '';
-
-  //   const matchSearch = item.name.toLowerCase().includes(searchText.toLowerCase());
-
-  //   return matchTab && matchSearch;
-  // });
 
   return (
     <SafeAreaView style={styles.container}>
@@ -135,32 +119,17 @@ const ChatScreen: React.FC = () => {
         />
       </View>
 
-      {/* Tabs */}
-      {/* <View style={styles.tabContainer}>
-        {['All', 'Employers', 'Workers'].map(tab => (
-          <TouchableOpacity
-            key={tab}
-            onPress={() => setActiveTab(tab)}
-            style={[styles.tab, activeTab === tab && styles.activeTab]}
-          >
-            <Text
-              style={[styles.tabText, activeTab === tab && styles.activeTabText]}
-            >
-              {tab}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View> */}
 
       {/* Message list */}
-      <ScrollView
+      <FlatList
+        data={DATA}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <MessageItem key={item.id} item={item} />
+        )}
         contentContainerStyle={styles.listPadding}
         showsVerticalScrollIndicator={false}
-      >
-        {DATA.map(item => (
-          <MessageItem key={item.id} item={item} />
-        ))}
-      </ScrollView>
+      />
     </SafeAreaView>
   );
 };

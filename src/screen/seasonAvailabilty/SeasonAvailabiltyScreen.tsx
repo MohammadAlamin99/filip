@@ -1,47 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
-  Image,
-  ScrollView,
+  FlatList,
   StatusBar,
 } from 'react-native';
-import {
-  ArrowLeft,
-  Bell,
-  Search,
-  ChevronDown,
-  MapPin,
-  Calendar,
-  Lock,
-  SendHorizontal,
-} from 'lucide-react-native';
+import { ArrowLeft, Bell, Search, ChevronDown } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
 import { styles } from './style';
-
-/* =======================
-   Types
-======================= */
-interface Candidate {
-  id: string;
-  name: string;
-  avatar: string;
-  location: string;
-  image: string;
-  status: 'Available' | 'Starts Soon';
-  statusText: string;
-  tags: string[];
-  availabilityType: string;
-  dates: string;
-  isLocked: boolean;
-}
-
-/* =======================
-   Data
-======================= */
+import { useNavigation } from '@react-navigation/native';
+import CandidateCard, { Candidate } from '../../components/findjob/CandidateCard';
 const CANDIDATES: Candidate[] = [
   {
     id: '1',
@@ -89,92 +59,19 @@ const CANDIDATES: Candidate[] = [
     isLocked: false,
   },
 ];
-const SeasonAvailabiltyScreen = () => {
+
+const SeasonAvailabilityScreen = () => {
   const navigation = useNavigation<any>();
+  const [search, setSearch] = useState('');
 
   const handleBack = () => {
     navigation.goBack();
   };
-  const renderCandidate = (item: Candidate) => (
-    <View style={styles.card}>
-      <Image source={{ uri: item.image }} style={styles.candidateImage} />
 
-      <View
-        style={[
-          styles.statusBadge,
-          item.status === 'Available' ? styles.statusYellow : styles.statusDark,
-        ]}
-      >
-        <View
-          style={[
-            styles.dot,
-            {
-              backgroundColor:
-                item.status === 'Available' ? '#F59E0B' : '#4ADE80',
-            },
-          ]}
-        />
-        <Text
-          style={[
-            styles.statusText,
-            { color: item.status === 'Available' ? '#000' : '#FFF' },
-          ]}
-        >
-          {item.statusText}
-        </Text>
-      </View>
-
-      <View style={styles.profileRow}>
-        <Image source={{ uri: item.image }} style={styles.avatarPlaceholder} />
-        <View>
-          <Text style={styles.candidateName}>{item.name}</Text>
-          <View style={styles.locationRow}>
-            <MapPin size={12} color="#FFF" />
-            <Text style={styles.locationText}>{item.location}</Text>
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.cardContent}>
-        <View style={styles.tagContainer}>
-          {item.tags.map((tag, index) => (
-            <View key={index} style={styles.tag}>
-              <Text style={styles.tagText}>{tag}</Text>
-            </View>
-          ))}
-        </View>
-
-        <View style={styles.availabilityRow}>
-          <Calendar size={24} color="#FFF" />
-          <View>
-            <Text style={styles.availabilityTitle}>
-              {item.availabilityType}
-            </Text>
-            <Text style={styles.availabilityDates}>{item.dates}</Text>
-          </View>
-        </View>
-
-        {item.isLocked ? (
-          <TouchableOpacity
-            style={styles.lockButton}
-            onPress={() => navigation.navigate('membership')}
-          >
-            <Lock size={18} color="#FFF" />
-            <Text style={styles.lockButtonText}>Upgrade To Contact</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            style={styles.engageButton}
-            onPress={() => navigation.navigate('chat')}
-          >
-            <Text style={styles.engageButtonText}>Engage Candidate</Text>
-
-            <SendHorizontal width={18} height={18} color="#1F2937" />
-          </TouchableOpacity>
-        )}
-      </View>
-    </View>
+  const filteredCandidates = CANDIDATES.filter(candidate =>
+    candidate.name.toLowerCase().includes(search.toLowerCase())
   );
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -200,38 +97,48 @@ const SeasonAvailabiltyScreen = () => {
           placeholder="Search"
           placeholderTextColor="#9CA3AF"
           style={styles.input}
+          value={search}
+          onChangeText={setSearch}
         />
       </View>
 
       {/* Filters */}
-      <ScrollView
+      <FlatList
         horizontal
         showsHorizontalScrollIndicator={false}
+        data={[
+          { label: 'Position' },
+          { label: 'Availability' },
+          { label: 'Location' },
+        ]}
+        keyExtractor={item => item.label}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={[
+              styles.filterBtn,
+              item.label === 'Position' && styles.filterBtnActive,
+            ]}
+          >
+            <Text
+              style={
+                item.label === 'Position'
+                  ? styles.filterBtnTextActive
+                  : styles.filterBtnText
+              }
+            >
+              {item.label}
+            </Text>
+            <ChevronDown size={20} color={item.label === 'Position' ? '#000' : '#FFF'} />
+          </TouchableOpacity>
+        )}
         contentContainerStyle={styles.filterScroll}
-      >
-        <TouchableOpacity style={[styles.filterBtn, styles.filterBtnActive]}>
-          <Text style={styles.filterBtnTextActive}>Position</Text>
-          <ChevronDown size={20} color="#000" />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.filterBtn}>
-          <Text style={styles.filterBtnText}>Period</Text>
-          <ChevronDown size={20} color="#FFF" />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.filterBtn}>
-          <Text style={styles.filterBtnText}>Location</Text>
-          <ChevronDown size={20} color="#FFF" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.filterBtn}>
-          <Text style={styles.filterBtnText}>Period</Text>
-          <ChevronDown size={20} color="#FFF" />
-        </TouchableOpacity>
-      </ScrollView>
+      />
 
       {/* List Header */}
       <View style={styles.listHeader}>
-        <Text style={styles.countText}>24 Available Candidate</Text>
+        <Text style={styles.countText}>
+          {filteredCandidates.length} Available Candidate
+        </Text>
         <TouchableOpacity style={styles.sortRow}>
           <Text style={styles.sortText}>Sort by</Text>
           <ChevronDown size={14} color="#FFD700" />
@@ -239,16 +146,15 @@ const SeasonAvailabiltyScreen = () => {
       </View>
 
       {/* Candidate List */}
-      <ScrollView
+      <FlatList
+        data={filteredCandidates}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => <CandidateCard candidate={item} />}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
-      >
-        {CANDIDATES.map(candidate => (
-          <View key={candidate.id}>{renderCandidate(candidate)}</View>
-        ))}
-      </ScrollView>
+      />
     </SafeAreaView>
   );
 };
 
-export default SeasonAvailabiltyScreen;
+export default SeasonAvailabilityScreen;

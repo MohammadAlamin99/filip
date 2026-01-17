@@ -153,6 +153,7 @@ const FulltimeScreen = () => {
       <FlatList
         data={MOCK_JOBS}
         keyExtractor={item => item.id}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <JobCard
             job={item}

@@ -69,7 +69,7 @@ const AvailabilityScreen = () => {
       <FlatList
         data={workers}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <WorkerCard worker={item} />}
+        renderItem={({ item }) => <WorkerCard worker={item} onPress={() => navigation.navigate('sendoffer')} />}
         ListHeaderComponent={
           <>
             <AvailabilityFilters
