@@ -10,11 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import styles from './style';
-import {
-  Bell,
-  Bookmark,
-  Search,
-} from 'lucide-react-native';
+import { Bell, Bookmark, Search } from 'lucide-react-native';
 import MainDrawer from '../../components/feed/MainDrawer';
 import Gig from '../../components/feed/Gig';
 
@@ -25,8 +21,6 @@ const COLORS = {
 const Drawer = createDrawerNavigator();
 
 const FeedContent = ({ navigation }: any) => {
-
-
   const GIGS_DATA = [
     {
       id: '1',
@@ -83,44 +77,42 @@ const FeedContent = ({ navigation }: any) => {
       </View>
 
       <FlatList
-  data={GIGS_DATA}
-  keyExtractor={(item) => item.id}
-  ListHeaderComponent={<Gig />}
-  renderItem={({ item: gig }) => (
-    <View style={styles.gigCard}>
-      <View style={styles.row}>
-        <Image source={{ uri: gig.avatar }} style={styles.gigAvatar} />
+        data={GIGS_DATA}
+        keyExtractor={item => item.id}
+        ListHeaderComponent={<Gig />}
+        renderItem={({ item: gig }) => (
+          <View style={styles.gigCard}>
+            <View style={styles.row}>
+              <Image source={{ uri: gig.avatar }} style={styles.gigAvatar} />
 
-        <View style={styles.gigInfo}>
-          <View style={styles.rowBetween}>
-            <Text style={styles.gigTitle}>{gig.title}</Text>
-            <Bookmark width={24} height={24} color="#fff" />
-          </View>
+              <View style={styles.gigInfo}>
+                <View style={styles.rowBetween}>
+                  <Text style={styles.gigTitle}>{gig.title}</Text>
+                  <Bookmark width={24} height={24} color="#fff" />
+                </View>
 
-          <Text style={styles.locationText_gig}>{gig.company}</Text>
+                <Text style={styles.locationText_gig}>{gig.company}</Text>
 
-          <View style={styles.rowBetween}>
-            <View style={styles.priceChip}>
-              <Text style={styles.priceChipText}>{gig.price}</Text>
+                <View style={styles.rowBetween}>
+                  <View style={styles.priceChip}>
+                    <Text style={styles.priceChipText}>{gig.price}</Text>
+                  </View>
+                  <Text style={styles.gigTime}>{gig.time}</Text>
+                </View>
+
+                {gig.tags && (
+                  <View style={styles.tag}>
+                    <Text style={styles.tagText}>{gig.tags[0]}</Text>
+                  </View>
+                )}
+
+                {gig.spots && <Text style={styles.spotsText}>{gig.spots}</Text>}
+              </View>
             </View>
-            <Text style={styles.gigTime}>{gig.time}</Text>
           </View>
-
-          {gig.tags && (
-            <View style={styles.tag}>
-              <Text style={styles.tagText}>{gig.tags[0]}</Text>
-            </View>
-          )}
-
-          {gig.spots && (
-            <Text style={styles.spotsText}>{gig.spots}</Text>
-          )}
-        </View>
-      </View>
-    </View>
-  )}
-  showsVerticalScrollIndicator={false}
-/>
+        )}
+        showsVerticalScrollIndicator={false}
+      />
 
       {/* </ScrollView> */}
     </SafeAreaView>

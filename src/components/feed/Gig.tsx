@@ -1,9 +1,9 @@
-import { View, Text, TouchableOpacity, FlatList } from 'react-native'
-import React from 'react'
+import { View, Text, TouchableOpacity, FlatList } from 'react-native';
+import React from 'react';
 import styles from '../../screen/feed/style';
 import FeedCard from './FeedCard';
 const Gig = () => {
-      const RECOMMENDED_DATA = [
+  const RECOMMENDED_DATA = [
     {
       id: '1',
       name: 'Micheal J.',
@@ -32,23 +32,23 @@ const Gig = () => {
   ];
   return (
     <View>
-    <View style={styles.headerRow}>
-      <Text style={styles.sectionTitle}>Recommended For You</Text>
-      <TouchableOpacity>
-        <Text style={styles.seeAllText}>See All</Text>
-      </TouchableOpacity>
+      <View style={styles.headerRow}>
+        <Text style={styles.sectionTitle}>Recommended For You</Text>
+        <TouchableOpacity>
+          <Text style={styles.seeAllText}>See All</Text>
+        </TouchableOpacity>
+      </View>
+
+      <FlatList
+        data={RECOMMENDED_DATA}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => <FeedCard item={item} />}
+        showsVerticalScrollIndicator={false}
+      />
+
+      <Text style={styles.sectionTitle}>Newest Gigs</Text>
     </View>
+  );
+};
 
-    <FlatList
-      data={RECOMMENDED_DATA}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => <FeedCard item={item} />}
-      showsVerticalScrollIndicator={false}
-    />
-
-    <Text style={styles.sectionTitle}>Newest Gigs</Text>
-  </View>
-  )
-}
-
-export default Gig
+export default Gig;

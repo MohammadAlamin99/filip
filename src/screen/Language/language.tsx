@@ -26,20 +26,61 @@ const LanguageScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const languages: Language[] = [
-    { code: 'RS', name: 'Srpski', flag: require('../../../assets/images/rs.png') },
-    { code: 'GB', name: 'English', flag: require('../../../assets/images/gb.png'), isDefault: true },
-    { code: 'FR', name: 'Français', flag: require('../../../assets/images/fr.png') },
-    { code: 'DE', name: 'Deutsch', flag: require('../../../assets/images/de.png') },
-    { code: 'PL', name: 'Polski', flag: require('../../../assets/images/pl.png') },
-    { code: 'TR', name: 'Türkçe', flag: require('../../../assets/images/tr.png') },
-    { code: 'IT', name: 'Italiano', flag: require('../../../assets/images/it.png') },
-    { code: 'ES', name: 'Español', flag: require('../../../assets/images/es.png') },
-    { code: 'PT', name: 'Português', flag: require('../../../assets/images/pt.png') },
-    { code: 'RU', name: 'Русский', flag: require('../../../assets/images/ru.png') },
+    {
+      code: 'RS',
+      name: 'Srpski',
+      flag: require('../../../assets/images/rs.png'),
+    },
+    {
+      code: 'GB',
+      name: 'English',
+      flag: require('../../../assets/images/gb.png'),
+      isDefault: true,
+    },
+    {
+      code: 'FR',
+      name: 'Français',
+      flag: require('../../../assets/images/fr.png'),
+    },
+    {
+      code: 'DE',
+      name: 'Deutsch',
+      flag: require('../../../assets/images/de.png'),
+    },
+    {
+      code: 'PL',
+      name: 'Polski',
+      flag: require('../../../assets/images/pl.png'),
+    },
+    {
+      code: 'TR',
+      name: 'Türkçe',
+      flag: require('../../../assets/images/tr.png'),
+    },
+    {
+      code: 'IT',
+      name: 'Italiano',
+      flag: require('../../../assets/images/it.png'),
+    },
+    {
+      code: 'ES',
+      name: 'Español',
+      flag: require('../../../assets/images/es.png'),
+    },
+    {
+      code: 'PT',
+      name: 'Português',
+      flag: require('../../../assets/images/pt.png'),
+    },
+    {
+      code: 'RU',
+      name: 'Русский',
+      flag: require('../../../assets/images/ru.png'),
+    },
   ];
 
   const filteredLanguages = languages.filter(lang =>
-    lang.name.toLowerCase().includes(searchQuery.toLowerCase())
+    lang.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const handleGoBack = () => {
@@ -74,11 +115,11 @@ const LanguageScreen = () => {
           />
         </View>
 
-        <ScrollView 
+        <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          {filteredLanguages.map((language) => {
+          {filteredLanguages.map(language => {
             const isSelected = selectedLanguage === language.code;
             return (
               <TouchableOpacity
@@ -94,9 +135,10 @@ const LanguageScreen = () => {
                   <Image source={language.flag} style={styles.flagIcon} />
                   <View style={styles.languageInfo}>
                     <Text style={styles.languageName}>{language.name}</Text>
-                    {language.isDefault && selectedLanguage === language.code && (
-                      <Text style={styles.defaultText}>Default</Text>
-                    )}
+                    {language.isDefault &&
+                      selectedLanguage === language.code && (
+                        <Text style={styles.defaultText}>Default</Text>
+                      )}
                   </View>
                 </View>
                 {isSelected ? (
@@ -109,7 +151,7 @@ const LanguageScreen = () => {
           })}
         </ScrollView>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.saveButton}
           onPress={handleSaveChanges}
           activeOpacity={0.7}

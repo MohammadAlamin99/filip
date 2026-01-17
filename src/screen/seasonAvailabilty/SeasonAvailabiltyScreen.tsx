@@ -11,7 +11,9 @@ import { ArrowLeft, Bell, Search, ChevronDown } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './style';
 import { useNavigation } from '@react-navigation/native';
-import CandidateCard, { Candidate } from '../../components/findjob/CandidateCard';
+import CandidateCard, {
+  Candidate,
+} from '../../components/findjob/CandidateCard';
 const CANDIDATES: Candidate[] = [
   {
     id: '1',
@@ -69,7 +71,7 @@ const SeasonAvailabilityScreen = () => {
   };
 
   const filteredCandidates = CANDIDATES.filter(candidate =>
-    candidate.name.toLowerCase().includes(search.toLowerCase())
+    candidate.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
@@ -128,7 +130,10 @@ const SeasonAvailabilityScreen = () => {
             >
               {item.label}
             </Text>
-            <ChevronDown size={20} color={item.label === 'Position' ? '#000' : '#FFF'} />
+            <ChevronDown
+              size={20}
+              color={item.label === 'Position' ? '#000' : '#FFF'}
+            />
           </TouchableOpacity>
         )}
         contentContainerStyle={styles.filterScroll}

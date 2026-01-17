@@ -9,16 +9,16 @@ import {
   X,
   PlusCircleIcon,
 } from 'lucide-react-native';
-import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
 import styles from '../../screen/feed/style';
 import { useNavigation } from '@react-navigation/native';
 import UsersAddIcon from '../svg/UsersAddIcon';
 import UpgradeIcon from '../svg/UpgradeIcon';
 
 const MainDrawer = () => {
-    const navigation = useNavigation<any>();
-    const [showBanner, setShowBanner] = useState(true);
+  const navigation = useNavigation<any>();
+  const [showBanner, setShowBanner] = useState(true);
   return (
     <View style={styles.drawerContainer}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -73,7 +73,9 @@ const MainDrawer = () => {
             <ChevronRight width={20} height={20} color="#9CA3AF" />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}
+          <TouchableOpacity
+            style={styles.menuItem}
+            activeOpacity={0.7}
             onPress={() => navigation.navigate('referral')}
           >
             <View style={styles.menuLeft}>
@@ -96,7 +98,9 @@ const MainDrawer = () => {
               </View>
               <View>
                 <Text style={styles.menuText}>My Posted Availability</Text>
-                <Text style={styles.menuSubtext}>Post & See Availabilities</Text>
+                <Text style={styles.menuSubtext}>
+                  Post & See Availabilities
+                </Text>
               </View>
             </View>
             <ChevronRight width={20} height={20} color="#9CA3AF" />
@@ -157,7 +161,7 @@ const MainDrawer = () => {
         </View>
       </ScrollView>
     </View>
-  )
-}
+  );
+};
 
-export default MainDrawer
+export default MainDrawer;

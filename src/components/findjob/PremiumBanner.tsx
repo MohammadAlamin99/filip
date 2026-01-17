@@ -12,7 +12,8 @@ const PremiumBanner = ({ onPress }: any) => {
 
       <Text style={styles.premiumTitle}>Need Premium Staff?</Text>
       <Text style={styles.premiumSub}>
-        Post A Verified Shift To Attract Our Highest-Rated Professionals Instantly
+        Post A Verified Shift To Attract Our Highest-Rated Professionals
+        Instantly
       </Text>
 
       <TouchableOpacity style={styles.premiumBtn} onPress={onPress}>

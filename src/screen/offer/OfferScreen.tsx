@@ -7,7 +7,15 @@ import {
   StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeft, Bell, CreditCard, Calendar, MapPin, Image, CalendarIcon } from 'lucide-react-native';
+import {
+  ArrowLeft,
+  Bell,
+  CreditCard,
+  Calendar,
+  MapPin,
+  Image,
+  CalendarIcon,
+} from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from './style';
 import CupIcon from '../../components/svg/CupIcon';
@@ -42,8 +50,10 @@ const OfferScreen = () => {
       rate: '35/Hr + Tips',
       schedule: 'Today, 7 PM',
       location: 'Downtown',
-      description: 'High Volume Cocktail Bar, Black Vest Required. Experience With Craft Cocktails Preferred',
-      fullDescription: 'High Volume Cocktail Bar, Black Vest Required. Experience With Craft Cocktails Preferred. Must be able to work in fast-paced environment.',
+      description:
+        'High Volume Cocktail Bar, Black Vest Required. Experience With Craft Cocktails Preferred',
+      fullDescription:
+        'High Volume Cocktail Bar, Black Vest Required. Experience With Craft Cocktails Preferred. Must be able to work in fast-paced environment.',
     },
     {
       id: '2',
@@ -53,8 +63,10 @@ const OfferScreen = () => {
       rate: '35/Hr + Tips',
       schedule: 'Friday, Today, 7 PM',
       location: 'Downtown',
-      description: 'High Volume Cocktail Bar, Black Vest Required. Experience With Craft Cocktails Preferred',
-      fullDescription: 'High Volume Cocktail Bar, Black Vest Required. Experience With Craft Cocktails Preferred. Professional kitchen experience required.',
+      description:
+        'High Volume Cocktail Bar, Black Vest Required. Experience With Craft Cocktails Preferred',
+      fullDescription:
+        'High Volume Cocktail Bar, Black Vest Required. Experience With Craft Cocktails Preferred. Professional kitchen experience required.',
     },
   ];
 
@@ -81,7 +93,12 @@ const OfferScreen = () => {
           onPress={() => setActiveTab('pending')}
           activeOpacity={0.7}
         >
-          <Text style={[styles.tabText, activeTab === 'pending' && styles.activeTabText]}>
+          <Text
+            style={[
+              styles.tabText,
+              activeTab === 'pending' && styles.activeTabText,
+            ]}
+          >
             Pending (2)
           </Text>
         </TouchableOpacity>
@@ -90,7 +107,12 @@ const OfferScreen = () => {
           onPress={() => setActiveTab('upcoming')}
           activeOpacity={0.7}
         >
-          <Text style={[styles.tabText, activeTab === 'upcoming' && styles.activeTabText]}>
+          <Text
+            style={[
+              styles.tabText,
+              activeTab === 'upcoming' && styles.activeTabText,
+            ]}
+          >
             Upcoming
           </Text>
         </TouchableOpacity>
@@ -99,7 +121,12 @@ const OfferScreen = () => {
           onPress={() => setActiveTab('history')}
           activeOpacity={0.7}
         >
-          <Text style={[styles.tabText, activeTab === 'history' && styles.activeTabText]}>
+          <Text
+            style={[
+              styles.tabText,
+              activeTab === 'history' && styles.activeTabText,
+            ]}
+          >
             History
           </Text>
         </TouchableOpacity>
@@ -107,7 +134,7 @@ const OfferScreen = () => {
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Offer Cards */}
-        {pendingOffers.map((offer) => (
+        {pendingOffers.map(offer => (
           <View key={offer.id} style={styles.offerCard}>
             {/* Header Row */}
             <View style={styles.cardHeader}>
@@ -141,10 +168,18 @@ const OfferScreen = () => {
             </View>
 
             {/* Description */}
-            <Text style={styles.description} numberOfLines={expandedCards.has(offer.id) ? undefined : 2}>
-              {expandedCards.has(offer.id) ? offer.fullDescription : offer.description}
+            <Text
+              style={styles.description}
+              numberOfLines={expandedCards.has(offer.id) ? undefined : 2}
+            >
+              {expandedCards.has(offer.id)
+                ? offer.fullDescription
+                : offer.description}
             </Text>
-            <TouchableOpacity onPress={() => toggleDescription(offer.id)} activeOpacity={0.7}>
+            <TouchableOpacity
+              onPress={() => toggleDescription(offer.id)}
+              activeOpacity={0.7}
+            >
               <Text style={styles.showMore}>
                 {expandedCards.has(offer.id) ? 'Show Less' : 'Show More'}
               </Text>
@@ -152,7 +187,10 @@ const OfferScreen = () => {
 
             {/* Action Buttons */}
             <View style={styles.actionButtons}>
-              <TouchableOpacity style={styles.declineButton} activeOpacity={0.7}>
+              <TouchableOpacity
+                style={styles.declineButton}
+                activeOpacity={0.7}
+              >
                 <Text style={styles.declineButtonText}>Decline</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.acceptButton} activeOpacity={0.7}>
@@ -168,7 +206,8 @@ const OfferScreen = () => {
             <Image width={24} height={24} color="#d3d3d3" />
           </View>
           <Text style={styles.ctaText}>
-            Update Your Availability To{'\n'}Receive More Offers Tailored To{'\n'}You.
+            Update Your Availability To{'\n'}Receive More Offers Tailored To
+            {'\n'}You.
           </Text>
         </View>
       </ScrollView>

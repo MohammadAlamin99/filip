@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     borderColor: '#ffffff81',
     backgroundColor: 'rgba(0, 0, 0, 0.27)',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   wrapMedalIcon: {
     width: 60,
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     borderColor: '#00000067',
     backgroundColor: 'rgba(117, 117, 117, 0.27)',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   clockIconWrapper: {
     width: 40,
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     color: COLORS.white,
     fontFamily: 'InterDisplayBold',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   starterPackButton: {
     marginTop: 5,
@@ -436,7 +436,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 45,
-    marginLeft: 20
+    marginLeft: 20,
   },
   creditBadgeText: {
     fontSize: 12,

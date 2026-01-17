@@ -119,14 +119,11 @@ const ChatScreen: React.FC = () => {
         />
       </View>
 
-
       {/* Message list */}
       <FlatList
         data={DATA}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <MessageItem key={item.id} item={item} />
-        )}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => <MessageItem key={item.id} item={item} />}
         contentContainerStyle={styles.listPadding}
         showsVerticalScrollIndicator={false}
       />

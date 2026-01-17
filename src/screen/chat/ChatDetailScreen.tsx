@@ -11,13 +11,13 @@ import {
   StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { 
-  ChevronLeft, 
-  MoreVertical, 
-  Info, 
-  Coffee, 
-  Plus, 
-  Send
+import {
+  ChevronLeft,
+  MoreVertical,
+  Info,
+  Coffee,
+  Plus,
+  Send,
 } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { styles } from './chatDetailStyle';
@@ -85,20 +85,22 @@ const ChatDetailScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
-      
+
       {/* --- HEADER --- */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <ChevronLeft color="#fff" size={24} />
           </TouchableOpacity>
-          <Image 
-            source={{ uri: 'https://randomuser.me/api/portraits/men/32.jpg' }} 
-            style={styles.headerAvatar} 
+          <Image
+            source={{ uri: 'https://randomuser.me/api/portraits/men/32.jpg' }}
+            style={styles.headerAvatar}
           />
           <View>
             <Text style={styles.headerName}>Alex</Text>
-            <Text style={styles.headerStatus}>Barista. <Text>Online</Text></Text>
+            <Text style={styles.headerStatus}>
+              Barista. <Text>Online</Text>
+            </Text>
           </View>
         </View>
         <TouchableOpacity>
@@ -112,8 +114,12 @@ const ChatDetailScreen = () => {
           <Coffee color="#C5A35E" size={20} />
         </View>
         <View style={styles.shiftDetails}>
-          <Text style={styles.shiftTitle}>Barista Shifts @ The Grand Hotel</Text>
-          <Text style={styles.shiftSubtitle}>Today, 6:00 PM-10:00PM . $22/Hr</Text>
+          <Text style={styles.shiftTitle}>
+            Barista Shifts @ The Grand Hotel
+          </Text>
+          <Text style={styles.shiftSubtitle}>
+            Today, 6:00 PM-10:00PM . $22/Hr
+          </Text>
         </View>
         <TouchableOpacity>
           <Info color="#F59E0B" size={24} />
@@ -121,23 +127,21 @@ const ChatDetailScreen = () => {
       </View>
 
       {/* --- CHAT AREA --- */}
-  <FlatList
+      <FlatList
         data={MESSAGES}
         showsVerticalScrollIndicator={false}
-  keyExtractor={(item) => item.id}
-  renderItem={({ item }) => (
-    <ChatMessageItem message={item} />
-  )}
-  contentContainerStyle={styles.listContent}
-  ListHeaderComponent={() => (
-    <View style={styles.centeredInfo}>
-      <Text style={styles.dateSeparator}>Today</Text>
-      <Text style={styles.matchText}>
-        You Matched With Sarah! Say Hello To Coordinate The Shift.
-      </Text>
-    </View>
-  )}
-/>
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => <ChatMessageItem message={item} />}
+        contentContainerStyle={styles.listContent}
+        ListHeaderComponent={() => (
+          <View style={styles.centeredInfo}>
+            <Text style={styles.dateSeparator}>Today</Text>
+            <Text style={styles.matchText}>
+              You Matched With Sarah! Say Hello To Coordinate The Shift.
+            </Text>
+          </View>
+        )}
+      />
 
       {/* --- INPUT BAR --- */}
       <KeyboardAvoidingView
@@ -148,7 +152,7 @@ const ChatDetailScreen = () => {
           <TouchableOpacity style={styles.plusButton}>
             <Plus color="#fff" size={24} />
           </TouchableOpacity>
-          
+
           <TextInput
             style={styles.textInput}
             placeholder=""

@@ -14,8 +14,6 @@ interface JobCardProps {
   onApply?: () => void;
   onBookmark?: () => void;
 }
-
-// Sub-component for the small info tags (Location, Salary, Type)
 const InfoTag = ({
   text,
   iconType,

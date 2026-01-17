@@ -42,7 +42,10 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
         <View
           style={[
             styles.dot,
-            { backgroundColor: candidate.status === 'Available' ? '#4ADE80' : '#F59E0B' },
+            {
+              backgroundColor:
+                candidate.status === 'Available' ? '#4ADE80' : '#F59E0B',
+            },
           ]}
         />
         <Text
@@ -57,7 +60,10 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
 
       {/* Profile Info */}
       <View style={styles.profileRow}>
-        <Image source={{ uri: candidate.avatar }} style={styles.avatarPlaceholder} />
+        <Image
+          source={{ uri: candidate.avatar }}
+          style={styles.avatarPlaceholder}
+        />
         <View>
           <Text style={styles.candidateName}>{candidate.name}</Text>
           <View style={styles.locationRow}>
@@ -80,7 +86,9 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
         <View style={styles.availabilityRow}>
           <Calendar size={24} color="#FFF" />
           <View>
-            <Text style={styles.availabilityTitle}>{candidate.availabilityType}</Text>
+            <Text style={styles.availabilityTitle}>
+              {candidate.availabilityType}
+            </Text>
             <Text style={styles.availabilityDates}>{candidate.dates}</Text>
           </View>
         </View>

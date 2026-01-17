@@ -100,7 +100,8 @@ const Profile = () => {
         <Text style={styles.title}>Settings</Text>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
         {/* Profile Section */}

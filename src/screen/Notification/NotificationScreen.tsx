@@ -30,7 +30,8 @@ const NotificationScreen = () => {
       id: '1',
       type: 'shift',
       title: 'New Shift Offer',
-      description: 'Barista Shift\nAt The Coffee Club • $25/Hr. Tap To View Details.',
+      description:
+        'Barista Shift\nAt The Coffee Club • $25/Hr. Tap To View Details.',
       time: '2h Ago',
       section: 'Today',
       isNew: true,
@@ -39,7 +40,8 @@ const NotificationScreen = () => {
       id: '2',
       type: 'message',
       title: 'Message From Sarah',
-      description: 'Hey, Are You Available To Start An Hour Early Tomorrow? The Manager Was Asking...',
+      description:
+        'Hey, Are You Available To Start An Hour Early Tomorrow? The Manager Was Asking...',
       time: '4h Ago',
       section: 'Today',
     },
@@ -47,7 +49,8 @@ const NotificationScreen = () => {
       id: '3',
       type: 'confirmation',
       title: 'Offer Accepted',
-      description: 'Confirmed! You Are Booked For The Friday Night Shift At Hotel Grand',
+      description:
+        'Confirmed! You Are Booked For The Friday Night Shift At Hotel Grand',
       time: '5h Ago',
       section: 'Today',
     },
@@ -55,7 +58,8 @@ const NotificationScreen = () => {
       id: '4',
       type: 'payment',
       title: 'Payment Processed',
-      description: 'Your Payment Of $150.00 For The Shift At The Burger Joint Has Been Processed.',
+      description:
+        'Your Payment Of $150.00 For The Shift At The Burger Joint Has Been Processed.',
       time: '1d Ago',
       section: 'Yesterday',
     },
@@ -63,7 +67,8 @@ const NotificationScreen = () => {
       id: '5',
       type: 'rejection',
       title: 'Application Declined',
-      description: 'Unfortunately, The Position At Seaside Cafe Has Been Filled.',
+      description:
+        'Unfortunately, The Position At Seaside Cafe Has Been Filled.',
       time: '3d Ago',
       section: 'Yesterday',
     },
@@ -71,7 +76,8 @@ const NotificationScreen = () => {
       id: '6',
       type: 'view',
       title: 'Profile View',
-      description: '5 Employers Viewed Your Profile This Week. Keep Your Availability Updated!',
+      description:
+        '5 Employers Viewed Your Profile This Week. Keep Your Availability Updated!',
       time: 'Oct 27',
       section: 'Earlier',
     },
@@ -79,7 +85,10 @@ const NotificationScreen = () => {
 
   const filteredNotifications = notifications.filter(n => {
     const query = searchQuery.toLowerCase();
-    return n.title.toLowerCase().includes(query) || n.description.toLowerCase().includes(query);
+    return (
+      n.title.toLowerCase().includes(query) ||
+      n.description.toLowerCase().includes(query)
+    );
   });
 
   const renderIcon = (type: string, isNew: boolean) => {
@@ -138,7 +147,10 @@ const NotificationScreen = () => {
       <StatusBar barStyle="light-content" />
 
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} activeOpacity={0.7}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          activeOpacity={0.7}
+        >
           <ArrowLeft width={24} height={24} color="#FFFFFF" />
         </TouchableOpacity>
         <Text style={styles.title}>Notifications</Text>
@@ -160,21 +172,30 @@ const NotificationScreen = () => {
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {sections.map(section => {
-          const sectionItems = filteredNotifications.filter(n => n.section === section);
+          const sectionItems = filteredNotifications.filter(
+            n => n.section === section,
+          );
           if (sectionItems.length === 0) return null;
 
           return (
             <View key={section}>
               <Text style={styles.sectionTitle}>{section}</Text>
               {sectionItems.map(item => (
-                <TouchableOpacity key={item.id} style={styles.notificationCard} activeOpacity={0.7}>
+                <TouchableOpacity
+                  key={item.id}
+                  style={styles.notificationCard}
+                  activeOpacity={0.7}
+                >
                   {renderIcon(item.type, item.isNew || false)}
                   <View style={styles.notificationContent}>
                     <View style={styles.notificationHeader}>
                       <Text style={styles.notificationTitle}>{item.title}</Text>
                       <Text style={styles.notificationTime}>{item.time}</Text>
                     </View>
-                    <Text style={styles.notificationDescription} numberOfLines={2}>
+                    <Text
+                      style={styles.notificationDescription}
+                      numberOfLines={2}
+                    >
                       {item.description}
                     </Text>
                   </View>

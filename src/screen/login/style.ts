@@ -41,14 +41,14 @@ const styles = StyleSheet.create({
   },
   span: {
     fontStyle: 'italic',
-    fontWeight:900,
-    fontFamily:interDisplayBlack,
+    fontWeight: 900,
+    fontFamily: interDisplayBlack,
   },
 
   subtext: {
     color: '#9CA3AF',
     fontFamily: interDisplayRegular,
-    fontWeight:400,
+    fontWeight: 400,
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 64,
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   label: {
     color: '#E5E7EB',
     fontFamily: interDisplayMedium,
-    fontWeight:500, 
+    fontWeight: 500,
     fontSize: 14,
     marginBottom: 8,
   },
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 14,
     fontFamily: interDisplayThin,
-    fontWeight:300,
+    fontWeight: 300,
     fontSize: 14,
     color: '#fff',
     marginBottom: 16,
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 14,
     fontFamily: interDisplayThin,
-    fontWeight:300,
+    fontWeight: 300,
     fontSize: 14,
     color: '#fff',
   },
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   orContinue: {
     color: '#fff',
     fontFamily: interDisplayMedium,
-    fontWeight:500,
+    fontWeight: 500,
     fontSize: 14,
   },
   lineBar: {
