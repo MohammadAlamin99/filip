@@ -41,10 +41,9 @@ const Gig = () => {
 
     <FlatList
       data={RECOMMENDED_DATA}
-      vertical
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => <FeedCard item={item} />}
-      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
     />
 
     <Text style={styles.sectionTitle}>Newest Gigs</Text>
