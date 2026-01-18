@@ -21,6 +21,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import styles from './style';
 import { Alert } from 'react-native';
+import { ToastAndroid, Platform } from 'react-native';
 type MarkedDates = {
     [key: string]: {
         selected?: boolean;
@@ -109,13 +110,22 @@ const SeosonalAvailabilityCreationScreen = () => {
         return `${month} ${day},\n${year}`;
     };
 
-    const handlePost = () => {
-        Alert.alert(
-            'Success',
-            'Availability posted successfully',
-            [{ text: 'OK', onPress: () => navigation.goBack() }]
-        );
+    const handleTost = () => {
+        const message = 'Engagement request sent successfully.';
+
+        if (Platform.OS === 'android') {
+            ToastAndroid.showWithGravity(
+                message,
+                ToastAndroid.SHORT,
+                ToastAndroid.BOTTOM
+            );
+        } else {
+            Alert.alert('Success', message);
+        }
+
+        navigation.goBack();
     };
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -125,7 +135,7 @@ const SeosonalAvailabilityCreationScreen = () => {
                     <Text style={styles.cancelText}>Cancel</Text>
                 </TouchableOpacity>
                 <Text style={styles.title}>Create Availability</Text>
-                <TouchableOpacity onPress={handlePost} activeOpacity={0.7}>
+                <TouchableOpacity onPress={handleTost} activeOpacity={0.7}>
                     <Text style={styles.postText}>Post</Text>
                 </TouchableOpacity>
             </View>

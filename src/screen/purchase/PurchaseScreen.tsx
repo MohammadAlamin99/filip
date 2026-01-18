@@ -14,6 +14,7 @@ import styles from './style';
 import PremiumIcon from '../../components/svg/PremiumIcon';
 import PlanListCard from '../../components/purchase/PlanListCard';
 import StarIcon from '../../components/svg/StarIcon';
+import { ToastAndroid, Platform, Alert } from 'react-native';
 
 const PurchaseScreen = () => {
   const navigation = useNavigation<any>();
@@ -21,6 +22,22 @@ const PurchaseScreen = () => {
     'monthly',
   );
   const handleBack = () => {
+    navigation.goBack();
+  };
+
+  const HandleTost = () => {
+    const message = 'Premium plan purchased successfully';
+
+    if (Platform.OS === 'android') {
+      ToastAndroid.showWithGravity(
+        message,
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM
+      );
+    } else {
+      Alert.alert('Success', message);
+    }
+
     navigation.goBack();
   };
 
@@ -39,7 +56,9 @@ const PurchaseScreen = () => {
         <View></View>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.headerIconContainer}>
           <PremiumIcon />
         </View>
@@ -137,7 +156,9 @@ const PurchaseScreen = () => {
               €9.99<Text style={styles.priceMonth}>/month</Text>
             </Text>
           </View>
-          <TouchableOpacity style={styles.upgradeButton}>
+          <TouchableOpacity style={styles.upgradeButton}
+            onPress={HandleTost}
+          >
             <Text style={styles.upgradeButtonText}>Upgrade Now</Text>
             <ArrowRight />
           </TouchableOpacity>

@@ -4,6 +4,7 @@ import styles from '../screen/availabilty/style';
 import { Check, Dot } from 'lucide-react-native';
 import Worker from '../@types/Worker.type';
 import StarIcon from './svg/StarIcon';
+import { useNavigation } from '@react-navigation/native';
 const WorkerCard = ({
   worker,
   onPress,
@@ -11,6 +12,9 @@ const WorkerCard = ({
   worker: Worker;
   onPress: () => void;
 }) => {
+
+  const navigation = useNavigation<any>();
+
   return (
     <View style={styles.card}>
       <View style={styles.cardTopRow}>
@@ -69,7 +73,7 @@ const WorkerCard = ({
       <View style={styles.actionRow}>
         {worker.isAvailable ? (
           <>
-            <TouchableOpacity style={styles.outlineBtn}>
+            <TouchableOpacity style={styles.outlineBtn} onPress={() => navigation.navigate('viewprofile')}>
               <Text style={styles.outlineBtnText}>View Profile</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.filledBtn} onPress={onPress}>

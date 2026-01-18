@@ -16,13 +16,17 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import styles from './viewProfileStyle';
 import ReviewCard from '../../components/profile/ReviewCard';
 import ProfileHead from './ProfileHead';
+import { ToastAndroid, Platform, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
 interface Day {
     day: string;
     date: string;
     active: boolean;
     hasDot?: boolean;
 }
-const ProfileScreen: React.FC = () => {
+const ViewProfileScreen: React.FC = () => {
+    const navigation = useNavigation<any>()
     const roles: string[] = ['Mixology', 'Customer Service', 'Inventory Management', 'POS System'];
 
     const dates: Day[] = [
@@ -35,12 +39,29 @@ const ProfileScreen: React.FC = () => {
         { day: 'Fri', date: '18', active: true, hasDot: true },
     ];
 
+    const handleSendEngagement = () => {
+        const message = 'Engagement request sent successfully.';
+
+        if (Platform.OS === 'android') {
+            ToastAndroid.showWithGravity(
+                message,
+                ToastAndroid.SHORT,
+                ToastAndroid.BOTTOM
+            );
+        } else {
+            Alert.alert('Success', message);
+        }
+
+        navigation.goBack();
+    };
+
+
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="light-content" />
             {/* Top Header */}
             <View style={styles.header}>
-                <TouchableOpacity><X size={24} color="#fff" strokeWidth={2.5} /></TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.goBack()}><X size={24} color="#fff" strokeWidth={2.5} /></TouchableOpacity>
                 <Text style={styles.headerTitle}>Profile</Text>
                 <View />
             </View>
@@ -126,10 +147,14 @@ const ProfileScreen: React.FC = () => {
 
             {/* Footer */}
             <View style={styles.footer}>
-                <TouchableOpacity style={styles.mainButton}>
+                <TouchableOpacity
+                    style={styles.mainButton}
+                    onPress={handleSendEngagement}
+                >
                     <CalendarCheck2 size={20} color="#000" strokeWidth={2.5} />
                     <Text style={styles.mainButtonText}>Send Engagement</Text>
                 </TouchableOpacity>
+
             </View>
         </SafeAreaView>
     );
@@ -137,4 +162,4 @@ const ProfileScreen: React.FC = () => {
 
 
 
-export default ProfileScreen;
+export default ViewProfileScreen;

@@ -1,6 +1,7 @@
+import { useNavigation } from '@react-navigation/native';
 import { Banknote, Bookmark, Clock, MapPin } from 'lucide-react-native';
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Platform, ToastAndroid, Alert } from 'react-native';
 
 interface JobCardProps {
   job: {
@@ -45,9 +46,26 @@ const InfoTag = ({
 
 export const JobCard: React.FC<JobCardProps> = ({
   job,
-  onApply,
   onBookmark,
 }) => {
+  const navigation = useNavigation<any>();
+
+  const handleTost = () => {
+    const message = 'Apply successfully';
+
+    if (Platform.OS === 'android') {
+      ToastAndroid.showWithGravity(
+        message,
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM
+      );
+    } else {
+      Alert.alert('Success', message);
+    }
+
+    navigation.goBack();
+  };
+
   return (
     <View style={styles.card}>
       {/* Header Row: Image, Title, and Bookmark */}
@@ -76,7 +94,7 @@ export const JobCard: React.FC<JobCardProps> = ({
       </View>
 
       {/* Apply Button */}
-      <TouchableOpacity style={styles.applyButton} onPress={onApply}>
+      <TouchableOpacity style={styles.applyButton} onPress={handleTost}>
         <Text style={styles.applyButtonText}>Apply Now</Text>
       </TouchableOpacity>
     </View>

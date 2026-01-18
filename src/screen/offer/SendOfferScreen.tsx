@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import styles from './SendOver';
 import StarIcon from '../../components/svg/StarIcon';
 import { Alert } from 'react-native';
+import { ToastAndroid, Platform } from 'react-native';
 const SendOfferScreen: React.FC = () => {
   const [hourlyRate, setHourlyRate] = useState<string>('25.00');
   const [context, setContext] = useState<string>('');
@@ -43,12 +44,20 @@ const SendOfferScreen: React.FC = () => {
   `;
   const navigation = useNavigation<any>();
 
-  const handlePost = () => {
-    Alert.alert(
-      'Success',
-      'Offer sent successfully',
-      [{ text: 'OK', onPress: () => navigation.goBack() }]
-    );
+  const handleSendEngagement = () => {
+    const message = 'Offer sent successfully';
+
+    if (Platform.OS === 'android') {
+      ToastAndroid.showWithGravity(
+        message,
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM
+      );
+    } else {
+      Alert.alert('Success', message);
+    }
+
+    navigation.goBack();
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -160,7 +169,7 @@ const SendOfferScreen: React.FC = () => {
         </View>
 
         {/* Send Button */}
-        <TouchableOpacity onPress={handlePost} style={styles.sendButton}>
+        <TouchableOpacity onPress={handleSendEngagement} style={styles.sendButton}>
           <Text style={styles.sendButtonText}>Send Offer</Text>
           <ArrowRight color="#000" size={24} strokeWidth={3} />
         </TouchableOpacity>

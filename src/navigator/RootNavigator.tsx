@@ -20,7 +20,7 @@ import ReferralScreen from '../screen/referral/ReferralScreen ';
 import SettingScreen from '../screen/profile/SettingScreen';
 import PostedAvailabilitiesScreen from '../screen/mypost/PostedAvailabilitiesScreen';
 import SeosonalAvailabilityCreation from '../screen/SeosonalAvailabilityCreation/SeosonalAvailabilityCreation';
-import ViewProfile from '../screen/profile/ViewProfile';
+import ViewProfile from '../screen/profile/ViewProfileScreen';
 
 export type RootStackParamList = {
   Splash: undefined;

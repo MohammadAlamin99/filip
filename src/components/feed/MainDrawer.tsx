@@ -137,7 +137,8 @@ const MainDrawer = () => {
               <Text style={styles.bannerSubtitle}>
                 Get Priority On High-Paying{'\n'}Gigs At Luxury Hotels
               </Text>
-              <TouchableOpacity style={styles.viewPlansBtn} activeOpacity={0.7}>
+              <TouchableOpacity style={styles.viewPlansBtn} activeOpacity={0.7}
+                onPress={() => navigation.navigate('membership')}>
                 <Text style={styles.viewPlansText}>View Plans</Text>
               </TouchableOpacity>
             </View>
