@@ -37,7 +37,9 @@ const TermsConditionsScreen = () => {
         <View style={{ width: 24 }} />
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>1. Introduction</Text>
           <Text style={styles.bodyText}>

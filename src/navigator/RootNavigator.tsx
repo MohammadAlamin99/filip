@@ -17,6 +17,7 @@ import TermsConditionsScreen from '../screen/termsCondition/TearmsConditionScree
 import SendOfferScreen from '../screen/offer/SendOfferScreen';
 import SignUpScreen from '../screen/login/SignUpScreen';
 import ReferralScreen from '../screen/referral/ReferralScreen ';
+import SettingScreen from '../screen/profile/SettingScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -38,6 +39,7 @@ export type RootStackParamList = {
   TermsConditions: undefined;
   sendoffer: undefined;
   referral: undefined;
+  profile: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -65,6 +67,7 @@ const RootNavigator: React.FC = () => {
       <Stack.Screen name="TermsConditions" component={TermsConditionsScreen} />
       <Stack.Screen name="sendoffer" component={SendOfferScreen} />
       <Stack.Screen name="referral" component={ReferralScreen} />
+      <Stack.Screen name="profile" component={SettingScreen} />
       <Stack.Screen name="BottomTabs" component={BottomTabs} />
     </Stack.Navigator>
   );

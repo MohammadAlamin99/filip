@@ -145,7 +145,7 @@ const MainDrawer = () => {
         )}
 
         <View style={styles.drawerFooter}>
-          <TouchableOpacity style={styles.footerItem} activeOpacity={0.7}>
+          <TouchableOpacity style={styles.footerItem} activeOpacity={0.7} onPress={() => navigation.navigate('profile')}>
             <Settings width={20} height={20} color="#FFF" />
             <Text style={styles.footerText}>Settings</Text>
           </TouchableOpacity>

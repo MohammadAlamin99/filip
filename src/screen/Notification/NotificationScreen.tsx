@@ -170,7 +170,9 @@ const NotificationScreen = () => {
         />
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {sections.map(section => {
           const sectionItems = filteredNotifications.filter(
             n => n.section === section,

@@ -101,7 +101,9 @@ const HelpSupportScreen = () => {
         <View style={{ width: 24 }} />
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Search Bar */}
         <View style={styles.searchContainer}>
           <Search width={24} height={24} color="white" />

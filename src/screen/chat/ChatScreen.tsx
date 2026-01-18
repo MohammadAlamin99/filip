@@ -13,8 +13,6 @@ import styles from './style';
 import { ChevronLeft, Search } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MessageData } from '../../@types/MessageData.type';
-
-// Sample data
 const DATA: MessageData[] = [
   {
     id: '1',

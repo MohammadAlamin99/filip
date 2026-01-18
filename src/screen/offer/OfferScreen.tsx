@@ -132,7 +132,9 @@ const OfferScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Offer Cards */}
         {pendingOffers.map(offer => (
           <View key={offer.id} style={styles.offerCard}>

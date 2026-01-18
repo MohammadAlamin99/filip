@@ -17,12 +17,13 @@ import {
   Bell,
   FileText,
   ChevronRight,
+  ArrowLeft,
 } from 'lucide-react-native';
 import UserProfileIcon from '../../components/svg/UserProfileIcon';
 import { useNavigation } from '@react-navigation/native';
 import styles from './style';
 
-const Profile = () => {
+const SettingScreen = () => {
   const navigation = useNavigation<any>();
   const menuItems = [
     {
@@ -97,7 +98,11 @@ const Profile = () => {
 
       {/* Header */}
       <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <ArrowLeft size={24} color="#ffffff" />
+        </TouchableOpacity>
         <Text style={styles.title}>Settings</Text>
+        <View></View>
       </View>
 
       <ScrollView
@@ -143,4 +148,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default SettingScreen;
