@@ -2,7 +2,6 @@ import React from 'react';
 import {
     View,
     Text,
-    TextInput,
     TouchableOpacity,
     ScrollView,
     StatusBar,
@@ -61,7 +60,7 @@ const ViewProfileScreen: React.FC = () => {
             <StatusBar barStyle="light-content" />
             {/* Top Header */}
             <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()}><X size={24} color="#fff" strokeWidth={2.5} /></TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.goBack()}><X size={20} color="#fff" strokeWidth={2.5} /></TouchableOpacity>
                 <Text style={styles.headerTitle}>Profile</Text>
                 <View />
             </View>
@@ -74,31 +73,31 @@ const ViewProfileScreen: React.FC = () => {
                 {/* Form Fields */}
                 <Text style={styles.label}>Full Name</Text>
                 <View>
-                    <Text style={styles.input}>Alex Rivera</Text>
+                    <Text style={styles.box}>Alex Rivera</Text>
                 </View>
 
                 <View style={styles.row}>
-                    <View style={{ flex: 1.5, marginRight: 12 }}>
+                    <View>
                         <Text style={styles.label}>City</Text>
                         <View style={styles.inputWithIcon}>
-                            <MapPin size={18} color="#999" style={{ marginLeft: 12 }} />
+                            <MapPin size={24} color="#fff" />
                             <View>
                                 <Text style={styles.flexInput}>San Francisco, CA</Text>
                             </View>
                         </View>
                     </View>
-                    <View style={{ flex: 1 }}>
+                    <View style={styles.age}>
                         <Text style={styles.label}>Age</Text>
-                        <TextInput style={[styles.input, { textAlign: 'center' }]} value="26" keyboardType="numeric" />
+                        <View>
+                            <Text style={[styles.box, styles.agetext]}>26</Text>
+                        </View>
                     </View>
                 </View>
 
                 <Text style={styles.label}>Short Bio / CV</Text>
-                <TextInput
-                    style={[styles.input, styles.textArea]}
-                    multiline
-                    value="Experienced Mixologist With 4 Years In High-Volume Nightclubs. Fast, Reliable, And Friendly, Always Ready To Jump In During The Rush."
-                />
+                <View>
+                    <Text style={[styles.box, styles.bioText]}>Experienced Mixologist With 4 Years In High-Volume Nightclubs. Fast, Reliable, And Friendly, Always Ready To Jump In During The Rush.</Text>
+                </View>
 
                 {/* Roles Section */}
                 <Text style={styles.label}>Professional Roles</Text>
@@ -107,7 +106,6 @@ const ViewProfileScreen: React.FC = () => {
                         {roles.map((role, i) => (
                             <View key={i} style={styles.tag}>
                                 <Text style={styles.tagText}>{role}</Text>
-                                <TouchableOpacity><X size={14} color="#fff" /></TouchableOpacity>
                             </View>
                         ))}
                     </View>
@@ -122,7 +120,7 @@ const ViewProfileScreen: React.FC = () => {
                             <View style={[styles.dateCircle, item.active && styles.activeDateCircle]}>
                                 <Text style={[styles.dateText, item.active && styles.activeDateText]}>{item.date}</Text>
                             </View>
-                            {item.hasDot && <View style={[styles.dot, { backgroundColor: item.active ? '#FACC15' : '#777' }]} />}
+                            {item.hasDot && <View style={[styles.dot, { backgroundColor: item.active ? '#FFD900' : '#FFD900' }]} />}
                         </View>
                     ))}
                 </View>
