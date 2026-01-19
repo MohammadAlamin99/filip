@@ -19,7 +19,9 @@ const SignUpScreen = () => {
 
   return (
     <SafeAreaView style={[styles.container, styles.signupContainer]}>
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
         <Text style={styles.SignupTittle}>Create Account</Text>
         <Text style={styles.title}>
           join <Text style={styles.span}>GoldShift</Text>

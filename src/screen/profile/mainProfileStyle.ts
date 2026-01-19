@@ -4,6 +4,7 @@ const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
         backgroundColor: '#111',
+        paddingTop: 15,
     },
 
     scrollContent: {

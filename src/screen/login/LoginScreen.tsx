@@ -19,7 +19,9 @@ const LoginScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+      >
         <Text style={styles.title}>
           Welcome to <Text style={styles.span}>GoldShift</Text>
         </Text>
