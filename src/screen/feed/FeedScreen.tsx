@@ -62,10 +62,10 @@ const FeedContent = ({ navigation }: any) => {
             <Text style={styles.nameText}>Alex</Text>
           </View>
         </TouchableOpacity>
-        <View>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('notification')}>
           <Bell width={24} height={24} color="white" />
           <View style={styles.notifDot} />
-        </View>
+        </TouchableOpacity>
       </View>
       <View style={styles.searchContainer}>
         <Search width={24} height={24} color="white" />
@@ -99,7 +99,6 @@ const FeedContent = ({ navigation }: any) => {
                   </View>
                   <Text style={styles.gigTime}>{gig.time}</Text>
                 </View>
-
                 {gig.tags && (
                   <View style={styles.tag}>
                     <Text style={styles.tagText}>{gig.tags[0]}</Text>

@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontFamily: 'InterDisplayBold',
     fontWeight: 700,
+    marginBottom: 8,
   },
   planListCardSubtitle: {
     fontSize: 14,

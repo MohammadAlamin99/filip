@@ -91,12 +91,14 @@ const MainDrawer = () => {
         <View style={styles.drawerSection}>
           <Text style={styles.sectionHeader}>Professional</Text>
 
-          <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
+          <TouchableOpacity style={styles.menuItem} activeOpacity={0.7} onPress={() => navigation.navigate('postAvailabilites')}>
             <View style={styles.menuLeft}>
               <View style={styles.iconCircle}>
                 <PlusCircleIcon width={20} height={18} color="#FFF" />
               </View>
-              <TouchableOpacity onPress={() => navigation.navigate('postAvailabilites')}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('postAvailabilites')}
+              >
                 <Text style={styles.menuText}>My Posted Availability</Text>
                 <Text style={styles.menuSubtext}>
                   Post & See Availabilities

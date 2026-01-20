@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   StatusBar,
 } from 'react-native';
-import { ArrowRight, Infinity } from 'lucide-react-native';
+import { ArrowRight, BadgeCheck, Infinity, Zap } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { ArrowLeft } from 'lucide-react-native';
@@ -15,15 +15,15 @@ import PremiumIcon from '../../components/svg/PremiumIcon';
 import PlanListCard from '../../components/purchase/PlanListCard';
 import StarIcon from '../../components/svg/StarIcon';
 import { ToastAndroid, Platform, Alert } from 'react-native';
+import PlanToggle from '../../components/purchase/PlanToggle';
+import PlanHeader from '../../components/purchase/PlanHeader';
+import CommissionIcon from '../../components/svg/CommissionIcon';
 
 const PurchaseScreen = () => {
   const navigation = useNavigation<any>();
   const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>(
     'monthly',
   );
-  const handleBack = () => {
-    navigation.goBack();
-  };
 
   const HandleTost = () => {
     const message = 'Premium plan purchased successfully';
@@ -46,16 +46,7 @@ const PurchaseScreen = () => {
       <StatusBar barStyle="light-content" />
 
       {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={handleBack}>
-          <Text>
-            <ArrowLeft width={22} height={22} color="white" />
-          </Text>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Premium</Text>
-        <View></View>
-      </View>
-
+      <PlanHeader />
       <ScrollView contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
@@ -72,44 +63,7 @@ const PurchaseScreen = () => {
         </View>
 
         {/* Plan Toggle */}
-        <View style={styles.toggleContainer}>
-          <TouchableOpacity
-            style={[
-              styles.toggleButton,
-              selectedPlan === 'monthly' && styles.toggleButtonActive,
-            ]}
-            onPress={() => setSelectedPlan('monthly')}
-          >
-            <Text
-              style={[
-                styles.toggleText,
-                selectedPlan === 'monthly' && styles.toggleTextActive,
-              ]}
-            >
-              Monthly
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.toggleButton,
-              selectedPlan === 'yearly' && styles.toggleButtonActive,
-            ]}
-            onPress={() => setSelectedPlan('yearly')}
-          >
-            <Text
-              style={[
-                styles.toggleText,
-                selectedPlan === 'yearly' && styles.toggleTextActive,
-              ]}
-            >
-              Yearly
-            </Text>
-            <View style={styles.saveBadge}>
-              <Text style={styles.saveBadgeText}>Save 20%</Text>
-            </View>
-          </TouchableOpacity>
-          {/* plan section */}
-        </View>
+        <PlanToggle selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} />
 
         {/* plan list card */}
         <View style={styles.planListCardContainer}>
@@ -119,19 +73,19 @@ const PurchaseScreen = () => {
             subtitle="Apply to as many jobs as you want."
           />
           <PlanListCard
-            icon={<Infinity width={24} height={24} color="#F6DF60" />}
-            title="Unlimited Applications"
-            subtitle="Apply to as many jobs as you want."
+            icon={<BadgeCheck width={24} height={24} color="#F6DF60" />}
+            title="Profile Highlight"
+            subtitle="Stand out in employer searches."
           />
           <PlanListCard
-            icon={<Infinity width={24} height={24} color="#F6DF60" />}
-            title="Unlimited Applications"
-            subtitle="Apply to as many jobs as you want."
+            icon={<CommissionIcon width={24} height={24} color="#F6DF60" />}
+            title="0% Commission"
+            subtitle="Keep 100% of what you earn."
           />
           <PlanListCard
-            icon={<Infinity width={24} height={24} color="#F6DF60" />}
-            title="Unlimited Applications"
-            subtitle="Apply to as many jobs as you want."
+            icon={<Zap width={20} height={20} color="#F6DF60" />}
+            title="Early Access"
+            subtitle="See gigs 1 hour before free users."
           />
 
           {/* review */}

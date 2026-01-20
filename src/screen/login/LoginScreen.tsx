@@ -84,7 +84,7 @@ const LoginScreen = () => {
           </TouchableOpacity>
           <TouchableOpacity style={styles.authentication}>
             <AppleIcon size={24} />
-            <Text style={styles.googleText}>Google</Text>
+            <Text style={styles.googleText}>Apple</Text>
           </TouchableOpacity>
         </View>
         {/* another acount */}

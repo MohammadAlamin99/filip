@@ -22,12 +22,11 @@ const SignUpScreen = () => {
       <ScrollView
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.SignupTittle}>Create Account</Text>
         <Text style={styles.title}>
-          join <Text style={styles.span}>GoldShift</Text>
+          Join <Text style={styles.span}>GoldShift</Text>
         </Text>
         <Text style={[styles.subtext, styles.signupSubtext]}>
-          connect with the best stafs
+          Connect With The Best Staff
         </Text>
 
         {/* full name */}
@@ -123,7 +122,7 @@ const SignUpScreen = () => {
         </TouchableOpacity>
         {/* another acount */}
         <View style={[styles.doyouHave, styles.signDoyouHave]}>
-          <Text style={styles.dontText}>Don't have an account?</Text>
+          <Text style={styles.dontText}>Already have an account ?</Text>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text style={styles.textStyle_text}>Log In</Text>
           </TouchableOpacity>

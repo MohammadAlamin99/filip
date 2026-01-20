@@ -222,7 +222,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: interDisplayRegular,
     fontWeight: 400,
-    maxWidth: 280,
     lineHeight: 16,
   },
   link: {

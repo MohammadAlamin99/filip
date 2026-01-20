@@ -18,6 +18,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import FilterItem from '../../components/FilterItem';
 import { styles } from './style';
 import { JobCard } from '../../components/fulltime/JobCard';
+import { useNavigation } from '@react-navigation/native';
 type Filter = {
   id: string;
   label: string;
@@ -81,6 +82,7 @@ const MOCK_JOBS = [
 
 const FulltimeScreen = () => {
   const [filters, setFilters] = useState<Filter[]>(INITIAL_FILTERS);
+  const navigation = useNavigation<any>();
   const onFilterPress = useCallback((id: string) => {
     setFilters(prev =>
       prev.map(item => ({
@@ -107,10 +109,10 @@ const FulltimeScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Full-Time roles</Text>
-        <View>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('notification')}>
           <Bell width={24} height={24} color="white" />
           <View style={styles.notifDot} />
-        </View>
+        </TouchableOpacity>
       </View>
 
       {/* Search */}

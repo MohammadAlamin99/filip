@@ -50,7 +50,9 @@ const MemberShipScreen = () => {
         </TouchableOpacity>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Title Section */}
         <View style={styles.titleSection}>
           <Text style={styles.mainTitle}>Upgrade Your Experience</Text>

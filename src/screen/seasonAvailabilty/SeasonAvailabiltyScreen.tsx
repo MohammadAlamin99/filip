@@ -86,10 +86,10 @@ const SeasonAvailabilityScreen = () => {
 
         <Text style={styles.headerTitle}>Seasonal Talent</Text>
 
-        <View>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('notification')}>
           <Bell width={24} height={24} color="white" />
           <View style={styles.notifDot} />
-        </View>
+        </TouchableOpacity>
       </View>
 
       {/* Search Bar */}
