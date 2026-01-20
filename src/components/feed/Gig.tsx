@@ -20,7 +20,7 @@ const Gig = () => {
       id: '2',
       name: 'Sarah J.',
       role: 'Bartender Assistance',
-      rate: '€35',
+      rate: '$35',
       location: 'Zinc Lounge • 5 Mil',
       badge: 'Seasonal',
       availability: 'Nov 15 - Jan 05',
@@ -46,7 +46,7 @@ const Gig = () => {
         showsVerticalScrollIndicator={false}
       />
 
-      <Text style={styles.sectionTitle}>Newest Gigs</Text>
+      <Text style={styles.sectionTitle}>Newest Availabilities</Text>
     </View>
   );
 };

@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: bgColor,
     paddingHorizontal: 20,
-    paddingTop: 60,
+    paddingTop: 40,
   },
   SignupTittle: {
     fontSize: 24,
