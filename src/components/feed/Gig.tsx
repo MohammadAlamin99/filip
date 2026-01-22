@@ -8,7 +8,7 @@ const Gig = () => {
       id: '1',
       name: 'Micheal J.',
       role: 'Event Server',
-      rate: '€25',
+      rate: '$25',
       location: 'SoHo, New York • 0.5 Mil',
       badge: 'Starts In 2 Hours',
       availability: 'Today, 6:00 PM - 2:00 AM',

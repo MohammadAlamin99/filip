@@ -84,15 +84,12 @@ const FeedContent = ({ navigation }: any) => {
           <View style={styles.gigCard}>
             <View style={styles.row}>
               <Image source={{ uri: gig.avatar }} style={styles.gigAvatar} />
-
               <View style={styles.gigInfo}>
                 <View style={styles.rowBetween}>
                   <Text style={styles.gigTitle}>{gig.title}</Text>
                   <Bookmark width={24} height={24} color="#fff" />
                 </View>
-
                 <Text style={styles.locationText_gig}>{gig.company}</Text>
-
                 <View style={styles.rowBetween}>
                   <View style={styles.priceChip}>
                     <Text style={styles.priceChipText}>{gig.price}</Text>
@@ -104,7 +101,6 @@ const FeedContent = ({ navigation }: any) => {
                     <Text style={styles.tagText}>{gig.tags[0]}</Text>
                   </View>
                 )}
-
                 {gig.spots && <Text style={styles.spotsText}>{gig.spots}</Text>}
               </View>
             </View>

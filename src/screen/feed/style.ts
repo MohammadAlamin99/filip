@@ -550,6 +550,14 @@ const styles = StyleSheet.create({
     fontFamily: 'InterDisplayMedium',
     fontWeight: 500,
   },
+  heartWrapper: {
+    height: 36,
+    width: 36,
+    borderRadius: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
 });
 
 export default styles;

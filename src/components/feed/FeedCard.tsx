@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View, TouchableOpacity, ImageBackground } from 'react-native';
 import { BadgeCheck, Clock, Heart } from 'lucide-react-native';
 import styles from '../../screen/feed/style';
@@ -6,7 +6,8 @@ import { feedData } from '../../@types/FeedData.type';
 import { useNavigation } from '@react-navigation/native';
 
 const FeedCard = ({ item }: { item: feedData }) => {
-  const navigation = useNavigation<any>()
+  const navigation = useNavigation<any>();
+  const [liked, setLiked] = useState<boolean>(false);
   return (
     <View key={item.id} style={styles.recCard}>
       <ImageBackground source={{ uri: item.image }} style={styles.cardImage}>
@@ -14,7 +15,19 @@ const FeedCard = ({ item }: { item: feedData }) => {
           <View style={styles.badgeContainer}>
             <Text style={styles.badgeText}>• {item.badge}</Text>
           </View>
-          <Heart height={24} width={24} color="white" />
+          <TouchableOpacity
+            onPress={() => setLiked(!liked)}
+            style={[
+              styles.heartWrapper,
+            ]}
+          >
+            <Heart
+              height={24}
+              width={24}
+              color={liked ? '#FF3B30' : 'white'}
+              fill={liked ? '#FF3B30' : 'transparent'}
+            />
+          </TouchableOpacity>
         </View>
         <View style={styles.profileRow}>
           <View style={styles.avatarCircle}>
