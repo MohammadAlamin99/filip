@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "16841583186",
+    "project_id": "goldshift-19fc6",
+    "storage_bucket": "goldshift-19fc6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16841583186:android:27615ab5bbd7e272cd4d8b",
+        "android_client_info": {
+          "package_name": "com.filip"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCP3TrrISm6sztWYYra-iTIvULx8vXqiBo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
