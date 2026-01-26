@@ -20,7 +20,6 @@ import {
 } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// --- Types ---
 type Status = 'Active' | 'Consumed' | 'Withdrawn' | 'Expired';
 
 interface AvailabilityItem {
@@ -34,7 +33,6 @@ interface AvailabilityItem {
   postedTime: string;
 }
 
-// --- Mock Data ---
 const DATA: AvailabilityItem[] = [
   {
     id: '1',
@@ -85,7 +83,6 @@ const DATA: AvailabilityItem[] = [
   },
 ];
 
-// --- Colors ---
 const COLORS = {
   background: '#121212',
   cardBg: '#1C1C1E',
@@ -128,7 +125,6 @@ const AvailabilityCard = ({ item }: { item: AvailabilityItem }) => {
         </View>
         <ChevronRight color={COLORS.textSecondary} size={20} />
       </View>
-
       <View style={styles.cardFooter}>
         <View style={styles.statusRow}>
           <View style={[styles.badge, { backgroundColor: statusStyle.bg }]}>
@@ -152,7 +148,6 @@ export default function MyAvailabilities() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
-
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity>

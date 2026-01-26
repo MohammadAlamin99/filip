@@ -43,7 +43,7 @@ const LoginScreen = () => {
 
       Toast.show({
         type: 'success',
-        text1: 'Login Successful 🎉',
+        text1: 'Login Successful',
       });
 
       navigation.replace('BottomTabs');

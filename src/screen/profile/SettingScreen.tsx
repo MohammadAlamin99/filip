@@ -31,7 +31,6 @@ const SettingScreen = () => {
       label: 'Personal Information',
       icon: User,
       onPress: () => {
-        // Personal Information
       },
     },
     {

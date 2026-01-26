@@ -16,7 +16,6 @@ import styles from './style';
 const PostedAvailabilitiesScreen = () => {
     const navigation = useNavigation<any>();
     const [activeTab, setActiveTab] = useState('all');
-
     const availabilities = [
         {
             id: '1',
@@ -54,6 +53,22 @@ const PostedAvailabilitiesScreen = () => {
         },
         {
             id: '5',
+            title: 'Cleaner',
+            schedule: 'Sat, Sat 12 • 7 AM - 12 PM',
+            status: 'expired',
+            postedTime: '1d Ago',
+            icon: 'clean',
+        },
+        {
+            id: '6',
+            title: 'Cleaner',
+            schedule: 'Sat, Sat 12 • 7 AM - 12 PM',
+            status: 'expired',
+            postedTime: '1d Ago',
+            icon: 'clean',
+        },
+        {
+            id: '7',
             title: 'Cleaner',
             schedule: 'Sat, Sat 12 • 7 AM - 12 PM',
             status: 'expired',

@@ -7,6 +7,9 @@ import {
     StatusBar,
     TextInput,
     Switch,
+    Alert,
+    ToastAndroid,
+    Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Calendar } from 'react-native-calendars';
@@ -15,13 +18,14 @@ import {
     BriefcaseBusiness,
     CircleCheck,
     Calendar as CalendarIcon,
-    File,
     Eye,
+    File
 } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from './style';
-import { Alert } from 'react-native';
-import { ToastAndroid, Platform } from 'react-native';
+import { getAuth } from '@react-native-firebase/auth';
+import { getFirestore, collection, addDoc, serverTimestamp } from '@react-native-firebase/firestore';
+
 type MarkedDates = {
     [key: string]: {
         selected?: boolean;
@@ -33,18 +37,15 @@ type MarkedDates = {
 };
 
 const SeosonalAvailabilityCreationScreen = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
     const [startDate, setStartDate] = useState('2025-02-03');
     const [endDate, setEndDate] = useState('2025-02-07');
-    const [locations, setLocations] = useState([
-        'San Francisco, CA',
-        'Mykonos, Gr',
-        'New York, NY',
-        'Austin, TX',
-    ]);
+    const [locations, setLocations] = useState(['New York, NY']);
+    const [newLocation, setNewLocation] = useState('');
     const [aboutText, setAboutText] = useState('');
     const [isActive, setIsActive] = useState(true);
-
+    const authInstance = getAuth();
+    const db = getFirestore();
     const handleGoBack = () => {
         navigation.goBack();
     };
@@ -56,7 +57,6 @@ const SeosonalAvailabilityCreationScreen = () => {
 
     const getMarkedDates = (): MarkedDates => {
         const marked: MarkedDates = {};
-
         if (!startDate || !endDate) return marked;
 
         const start = new Date(startDate);
@@ -65,42 +65,18 @@ const SeosonalAvailabilityCreationScreen = () => {
 
         while (current <= end) {
             const dateStr = current.toISOString().split('T')[0];
-
-            if (dateStr === startDate && dateStr === endDate) {
-                marked[dateStr] = {
-                    selected: true,
-                    color: '#FFD900',
-                    textColor: '#111111',
-                    startingDay: true,
-                    endingDay: true,
-                };
-            } else if (dateStr === startDate) {
-                marked[dateStr] = {
-                    selected: true,
-                    color: '#FFD900',
-                    textColor: '#111111',
-                    startingDay: true,
-                };
-            } else if (dateStr === endDate) {
-                marked[dateStr] = {
-                    selected: true,
-                    color: '#FFD900',
-                    textColor: '#111111',
-                    endingDay: true,
-                };
-            } else {
-                marked[dateStr] = {
-                    selected: true,
-                    color: '#FFD900',
-                    textColor: '#111111',
-                };
-            }
-
+            marked[dateStr] = {
+                selected: true,
+                color: '#FFD900',
+                textColor: '#111111',
+                startingDay: dateStr === startDate,
+                endingDay: dateStr === endDate,
+            };
             current.setDate(current.getDate() + 1);
         }
-
         return marked;
     };
+
 
     const formatDateDisplay = (dateStr: string) => {
         const date = new Date(dateStr);
@@ -110,44 +86,99 @@ const SeosonalAvailabilityCreationScreen = () => {
         return `${month} ${day},\n${year}`;
     };
 
-    const handleTost = () => {
-        const message = 'Engagement request sent successfully.';
-
-        if (Platform.OS === 'android') {
-            ToastAndroid.showWithGravity(
-                message,
-                ToastAndroid.SHORT,
-                ToastAndroid.BOTTOM
-            );
-        } else {
-            Alert.alert('Success', message);
+    const addLocation = () => {
+        if (newLocation.trim() !== '') {
+            setLocations([...locations, newLocation.trim()]);
+            setNewLocation('');
         }
-
-        navigation.goBack();
     };
 
+    const handleTost = async () => {
+        try {
+            const user = authInstance.currentUser;
+            if (!user) {
+                Alert.alert('Error', 'User not authenticated');
+                return;
+            }
+            const jobPost = {
+                userId: user.uid,
+                title: 'Event Server',
+                category: 'Hospitality',
+                type: 'seasonal',
+                description:
+                    'Serve guests during a private event. Experience preferred.',
+                schedule: {
+                    start: `${startDate}T18:00:00Z`,
+                    end: `${endDate}T02:00:00Z`,
+                },
+                location: 'New York, NY',
+                rate: {
+                    amount: 25,
+                    unit: 'hour',
+                },
+                requiredSkills: ['Serving', 'Wine Knowledge'],
+                positions: {
+                    total: 5,
+                    filled: 0,
+                },
+                status: isActive ? 'open' : 'inactive',
+                visibility: {
+                    priority: false,
+                    creditUsed: 0,
+                },
+                applicationsCount: 0,
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp(),
+            };
+
+            await addDoc(collection(db, 'jobs'), jobPost);
+
+            const message = 'Job posted successfully';
+
+            if (Platform.OS === 'android') {
+                ToastAndroid.showWithGravity(message, ToastAndroid.SHORT, ToastAndroid.BOTTOM);
+            } else {
+                Alert.alert('Success', message);
+            }
+
+            navigation.goBack();
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Error', 'Something went wrong. Please try again.');
+        }
+    };
 
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="light-content" />
+
             <View style={styles.header}>
                 <TouchableOpacity onPress={handleGoBack} activeOpacity={0.7}>
                     <Text style={styles.cancelText}>Cancel</Text>
                 </TouchableOpacity>
+
                 <Text style={styles.title}>Create Availability</Text>
+
                 <TouchableOpacity onPress={handleTost} activeOpacity={0.7}>
                     <Text style={styles.postText}>Post</Text>
                 </TouchableOpacity>
             </View>
 
-            <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+            <ScrollView
+                contentContainerStyle={styles.scrollContent}
+                showsVerticalScrollIndicator={false}
+            >
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Job Details</Text>
                     <Text style={styles.subsectionTitle}>Target Position</Text>
                     <View style={styles.jobCard}>
-                        <BriefcaseBusiness width={20} height={20} color="#FFFFFF" />
-                        <Text style={styles.jobText}>Head Mixologist</Text>
-                        <CircleCheck width={20} height={20} color="#FFD900" />
+                        <BriefcaseBusiness width={24} height={24} color="hsla(220, 13%, 91%, 0.85)" />
+                        <TextInput
+                            style={styles.jobText}
+                            placeholder="Enter job title"
+                            placeholderTextColor='hsla(220, 13%, 91%, 0.85)'
+                        />
+                        <CircleCheck width={24} height={24} color="#FFD900" />
                     </View>
                 </View>
 
@@ -157,97 +188,86 @@ const SeosonalAvailabilityCreationScreen = () => {
                         <Text style={styles.dateLabel}>Start Date</Text>
                         <Text style={styles.dateLabel}>End Date</Text>
                     </View>
+
                     <View style={styles.dateRow}>
                         <View style={styles.dateCard}>
                             <CalendarIcon width={24} height={24} color="#ffffff" />
-                            <View style={styles.dateInfo}>
-                                <Text style={styles.dateValue}>{formatDateDisplay(startDate)}</Text>
-                            </View>
+                            <Text style={styles.dateValue}>
+                                {formatDateDisplay(startDate)}
+                            </Text>
                         </View>
 
                         <View style={styles.dateCard}>
                             <CalendarIcon width={24} height={24} color="#ffffff" />
-                            <View style={styles.dateInfo}>
-                                <Text style={styles.dateValue}>{formatDateDisplay(endDate)}</Text>
-                            </View>
+                            <Text style={styles.dateValue}>
+                                {formatDateDisplay(endDate)}
+                            </Text>
                         </View>
                     </View>
                 </View>
 
-                <View style={styles.calendarContainer}>
-                    <Calendar
-                        current="2025-02-01"
-                        markingType="period"
-                        markedDates={getMarkedDates()}
-                        onDayPress={(day) => {
-                            if (!startDate || (startDate && endDate)) {
+                <Calendar
+                    current="2025-02-01"
+                    markingType="period"
+                    markedDates={getMarkedDates()}
+                    onDayPress={(day) => {
+                        if (!startDate || (startDate && endDate)) {
+                            setStartDate(day.dateString);
+                            setEndDate('');
+                        } else {
+                            if (new Date(day.dateString) < new Date(startDate)) {
                                 setStartDate(day.dateString);
-                                setEndDate('');
                             } else {
-                                if (new Date(day.dateString) < new Date(startDate)) {
-                                    setStartDate(day.dateString);
-                                } else {
-                                    setEndDate(day.dateString);
-                                }
+                                setEndDate(day.dateString);
                             }
-                        }}
-                        theme={{
-                            calendarBackground: '#1E1E1E',
-                            textSectionTitleColor: '#FFD900',
-                            selectedDayBackgroundColor: '#FFD900',
-                            selectedDayTextColor: '#111111',
-                            todayTextColor: '#FFD900',
-                            dayTextColor: '#FFFFFF',
-                            textDisabledColor: '#666666',
-                            monthTextColor: '#FFFFFF',
-                            textMonthFontFamily: 'InterDisplayMedium',
-                            textDayFontFamily: 'InterDisplayRegular',
-                            textMonthFontWeight: '500' as any,
-                            textDayFontWeight: '400' as any,
-                            textDayHeaderFontFamily: 'InterDisplayMedium',
-                            arrowColor: '#FFD900',
-                            textDayHeaderFontSize: 18,
-                        }}
-                        style={{
-                            borderRadius: 16,
-                            padding: 10,
-                        }}
-                    />
-
-                    <View style={styles.calendarActions}>
-                        <TouchableOpacity
-                            style={styles.calendarCancelBtn}
-                            activeOpacity={0.7}
-                            onPress={() => {
-                                setStartDate('2025-02-03');
-                                setEndDate('2025-02-07');
-                            }}
-                        >
-                            <Text style={styles.calendarCancelText}>Cancel</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.calendarDoneBtn} activeOpacity={0.7}>
-                            <Text style={styles.calendarDoneText}>Done</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
+                        }
+                    }}
+                    theme={{
+                        calendarBackground: '#1E1E1E',
+                        textSectionTitleColor: '#FFD900',
+                        selectedDayBackgroundColor: '#FFD900',
+                        selectedDayTextColor: '#111111',
+                        todayTextColor: '#FFD900',
+                        dayTextColor: '#FFFFFF',
+                        textDisabledColor: '#666666',
+                        monthTextColor: '#FFFFFF',
+                        textMonthFontFamily: 'InterDisplayMedium',
+                        textDayFontFamily: 'InterDisplayRegular',
+                        textMonthFontWeight: '500' as any,
+                        textDayFontWeight: '400' as any,
+                        textDayHeaderFontFamily: 'InterDisplayMedium',
+                        arrowColor: '#FFD900',
+                        textDayHeaderFontSize: 18,
+                    }}
+                    style={{
+                        borderRadius: 16,
+                        padding: 10,
+                    }}
+                />
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Preferences</Text>
                     <Text style={styles.subsectionTitle}>Preferred Location</Text>
+                    <View style={styles.addLocationRow}>
+                        <TextInput
+                            style={[styles.jobText, { flex: 1 }]}
+                            placeholder="Add location..."
+                            placeholderTextColor="#9CA3AF"
+                            value={newLocation}
+                            onChangeText={setNewLocation}
+                        />
+                        <TouchableOpacity onPress={addLocation} style={styles.addLocationButton} activeOpacity={0.7}>
+                            <Text>Add</Text>
+                        </TouchableOpacity>
+                    </View>
                     <View style={styles.locationsContainer}>
-                        {locations &&
-                            locations.length > 0 &&
-                            locations.map((location, index) => (
-                                <View key={index} style={styles.locationChip}>
-                                    <Text style={styles.locationText}>{location}</Text>
-                                    <TouchableOpacity
-                                        onPress={() => removeLocation(index)}
-                                        activeOpacity={0.7}
-                                    >
-                                        <X width={16} height={16} color="#FFFFFF" />
-                                    </TouchableOpacity>
-                                </View>
-                            ))}
+                        {locations.map((location, index) => (
+                            <View key={index} style={styles.locationChip}>
+                                <Text style={styles.locationText}>{location}</Text>
+                                <TouchableOpacity onPress={() => removeLocation(index)} activeOpacity={0.7}>
+                                    <X width={16} height={16} color="#FFFFFF" />
+                                </TouchableOpacity>
+                            </View>
+                        ))}
                     </View>
                 </View>
 
@@ -255,10 +275,9 @@ const SeosonalAvailabilityCreationScreen = () => {
                     <Text style={styles.sectionTitle}>About You</Text>
                     <TextInput
                         style={styles.textArea}
-                        placeholder="Describe your experience and what makes you perfect for this role..."
+                        placeholder="Describe your experience..."
                         placeholderTextColor="#9CA3AF"
                         multiline
-                        numberOfLines={6}
                         value={aboutText}
                         onChangeText={setAboutText}
                         textAlignVertical="top"
@@ -282,7 +301,6 @@ const SeosonalAvailabilityCreationScreen = () => {
                         </TouchableOpacity>
                     </View>
                 </View>
-
                 <View style={styles.section}>
                     <View style={styles.toggleCard}>
                         <View style={styles.toggleLeft}>
@@ -300,7 +318,6 @@ const SeosonalAvailabilityCreationScreen = () => {
                             value={isActive}
                             onValueChange={setIsActive}
                             trackColor={{ false: '#2A2A2A', true: '#FFD900' }}
-                            thumbColor="#FFFFFF"
                         />
                     </View>
                 </View>
