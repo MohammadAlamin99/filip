@@ -5,12 +5,12 @@ import { X } from 'lucide-react-native';
 const AvailiabilityCategory = ({ categoryInput, setCategoryInput, categories, removeCategory, addCategory }: { categoryInput: string, setCategoryInput: (text: string) => void, categories: string[], removeCategory: (index: number) => void, addCategory: () => void }) => {
     return (
         <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Category</Text>
+            <Text style={styles.sectionTitle}>Skills</Text>
 
             <View style={styles.addLocationRow}>
                 <TextInput
                     style={[styles.jobText, { flex: 1 }]}
-                    placeholder="Add category..."
+                    placeholder="Add skill..."
                     placeholderTextColor="#9CA3AF"
                     value={categoryInput}
                     onChangeText={setCategoryInput}

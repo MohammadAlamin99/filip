@@ -30,13 +30,14 @@ import AvilabilityLocation from '../../components/availiability/AvilabilityLocat
 import AvailiabilityCategory from '../../components/availiability/AvailiabilityCategory';
 import { addItemToList, removeItemFromList } from '../../helper/listHelper';
 import UploadBanner from '../../components/availiability/UploadBanner';
+import AvailabilityPrice from '../../components/availiability/AvailabilityPrice';
 
 const SeosonalAvailabilityCreationScreen = () => {
     const navigation = useNavigation<any>();
     const [bannerImage, setBannerImage] = useState<string | null>(null);
     const [startDate, setStartDate] = useState('2025-02-03');
     const [endDate, setEndDate] = useState('2025-02-07');
-
+    const [hourlyPrice, setHourlyPrice] = useState('0');
     const [locations, setLocations] = useState<string[]>([]);
     const [newLocation, setNewLocation] = useState('');
 
@@ -108,7 +109,6 @@ const SeosonalAvailabilityCreationScreen = () => {
             const jobPost = {
                 userId: user.uid,
                 title: title,
-                category: categories[0],
 
                 type: 'seasonal',
 
@@ -123,21 +123,19 @@ const SeosonalAvailabilityCreationScreen = () => {
                 location: locations,
 
                 rate: {
-                    amount: 25,
+                    amount: hourlyPrice ? parseFloat(hourlyPrice) : 0,
                     unit: 'hour',
                 },
 
-                requiredSkills: ['Serving', 'Wine Knowledge'],
+                requiredSkills: categories,
 
                 positions: {
                     total: 5,
                     filled: 0,
                 },
 
-                status: isActive ? 'open' : 'cancelled',
-
                 visibility: {
-                    priority: false,
+                    priority: isActive,
                     creditUsed: 0,
                 },
 
@@ -189,6 +187,12 @@ const SeosonalAvailabilityCreationScreen = () => {
                 <AvailiablityHeading setTitle={setTitle} />
                 {/* Banner Upload */}
                 <UploadBanner bannerImage={bannerImage} setBannerImage={setBannerImage} />
+
+                {/* hourly price */}
+                <AvailabilityPrice
+                    price={hourlyPrice}
+                    setPrice={setHourlyPrice}
+                />
 
                 {/* Availability */}
                 <View style={styles.section}>
