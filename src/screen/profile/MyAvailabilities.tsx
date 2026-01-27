@@ -144,7 +144,6 @@ const AvailabilityCard = ({ item }: { item: AvailabilityItem }) => {
 
 export default function MyAvailabilities() {
   const [activeTab, setActiveTab] = useState('All');
-
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -158,7 +157,6 @@ export default function MyAvailabilities() {
           <Bell color="#FFF" size={24} />
         </TouchableOpacity>
       </View>
-
       {/* Tabs */}
       <View style={styles.tabContainer}>
         {['All', 'Active', 'Past'].map(tab => (
@@ -178,14 +176,12 @@ export default function MyAvailabilities() {
           </TouchableOpacity>
         ))}
       </View>
-
       {/* List */}
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {DATA.map(item => (
           <AvailabilityCard key={item.id} item={item} />
         ))}
       </ScrollView>
-
       {/* FAB */}
       <TouchableOpacity style={styles.fab}>
         <Plus color="#000" size={24} />

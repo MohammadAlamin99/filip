@@ -40,10 +40,8 @@ const SeosonalAvailabilityCreationScreen = () => {
     const [hourlyPrice, setHourlyPrice] = useState('0');
     const [locations, setLocations] = useState<string[]>([]);
     const [newLocation, setNewLocation] = useState('');
-
     const [categoryInput, setCategoryInput] = useState('');
     const [categories, setCategories] = useState<string[]>([]);
-
     const [aboutText, setAboutText] = useState('');
     const [isActive, setIsActive] = useState(true);
     const [title, setTitle] = useState('');
@@ -78,6 +76,7 @@ const SeosonalAvailabilityCreationScreen = () => {
     };
 
     /* FIREBASE JOB POST*/
+
     const handleTost = async () => {
         try {
             const user = authInstance.currentUser;
@@ -166,7 +165,6 @@ const SeosonalAvailabilityCreationScreen = () => {
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="light-content" />
-
             <View style={styles.header}>
                 <TouchableOpacity onPress={handleGoBack} activeOpacity={0.7}>
                     <Text style={styles.cancelText}>Cancel</Text>
@@ -178,7 +176,6 @@ const SeosonalAvailabilityCreationScreen = () => {
                     <Text style={styles.postText}>Post</Text>
                 </TouchableOpacity>
             </View>
-
             <ScrollView
                 contentContainerStyle={styles.scrollContent}
                 showsVerticalScrollIndicator={false}
@@ -239,7 +236,6 @@ const SeosonalAvailabilityCreationScreen = () => {
                     removeLocation={removeLocation}
                     addLocation={addLocation}
                 />
-
 
                 {/* About */}
                 <View style={styles.section}>

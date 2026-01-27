@@ -2,7 +2,8 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native'
 import React from 'react'
 import styles from '../../screen/SeosonalAvailabilityCreation/style';
 import { X } from 'lucide-react-native';
-const AvilabilityLocation = ({ newLocation, setNewLocation, locations, removeLocation, addLocation }: { newLocation: string; setNewLocation: (text: string) => void; locations: string[]; removeLocation: (index: number) => void; addLocation: () => void }) => {
+const AvilabilityLocation = ({ newLocation, setNewLocation, locations, removeLocation, addLocation }:
+    { newLocation: string; setNewLocation: (text: string) => void; locations: string[]; removeLocation: (index: number) => void; addLocation: () => void }) => {
     return (
         <View style={styles.section}>
             <Text style={styles.sectionTitle}>Preferred Location</Text>
