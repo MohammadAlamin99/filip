@@ -11,7 +11,6 @@ const AvailabilityPrice = ({
     return (
         <View style={styles.container}>
             <Text style={styles.label}>Hourly Rate</Text>
-
             <View style={styles.inputWrapper}>
                 <Text style={styles.currency}>€</Text>
                 <TextInput
@@ -29,7 +28,6 @@ const AvailabilityPrice = ({
 };
 
 export default AvailabilityPrice;
-
 const styles = StyleSheet.create({
     container: {
         marginBottom: 24,
