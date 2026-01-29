@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import RootNavigator from './src/navigator/RootNavigator';
 import { NavigationContainer } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,6 +16,13 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '16841583186-osf9eoaidpt6l1892ro4oovv8aujdkd9.apps.googleusercontent.com',
+      offlineAccess: true,
+    });
+  }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <NavigationContainer>
