@@ -9,123 +9,54 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Eye, EyeOff, MapPin } from 'lucide-react-native';
-import styles from '../login/style';
 import { useNavigation } from '@react-navigation/native';
 import Toast from 'react-native-toast-message';
-import { getAuth, createUserWithEmailAndPassword } from '@react-native-firebase/auth';
-import { getFirestore, doc, setDoc, serverTimestamp } from '@react-native-firebase/firestore';
-
+import { useMutation } from '@tanstack/react-query';
+import styles from '../login/style';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigator/RootNavigator';
+import { signUpUser } from '../../services/auth';
 
-type SignUpScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'signup'>;
+type SignUpScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'signup'
+>;
 
 const SignUpScreen = () => {
   const navigation = useNavigation<SignUpScreenNavigationProp>();
-
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [selected, setSelected] = useState(false);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const handleSignUp = async () => {
-    if (!email || !password || !fullName || !city) {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  // Query Mutation
+  const mutation = useMutation({
+    mutationFn: signUpUser,
+    onSuccess: () => {
       Toast.show({
-        type: 'error',
-        text1: 'Incomplete Information',
-        text2: 'Please fill in all required fields to continue.',
+        type: 'success',
+        text1: 'Sign Up Successful',
       });
-      return;
-    }
-
-    if (!selected) {
-      Toast.show({
-        type: 'error',
-        text1: 'Terms Not Accepted',
-        text2: 'You must agree to the Terms & Conditions before signing up.',
-      });
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const auth = getAuth();
-      const firestore = getFirestore();
-
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      await setDoc(doc(firestore, 'users', user.uid), {
-        email,
-        role: 'worker',
-
-        profile: {
-          name: fullName,
-          photo: null,
-          city,
-          skills: [],
-        },
-
-        membership: {
-          tier: 'free',
-          freePostsUsed: 0,
-          postLimit: 10,
-        },
-
-        workerProfile: {
-          aboutMe: '',
-          baseCity: city,
-          skills: [],
-          openToWork: true,
-        },
-
-        employeeProfile: null,
-
-        credits: {
-          balance: 0,
-          lifetimeEarned: 0,
-          used: 0,
-        },
-
-        referral: {
-          code: null,
-          invitedCount: 0,
-          verifiedCount: 0,
-        },
-
-        rating: {
-          avg: 0,
-          count: 0,
-        },
-
-        terms: {
-          accepted: true,
-          acceptedAt: serverTimestamp(),
-        },
-
-        verified: false,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
-
-      Toast.show({ type: 'success', text1: 'Sign Up Successful' });
       navigation.navigate('Login');
-    } catch (error: any) {
-      if (error.code === 'auth/email-already-in-use') {
-        Toast.show({ type: 'error', text1: 'Email already in use' });
-      } else if (error.code === 'auth/invalid-email') {
-        Toast.show({ type: 'error', text1: 'Invalid email address' });
-      } else if (error.code === 'auth/weak-password') {
-        Toast.show({ type: 'error', text1: 'Weak password', text2: 'Password must be at least 6 characters.' });
-      } else {
-        Toast.show({ type: 'error', text1: 'Unable to complete request', text2: 'Please try again later.' });
-      }
-    } finally {
-      setLoading(false);
-    }
+    },
+    onError: (error: any) => {
+      Toast.show({
+        type: 'error',
+        text1: 'Sign Up Failed',
+        text2: error.message,
+      });
+    },
+  });
+
+  const handleSignUp = () => {
+    mutation.mutate({
+      fullName,
+      email,
+      password,
+      city,
+      acceptedTerms,
+    });
   };
 
   return (
@@ -134,7 +65,9 @@ const SignUpScreen = () => {
         <Text style={styles.title}>
           Join <Text style={styles.span}>GoldShift</Text>
         </Text>
-        <Text style={[styles.subtext, styles.signupSubtext]}>Connect With The Best Staff</Text>
+        <Text style={[styles.subtext, styles.signupSubtext]}>
+          Connect With The Best Staff
+        </Text>
 
         {/* Full Name */}
         <Text style={styles.label}>Full Name</Text>
@@ -189,26 +122,36 @@ const SignUpScreen = () => {
             style={styles.eyeIcon}
             activeOpacity={0.7}
           >
-            {passwordVisible ? <EyeOff size={24} color="#374151" /> : <Eye size={24} color="#374151" />}
+            {passwordVisible ? (
+              <EyeOff size={24} color="#374151" />
+            ) : (
+              <Eye size={24} color="#374151" />
+            )}
           </TouchableOpacity>
         </View>
 
         {/* Terms */}
         <TouchableOpacity
           style={styles.radioWrapper}
-          onPress={() => setSelected(!selected)}
+          onPress={() => setAcceptedTerms(!acceptedTerms)}
           activeOpacity={0.8}
         >
-          <View style={[styles.radio, selected && styles.radioSelected]}>
-            {selected && <View style={styles.radioInner} />}
+          <View style={[styles.radio, acceptedTerms && styles.radioSelected]}>
+            {acceptedTerms && <View style={styles.radioInner} />}
           </View>
           <Text style={styles.text}>
             I Agree To The{' '}
-            <Text style={styles.link} onPress={() => Linking.openURL('https://example.com/terms')}>
+            <Text
+              style={styles.link}
+              onPress={() => Linking.openURL('https://example.com/terms')}
+            >
               Terms & Condition
             </Text>{' '}
             And{' '}
-            <Text style={styles.link} onPress={() => Linking.openURL('https://example.com/privacy')}>
+            <Text
+              style={styles.link}
+              onPress={() => Linking.openURL('https://example.com/privacy')}
+            >
               Privacy Policy
             </Text>
             .
@@ -216,8 +159,14 @@ const SignUpScreen = () => {
         </TouchableOpacity>
 
         {/* Sign Up Button */}
-        <TouchableOpacity style={[styles.button, styles.signupBtn]} onPress={handleSignUp}>
-          <Text style={styles.loginButton}>{loading ? 'Loading...' : 'Sign Up'}</Text>
+        <TouchableOpacity
+          style={[styles.button, styles.signupBtn]}
+          onPress={handleSignUp}
+          disabled={mutation.isPending}
+        >
+          <Text style={styles.loginButton}>
+            {mutation.isPending ? 'Loading...' : 'Sign Up'}
+          </Text>
         </TouchableOpacity>
 
         {/* Already have account */}

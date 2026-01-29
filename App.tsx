@@ -20,7 +20,6 @@ const App = () => {
       <NavigationContainer>
         <RootNavigator />
       </NavigationContainer>
-
       {/* Toast message */}
       <Toast />
     </QueryClientProvider>
