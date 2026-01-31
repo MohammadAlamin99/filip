@@ -1,75 +1,27 @@
-
-import { View, Text, TouchableOpacity, FlatList } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { View, Text, FlatList } from 'react-native';
 import styles from '../../screen/feed/style';
 import FeedCard from './FeedCard';
+import { useQuery } from '@tanstack/react-query';
 
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  orderBy,
-  limit,
-} from '@react-native-firebase/firestore';
+import FeedCardSkeleton from '../skeleton/FeedCardSkeleton';
+import { fetchRecommendedJobs } from '../../services/jobs';
 
 const Gig = () => {
-  const [recommendedData, setRecommendedData] = useState<any[]>([]);
-  useEffect(() => {
-    const fetchRecommendedJobs = async () => {
-      try {
-        const q = query(
-          collection(getFirestore(), 'jobs'),
-          orderBy('createdAt', 'desc'),
-          limit(5)
-        );
-        const snapshot = await getDocs(q);
-        const mappedData = snapshot.docs.map((doc: { data: () => any; id: string; }) => {
-          const job = doc.data();
-
-          return {
-            id: doc.id,
-            name: job.userName ?? 'Anonymous',
-            role: job.title,
-            rate: job.rate
-              ? `€${job.rate.amount}`
-              : '',
-            location: Array.isArray(job.location)
-              ? job.location.join(', ')
-              : 'Unknown location',
-            badge: job.type === 'seasonal'
-              ? 'Seasonal'
-              : 'Starts Soon',
-            availability: job.schedule?.end
-              ? 'Scheduled'
-              : job.type,
-            subAvailability: job.schedule?.end
-              ? 'Flexible'
-              : undefined,
-            tags: job.requiredSkills ?? [],
-            image:
-              job.bannerImage && job.bannerImage !== ''
-                ? job.bannerImage
-                : 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800',
-          };
-        });
-
-        setRecommendedData(mappedData);
-      } catch (error) {
-        console.log('Error fetching recommended jobs:', error);
-      }
-    };
-
-    fetchRecommendedJobs();
-  }, []);
-
+  const { data: recommendedData, isPending } = useQuery({
+    queryKey: ['recommendedJobs'],
+    queryFn: fetchRecommendedJobs,
+  });
+  console.log('hello', recommendedData);
+  if (isPending) {
+    return <FeedCardSkeleton />;
+  }
   return (
     <View>
       <View style={styles.headerRow}>
         <Text style={styles.sectionTitle}>Recommended For You</Text>
-        <TouchableOpacity>
+        {/* <TouchableOpacity>
           <Text style={styles.seeAllText}>See All</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <FlatList

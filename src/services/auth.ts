@@ -105,7 +105,6 @@ export const signInWithGoogle = async () => {
       },
 
       employerProfile: null,
-
       membership: {
         tier: 'free',
         freePostsUsed: 0,
@@ -124,9 +123,7 @@ export const signInWithGoogle = async () => {
         accepted: true,
         acceptedAt: firestore.FieldValue.serverTimestamp(),
       },
-
       verified: true,
-
       createdAt: firestore.FieldValue.serverTimestamp(),
       updatedAt: firestore.FieldValue.serverTimestamp(),
     });

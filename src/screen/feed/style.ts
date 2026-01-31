@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 100,
-    objectFit: 'cover',
   },
   nameText: {
     color: COLORS.textMain,
@@ -557,7 +556,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
 });
 
 export default styles;

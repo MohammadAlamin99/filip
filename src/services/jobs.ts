@@ -9,6 +9,7 @@ import {
   where,
   orderBy,
   getDocs,
+  getDoc,
 } from '@react-native-firebase/firestore';
 
 // Compute priority based on end date & visibility
@@ -63,7 +64,6 @@ export const fetchMyJobs = async () => {
 
 // create jobs
 
-// Create Job function
 export const createJob = async ({
   title,
   type = 'seasonal',
@@ -171,4 +171,68 @@ export const createJob = async ({
     // Create the job
     transaction.set(jobRef, jobPost);
   });
+};
+
+// Fetch recommended jobs
+// export const fetchRecommendedJobs = async () => {
+//   const q = query(
+//     collection(getFirestore(), 'jobs'),
+//     orderBy('createdAt', 'desc'),
+//   );
+//   const snapshot = await getDocs(q);
+//   const mappedData = snapshot.docs.map(
+//     (doc: { data: () => any; id: string }) => {
+//       const job = doc.data();
+//       console.log(job);
+//       return {
+//         id: doc.id,
+//         name: job.userName ?? 'Anonymous',
+//         role: job.title,
+//         rate: job.rate ? `€${job.rate.amount}` : '',
+//         location: Array.isArray(job.location)
+//           ? job.location.join(', ')
+//           : 'Unknown location',
+//         badge: job.type === 'seasonal' ? 'Seasonal' : 'Full Time',
+//         availability: job.schedule?.end ? 'Scheduled' : job.type,
+//         subAvailability: job.schedule?.end ? 'Flexible' : undefined,
+//         tags: job.requiredSkills ?? [],
+//         image:
+//           job.bannerImage && job.bannerImage !== ''
+//             ? job.bannerImage
+//             : 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800',
+//       };
+//     },
+//   );
+
+//   return mappedData;
+// };
+
+export const fetchRecommendedJobs = async () => {
+  const db = getFirestore();
+  const jobsCol = collection(db, 'jobs');
+  const q = query(jobsCol, orderBy('createdAt', 'desc'));
+  const jobSnapshots = await getDocs(q);
+
+  const jobsWithUserInfo = await Promise.all(
+    jobSnapshots.docs.map(async (jobDoc: { data: () => any; id: any }) => {
+      const jobData = jobDoc.data();
+      const userRef = doc(db, 'users', jobData.userId);
+      const userSnap = await getDoc(userRef);
+      const userData = userSnap.exists() ? userSnap.data() : null;
+      return {
+        id: jobDoc.id,
+        ...jobData,
+        user: userData
+          ? {
+              id: userSnap.id,
+              name: userData.profile.name,
+              email: userData.email,
+              membership: userData.membership,
+            }
+          : null,
+      };
+    }),
+  );
+
+  return jobsWithUserInfo;
 };
