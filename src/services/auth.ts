@@ -30,6 +30,7 @@ export const signUpUser = async (data: SignUpData) => {
     .set({
       email,
       role: 'worker',
+      roles: ['worker', 'employer'],
       profile: {
         name: fullName,
         photo: null,
@@ -46,10 +47,12 @@ export const signUpUser = async (data: SignUpData) => {
       membership: {
         tier: 'free',
         freePostsUsed: 0,
-        postLimit: 10,
+        postLimit: 5,
+        startedAt: null,
+        expiresAt: null,
       },
       credits: {
-        balance: 0,
+        balance: 5,
         lifetimeEarned: 0,
         used: 0,
       },
@@ -85,6 +88,7 @@ export const signInWithGoogle = async () => {
     await userRef.set({
       email: user.email,
       role: 'worker',
+      roles: ['worker', 'employer'],
 
       profile: {
         name: user.displayName ?? '',
@@ -105,7 +109,9 @@ export const signInWithGoogle = async () => {
       membership: {
         tier: 'free',
         freePostsUsed: 0,
-        postLimit: 10,
+        postLimit: 5,
+        startedAt: null,
+        expiresAt: null,
       },
 
       credits: {
