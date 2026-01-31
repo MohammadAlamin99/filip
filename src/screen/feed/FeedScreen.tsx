@@ -58,7 +58,12 @@ const FeedContent = ({ navigation }: any) => {
         >
           <View>
             <Image
-              source={{ uri: user?.profile?.photo || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png' }}
+              source={{
+                uri:
+                  user?.profile?.photo && user.profile.photo.length > 0
+                    ? user.profile.photo
+                    : 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
+              }}
               style={styles.avatar}
             />
           </View>
@@ -67,7 +72,10 @@ const FeedContent = ({ navigation }: any) => {
             <Text style={styles.nameText}>{user?.profile?.name}</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('notification')}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate('notification')}
+        >
           <Bell width={24} height={24} color="white" />
           <View style={styles.notifDot} />
         </TouchableOpacity>
@@ -138,4 +146,3 @@ const FeedScreen = () => {
 };
 
 export default FeedScreen;
-
