@@ -9,9 +9,20 @@ const FeedCard = ({ item }: { item: any }) => {
   console.log(item);
   const navigation = useNavigation<any>();
   const [liked, setLiked] = useState<boolean>(false);
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return '';
+
+    const date = new Date(dateString);
+
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: '2-digit',
+      year: 'numeric',
+    });
+  };
   return (
     <View key={item.id} style={styles.recCard}>
-      <ImageBackground source={{ uri: item.image }} style={styles.cardImage}>
+      <ImageBackground source={{ uri: item?.bannerImage || "" }} style={styles.cardImage}>
         <View style={styles.MainbadgeContainer}>
           <View style={styles.badgeContainer}>
             <Text style={styles.badgeText}>• {item.type}</Text>
@@ -30,16 +41,20 @@ const FeedCard = ({ item }: { item: any }) => {
         </View>
         <View style={styles.profileRow}>
           <View style={styles.avatarCircle}>
-            {/* <Text style={styles.avatarInitial}>{item.name.charAt(0)}</Text> */}
+            <Text style={styles.avatarInitial}>P</Text>
           </View>
           <View>
             <Text style={styles.profileName}>
               {item?.user?.name || 'Unknown'}
             </Text>
-            <View style={styles.verifiedContainer}>
-              <BadgeCheck width={16} height={16} color="#FFD900" />
-              <Text style={styles.verifiedText}>Verified</Text>
-            </View>
+            {
+              item?.user?.verified === true && (
+                <View style={styles.verifiedContainer}>
+                  <BadgeCheck width={16} height={16} color="#FFD900" />
+                  <Text style={styles.verifiedText}>Verified</Text>
+                </View>
+              )
+            }
           </View>
         </View>
       </ImageBackground>
@@ -49,7 +64,7 @@ const FeedCard = ({ item }: { item: any }) => {
           <Text style={styles.roleTitle}>{item?.title}</Text>
           <Text style={styles.rateText}>
             {item.rate?.amount}
-            <Text style={styles.perHr}>/Hr</Text>
+            <Text style={styles.perHr}>/{item?.rate?.unit}</Text>
           </Text>
         </View>
         <Text style={styles.locationText}>{item.location}</Text>
@@ -61,7 +76,9 @@ const FeedCard = ({ item }: { item: any }) => {
               {item.subAvailability ? 'Availability' : 'Next Available'}
             </Text>
             <Text style={styles.availValue}>
-              {item?.schedule?.end || 'n/a'}
+              {item?.schedule?.start && item?.schedule?.end
+                ? `${formatDate(item.schedule.start)} - ${formatDate(item.schedule.end)}`
+                : 'Date not available'}
             </Text>
             {item.subAvailability && (
               <Text style={styles.availSub}>{item.subAvailability}</Text>
@@ -69,15 +86,15 @@ const FeedCard = ({ item }: { item: any }) => {
           </View>
         </View>
 
-        {/* <View style={styles.tagRow}>
-          {item.tags.map((tag: string, idx: number) => (
-            <View key={idx} style={styles.tag}>
-              <Text style={styles.tagText}>
-                {item?.requiredSkills || 'n/a'}
-              </Text>
-            </View>
-          ))}
-        </View> */}
+        <View style={styles.tagRow}>
+          {Array.isArray(item?.requiredSkills) &&
+            item.requiredSkills.map((skill: string, idx: number) => (
+              <View key={`${skill}-${idx}`} style={styles.tag}>
+                <Text style={styles.tagText}>{skill}</Text>
+              </View>
+            ))}
+        </View>
+
 
         <TouchableOpacity
           style={styles.viewProfileBtn}

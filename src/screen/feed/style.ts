@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
+    backgroundColor: '#262626'
   },
   MainbadgeContainer: {
     display: 'flex',

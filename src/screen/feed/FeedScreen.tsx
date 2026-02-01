@@ -124,7 +124,6 @@ const FeedContent = ({ navigation }: any) => {
         )}
         showsVerticalScrollIndicator={false}
       />
-
       {/* </ScrollView> */}
     </SafeAreaView>
   );
