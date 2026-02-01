@@ -11,7 +11,6 @@ const Gig = () => {
     queryKey: ['recommendedJobs'],
     queryFn: fetchRecommendedJobs,
   });
-  console.log('hello', recommendedData);
   if (isPending) {
     return <FeedCardSkeleton />;
   }
@@ -37,3 +36,4 @@ const Gig = () => {
 };
 
 export default Gig;
+

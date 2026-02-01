@@ -173,40 +173,6 @@ export const createJob = async ({
   });
 };
 
-// Fetch recommended jobs
-// export const fetchRecommendedJobs = async () => {
-//   const q = query(
-//     collection(getFirestore(), 'jobs'),
-//     orderBy('createdAt', 'desc'),
-//   );
-//   const snapshot = await getDocs(q);
-//   const mappedData = snapshot.docs.map(
-//     (doc: { data: () => any; id: string }) => {
-//       const job = doc.data();
-//       console.log(job);
-//       return {
-//         id: doc.id,
-//         name: job.userName ?? 'Anonymous',
-//         role: job.title,
-//         rate: job.rate ? `€${job.rate.amount}` : '',
-//         location: Array.isArray(job.location)
-//           ? job.location.join(', ')
-//           : 'Unknown location',
-//         badge: job.type === 'seasonal' ? 'Seasonal' : 'Full Time',
-//         availability: job.schedule?.end ? 'Scheduled' : job.type,
-//         subAvailability: job.schedule?.end ? 'Flexible' : undefined,
-//         tags: job.requiredSkills ?? [],
-//         image:
-//           job.bannerImage && job.bannerImage !== ''
-//             ? job.bannerImage
-//             : 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800',
-//       };
-//     },
-//   );
-
-//   return mappedData;
-// };
-
 export const fetchRecommendedJobs = async () => {
   const db = getFirestore();
   const jobsCol = collection(db, 'jobs');

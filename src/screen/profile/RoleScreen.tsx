@@ -17,7 +17,10 @@ import {
     Briefcase,
 } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styles from '../Language/style';
+import { updateUserRoles } from '../../services/user';
+import Toast from 'react-native-toast-message';
 
 type Role = {
     code: string;
@@ -26,12 +29,10 @@ type Role = {
 };
 
 const RoleScreen = () => {
-    const navigation = useNavigation();
-
-    // Multiple selection state (unchanged)
+    const navigation = useNavigation<any>();
+    const queryClient = useQueryClient();
     const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
-    const [searchQuery, setSearchQuery] = useState('');
-    console.log(setSearchQuery)
+    const [searchQuery] = useState('');
     const roles: Role[] = [
         { code: 'WAITER', name: 'Waiter', icon: Utensils },
         { code: 'BARTENDER', name: 'Bartender', icon: Martini },
@@ -43,50 +44,61 @@ const RoleScreen = () => {
         { code: 'MANAGER', name: 'Manager', icon: Briefcase },
         { code: 'EMPLOYER', name: 'Employer', icon: Briefcase },
     ];
-
-    // Filter roles (logic unchanged)
+    // filter
     const filteredRoles = roles.filter(role =>
         role.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
-    // Toggle role selection (logic unchanged)
+    // toggle role select
     const toggleLanguage = (code: string) => {
-        setSelectedLanguages(prev => {
-            if (prev.includes(code)) {
-                return prev.filter(item => item !== code);
-            }
-            return [...prev, code];
-        });
+        setSelectedLanguages(prev =>
+            prev.includes(code)
+                ? prev.filter(item => item !== code)
+                : [...prev, code]
+        );
     };
-
-    const handleGoBack = () => {
-        navigation.goBack();
-    };
-
+    // udpate role
+    const { mutate: saveRoles, isPending } = useMutation({
+        mutationFn: updateUserRoles,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['currentUser'] });
+            navigation.goBack();
+        },
+        onError: (err: any) => {
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: err.message || 'Failed to update roles',
+            })
+        },
+    });
     const handleSaveChanges = () => {
-        console.log('Selected Roles:', selectedLanguages);
-        navigation.goBack();
+        if (selectedLanguages.length === 0) {
+            Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: 'Please select at least one role',
+            })
+            return;
+        }
+        saveRoles(selectedLanguages);
     };
 
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="light-content" />
-
             {/* Header */}
             <View style={styles.header}>
-                <TouchableOpacity onPress={handleGoBack}>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
                     <ChevronLeft width={24} height={24} color="#FFF" />
                 </TouchableOpacity>
 
                 <Text style={styles.title}>Select Your Role</Text>
 
-                <Text style={styles.cancelText}>Post</Text>
+                <View />
             </View>
-
             <Text style={styles.skilltext}>
                 Select the positions you are interested in working to match with better jobs.
             </Text>
-
             {/* Content */}
             <View style={styles.contentWrapper}>
                 <ScrollView
@@ -112,13 +124,11 @@ const RoleScreen = () => {
                                     <Icon width={22} height={22} color="#FFF" />
 
                                     <View style={styles.languageInfo}>
-                                        <Text style={styles.languageName}>
-                                            {role.name}
-                                        </Text>
+                                        <Text style={styles.languageName}>{role.name}</Text>
                                     </View>
                                 </View>
 
-                                {/* Square Checkbox */}
+                                {/* Checkbox */}
                                 <View
                                     style={[
                                         styles.checkbox,
@@ -138,9 +148,12 @@ const RoleScreen = () => {
                 <TouchableOpacity
                     style={[styles.saveButton, styles.saverole]}
                     onPress={handleSaveChanges}
+                    disabled={isPending}
                     activeOpacity={0.7}
                 >
-                    <Text style={styles.saveButtonText}>Save Roles</Text>
+                    <Text style={styles.saveButtonText}>
+                        {isPending ? 'Saving...' : 'Save Roles'}
+                    </Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

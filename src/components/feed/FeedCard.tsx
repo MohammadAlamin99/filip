@@ -6,7 +6,6 @@ import styles from '../../screen/feed/style';
 import { useNavigation } from '@react-navigation/native';
 
 const FeedCard = ({ item }: { item: any }) => {
-  console.log(item);
   const navigation = useNavigation<any>();
   const [liked, setLiked] = useState<boolean>(false);
   const formatDate = (dateString?: string) => {
@@ -22,7 +21,7 @@ const FeedCard = ({ item }: { item: any }) => {
   };
   return (
     <View key={item.id} style={styles.recCard}>
-      <ImageBackground source={{ uri: item?.bannerImage || "" }} style={styles.cardImage}>
+      <ImageBackground source={{ uri: item?.bannerImage || "n/a" }} style={styles.cardImage}>
         <View style={styles.MainbadgeContainer}>
           <View style={styles.badgeContainer}>
             <Text style={styles.badgeText}>• {item.type}</Text>

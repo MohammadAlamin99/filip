@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     },
 
     skillText: {
-        color: '#9CA3AF',
+        color: '#fff',
         marginRight: 6,
         fontSize: 14,
         fontFamily: 'InterDisplay-Medium',
@@ -227,6 +227,22 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         fontFamily: 'InterDisplay-SemiBold',
     },
+    removeBtn: {
+        marginLeft: 8,
+        width: 18,
+        height: 18,
+        borderRadius: 9,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    removeText: {
+        color: '#fff',
+        fontSize: 24,
+        lineHeight: 16,
+        fontWeight: '600',
+    },
+
 });
 
 export default styles;

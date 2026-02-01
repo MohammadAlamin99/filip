@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -17,11 +17,27 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchCurrentUser } from '../../services/user';
 
 const MainProfile: React.FC = () => {
-  const [about, setAbout] = useState('');
   const [skillInput, setSkillInput] = useState('');
   const [skills, setSkills] = useState<string[]>([]);
   const [openToWork, setOpenToWork] = useState(true);
   const [photo, setPhoto] = useState<string | null>(null);
+
+  const [city, setCity] = useState('');
+  const [about, setAbout] = useState('');
+
+  const { data: user } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: fetchCurrentUser,
+  });
+
+  useEffect(() => {
+    if (user) {
+      setCity(user?.profile?.city || '');
+      setAbout(user?.workerProfile?.aboutMe || '');
+      setSkills(user?.workerProfile?.skills || []);
+      setOpenToWork(user?.workerProfile?.openToWork ?? true);
+    }
+  }, [user]);
 
   const pickImage = () => {
     launchImageLibrary({ mediaType: 'photo', quality: 0.7 }, res => {
@@ -32,16 +48,13 @@ const MainProfile: React.FC = () => {
   };
 
   const addSkill = () => {
-    if (!skillInput.trim()) return;
-    setSkills(prev => [...prev, skillInput.trim()]);
+    const value = skillInput.trim();
+    if (!value) return;
+
+    setSkills(prev => (prev.includes(value) ? prev : [...prev, value]));
     setSkillInput('');
   };
 
-  const { data: user } = useQuery({
-    queryKey: ['currentUser'],
-    queryFn: fetchCurrentUser,
-  });
-  const [city, setCity] = useState(user?.profile?.city || '');
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView
@@ -57,18 +70,15 @@ const MainProfile: React.FC = () => {
           <View style={styles.photoSection}>
             <TouchableOpacity onPress={pickImage}>
               <View style={styles.avatar}>
-                {photo ? (
-                  <Image source={{ uri: photo }} style={styles.avatarImage} />
-                ) : (
-                  <Image
-                    source={{
-                      uri:
-                        user?.profile?.photo ||
-                        'https://static.vecteezy.com/system/resources/thumbnails/022/014/184/small/user-icon-member-login-isolated-vector.jpg',
-                    }}
-                    style={styles.avatarImage}
-                  />
-                )}
+                <Image
+                  source={{
+                    uri:
+                      photo ||
+                      user?.profile?.photo ||
+                      'https://static.vecteezy.com/system/resources/thumbnails/022/014/184/small/user-icon-member-login-isolated-vector.jpg',
+                  }}
+                  style={styles.avatarImage}
+                />
                 <View style={styles.cameraIcon}>
                   <CameraIcon size={24} color="#1F2937" />
                 </View>
@@ -82,8 +92,8 @@ const MainProfile: React.FC = () => {
           <Text style={styles.label}>About Me</Text>
           <TextInput
             style={styles.textArea}
-            placeholder="Tell employer about your experience..."
-            placeholderTextColor="#fff"
+            placeholder="Tell something about yourself"
+            placeholderTextColor="#9CA3AF"
             value={about}
             onChangeText={setAbout}
             multiline
@@ -98,17 +108,20 @@ const MainProfile: React.FC = () => {
               style={styles.flexInput}
               value={city}
               onChangeText={setCity}
+              placeholder="Your city"
+              placeholderTextColor="#9CA3AF"
             />
             <MapPin size={24} color="#374151" />
           </View>
 
-          {/* Skills */}
+          {/* Skills Input */}
           <SkillInput
             skillInput={skillInput}
             setSkillInput={setSkillInput}
             addSkill={addSkill}
           />
 
+          {/* SKILL CHIPS */}
           <View style={styles.skillWrap}>
             {skills.map((skill, index) => (
               <View key={index} style={styles.skillChip}>
