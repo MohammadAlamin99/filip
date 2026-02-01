@@ -182,7 +182,7 @@ import {
   Switch,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { CameraIcon, MapPin } from 'lucide-react-native';
+import { CameraIcon, MapPin, X } from 'lucide-react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
 import Toast from 'react-native-toast-message';
 import styles from './mainProfileStyle';
@@ -366,7 +366,7 @@ const MainProfile: React.FC = () => {
                   }
                   style={styles.removeBtn}
                 >
-                  <Text style={styles.removeText}>×</Text>
+                  <X color='#fff' size={18} />
                 </TouchableOpacity>
               </View>
             ))}
@@ -393,7 +393,7 @@ const MainProfile: React.FC = () => {
           </View>
 
           {/* Save */}
-          <TouchableOpacity
+          < TouchableOpacity
             style={styles.saveBtn}
             onPress={handleSaveProfile}
             disabled={isPending}

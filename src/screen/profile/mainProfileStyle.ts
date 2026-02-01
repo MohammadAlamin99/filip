@@ -181,7 +181,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: '#1D1D1D',
-        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: '#1F2937',
+        borderRadius: 12,
         paddingHorizontal: 12,
         paddingVertical: 6,
         margin: 4,
@@ -189,7 +191,6 @@ const styles = StyleSheet.create({
 
     skillText: {
         color: '#fff',
-        marginRight: 6,
         fontSize: 14,
         fontFamily: 'InterDisplay-Medium',
         fontWeight: 500,
