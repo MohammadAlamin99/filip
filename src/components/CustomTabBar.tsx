@@ -37,8 +37,8 @@ export default function CustomTabBar({ state, navigation }: any) {
                       {route.name === 'FindJobs'
                         ? 'Find Jobs'
                         : route.name === 'fulltime'
-                        ? 'Full-Time'
-                        : route.name}
+                          ? 'Full-Time'
+                          : route.name}
                     </Text>
                   )}
                 </Text>

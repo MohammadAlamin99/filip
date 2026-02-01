@@ -64,3 +64,38 @@ export const updateUserRoles = async (roles: string[]) => {
     updatedAt: new Date(),
   });
 };
+
+// employer profile update
+type UpdateEmployerProfilePayload = {
+  photo?: string | null;
+  companyName: string;
+  industry: string;
+  about: string;
+  address: string;
+  contactName: string;
+  phone: string;
+};
+
+export const updateEmployerProfile = async (
+  payload: UpdateEmployerProfilePayload
+) => {
+  const user = getAuth().currentUser;
+  if (!user) {
+    throw new Error('User not logged in');
+  }
+
+  const db = getFirestore();
+  const userRef = doc(db, 'users', user.uid);
+
+  await updateDoc(userRef, {
+    ...(payload.photo && { 'profile.photo': payload.photo }),
+    'profile.companyName': payload.companyName,
+    'profile.industry': payload.industry,
+    'profile.about': payload.about,
+    'employerProfile.address': payload.address,
+    'employerProfile.contactName': payload.contactName,
+    'employerProfile.phone': payload.phone,
+
+    updatedAt: new Date(),
+  });
+};

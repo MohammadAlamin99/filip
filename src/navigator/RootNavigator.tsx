@@ -23,10 +23,10 @@ import SendOfferScreen from '../screen/offer/SendOfferScreen';
 import SettingScreen from '../screen/profile/SettingScreen';
 import PostedAvailabilitiesScreen from '../screen/mypost/PostedAvailabilitiesScreen';
 import SeosonalAvailabilityCreation from '../screen/SeosonalAvailabilityCreation/SeosonalAvailabilityCreation';
-import ViewProfile from '../screen/profile/ViewProfileScreen';
 import RoleScreen from '../screen/profile/RoleScreen';
 import ReferralScreen from '../screen/referral/ReferralScreen ';
 import FullTimeAvailabilityCreation from '../screen/availabilty/FullTimeAvailabilityCreation';
+import GetProfile from '../screen/profile/GetProfile';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -52,7 +52,7 @@ export type RootStackParamList = {
   postAvailabilites: undefined;
   SeosonalAvailabilityCreation: undefined;
   FullTimeAvailabilityCreation: undefined;
-  viewprofile: undefined;
+  GetProfile: undefined;
   role: undefined;
 };
 
@@ -64,7 +64,7 @@ type PrivateScreenProps = {
 };
 
 const PrivateScreen: React.FC<PrivateScreenProps> = ({ navigation, children }) => {
-  const user = getAuth().currentUser; // modular API
+  const user = getAuth().currentUser;
 
   if (!user) {
     navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
@@ -110,7 +110,7 @@ const RootNavigator: React.FC = () => {
       <Stack.Screen name="postAvailabilites" component={withPrivate(PostedAvailabilitiesScreen)} />
       <Stack.Screen name="SeosonalAvailabilityCreation" component={withPrivate(SeosonalAvailabilityCreation)} />
       <Stack.Screen name="FullTimeAvailabilityCreation" component={withPrivate(FullTimeAvailabilityCreation)} />
-      <Stack.Screen name="viewprofile" component={withPrivate(ViewProfile)} />
+      <Stack.Screen name="GetProfile" component={withPrivate(GetProfile)} />
       <Stack.Screen name="role" component={withPrivate(RoleScreen)} />
     </Stack.Navigator>
   );
