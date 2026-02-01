@@ -203,3 +203,24 @@ export const fetchRecommendedJobs = async () => {
 
   return jobsWithUserInfo;
 };
+
+
+// full time jobs
+
+export const fetchFullTimeJobs = async () => {
+  const db = getFirestore();
+
+  const q = query(
+    collection(db, 'jobs'),
+    where('type', '==', 'fulltime'),
+    orderBy('createdAt', 'desc')
+  );
+
+  const snap = await getDocs(q);
+
+  return snap.docs.map((doc: { id: any; data: () => any; }) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+};
+
