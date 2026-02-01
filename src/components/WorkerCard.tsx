@@ -1,3 +1,4 @@
+
 import { Text, View, TouchableOpacity, Image } from 'react-native';
 import React from 'react';
 import styles from '../screen/availabilty/style';
@@ -5,6 +6,7 @@ import { Check, Dot } from 'lucide-react-native';
 import Worker from '../@types/Worker.type';
 import StarIcon from './svg/StarIcon';
 import { useNavigation } from '@react-navigation/native';
+
 const WorkerCard = ({
   worker,
   onPress,
@@ -12,7 +14,6 @@ const WorkerCard = ({
   worker: Worker;
   onPress: () => void;
 }) => {
-
   const navigation = useNavigation<any>();
 
   return (
@@ -37,7 +38,9 @@ const WorkerCard = ({
                 <Dot color="#FCD34D" />
                 <Text style={styles.ratingVal}>{worker.rating}</Text>
                 <StarIcon width={16} height={16} color="#FCD34D" />
-                <Text style={styles.reviewCount}>({worker.reviews})</Text>
+                <Text style={styles.reviewCount}>
+                  ({worker.reviews})
+                </Text>
               </View>
             </View>
           </View>
@@ -48,7 +51,9 @@ const WorkerCard = ({
             €{worker.price}
             <Text style={styles.hrText}>/hr</Text>
           </Text>
-          <Text style={styles.distanceText}>{worker.distance} Mi Away</Text>
+          <Text style={styles.distanceText}>
+            {worker.distance} Mi Away
+          </Text>
           {!worker.isAvailable && (
             <View style={styles.busyTag}>
               <Text style={styles.busyText}>Busy</Text>
@@ -62,27 +67,41 @@ const WorkerCard = ({
       </Text>
 
       <View style={styles.tagRow}>
-        {worker.tags.map((tag, index) => (
+        {worker.tags?.map((tag, index) => (
           <View key={index} style={styles.tag}>
             <Text style={styles.tagText}>{tag}</Text>
           </View>
         ))}
       </View>
-      <View style={styles.line}></View>
+
+      <View style={styles.line} />
 
       <View style={styles.actionRow}>
         {worker.isAvailable ? (
           <>
-            <TouchableOpacity style={styles.outlineBtn} onPress={() => navigation.navigate('viewprofile')}>
+            <TouchableOpacity
+              style={styles.outlineBtn}
+              onPress={() =>
+                navigation.navigate('viewprofile', {
+                  workerId: worker.id,
+                })
+              }
+            >
               <Text style={styles.outlineBtnText}>View Profile</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.filledBtn} onPress={onPress}>
+
+            <TouchableOpacity
+              style={styles.filledBtn}
+              onPress={onPress}
+            >
               <Text style={styles.filledBtnText}>Send Offer</Text>
             </TouchableOpacity>
           </>
         ) : (
           <TouchableOpacity style={styles.disabledBtn} disabled>
-            <Text style={styles.disabledBtnText}>Currently Unavailable</Text>
+            <Text style={styles.disabledBtnText}>
+              Currently Unavailable
+            </Text>
           </TouchableOpacity>
         )}
       </View>
