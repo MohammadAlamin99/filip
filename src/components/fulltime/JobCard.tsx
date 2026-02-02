@@ -1,20 +1,18 @@
 import { useNavigation } from '@react-navigation/native';
 import { Banknote, Bookmark, Clock, MapPin } from 'lucide-react-native';
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Platform, ToastAndroid, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Platform,
+  ToastAndroid,
+  Alert,
+} from 'react-native';
+import { JobCardProps } from '../../@types/JobCardProps.type';
 
-interface JobCardProps {
-  job: {
-    title: string;
-    company: string;
-    location: string;
-    salary: string;
-    type: string;
-    image: string;
-  };
-  onApply?: () => void;
-  onBookmark?: () => void;
-}
 const InfoTag = ({
   text,
   iconType,
@@ -44,10 +42,8 @@ const InfoTag = ({
   );
 };
 
-export const JobCard: React.FC<JobCardProps> = ({
-  job,
-  onBookmark,
-}) => {
+export const JobCard: React.FC<JobCardProps> = ({ job, onBookmark }) => {
+  console.log(job, 'jobs');
   const navigation = useNavigation<any>();
 
   const handleTost = () => {
@@ -57,7 +53,7 @@ export const JobCard: React.FC<JobCardProps> = ({
       ToastAndroid.showWithGravity(
         message,
         ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM
+        ToastAndroid.BOTTOM,
       );
     } else {
       Alert.alert('Success', message);
@@ -68,13 +64,12 @@ export const JobCard: React.FC<JobCardProps> = ({
 
   return (
     <View style={styles.card}>
-      {/* Header Row: Image, Title, and Bookmark */}
       <View style={styles.headerRow}>
         <View style={styles.titleSection}>
-          <Image source={{ uri: job.image }} style={styles.avatar} />
+          <Image source={{ uri: job?.user?.photo }} style={styles.avatar} />
           <View>
             <Text style={styles.jobTitle}>{job.title}</Text>
-            <Text style={styles.companyName}>{job.company}</Text>
+            <Text style={styles.companyName}>{job?.user?.name}</Text>
           </View>
         </View>
         <TouchableOpacity onPress={onBookmark}>
@@ -86,7 +81,7 @@ export const JobCard: React.FC<JobCardProps> = ({
       <View style={styles.tagsWrapper}>
         <View style={styles.row}>
           <InfoTag text={job.location} iconType="location" />
-          <InfoTag text={job.salary} iconType="salary" />
+          <InfoTag text={`€ ${job?.rate?.amount}/yr`} iconType="salary" />
         </View>
         <View style={styles.row}>
           <InfoTag text={job.type} iconType="time" />
@@ -158,7 +153,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   salaryTag: {
-    backgroundColor: 'rgba(255, 215, 0, 0.1)', // Subtle yellow tint
+    backgroundColor: 'rgba(255, 215, 0, 0.1)',
     borderWidth: 1,
     borderColor: 'rgba(255, 215, 0, 0.3)',
   },

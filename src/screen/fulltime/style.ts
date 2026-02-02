@@ -4,7 +4,7 @@ import { Dimensions } from 'react-native';
 const { width } = Dimensions.get('window');
 export const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: '#111',
     paddingBottom: 60,
     paddingHorizontal: 20,
@@ -15,6 +15,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 15,
     marginBottom: 24,
+  },
+  listContent: {
+    height: '100%',
   },
   notifDot: {
     position: 'absolute',

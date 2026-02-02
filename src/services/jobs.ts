@@ -11,6 +11,8 @@ import {
   getDocs,
   getDoc,
 } from '@react-native-firebase/firestore';
+import { UserInfo } from '../@types/userInfo.type';
+import { Job } from '../@types/job.type';
 
 // Compute priority based on end date & visibility
 const computePriority = (
@@ -63,7 +65,6 @@ export const fetchMyJobs = async () => {
 };
 
 // create jobs
-
 export const createJob = async ({
   title,
   type = 'seasonal',
@@ -190,12 +191,12 @@ export const fetchRecommendedJobs = async () => {
         ...jobData,
         user: userData
           ? {
-            id: userSnap.id,
-            name: userData.profile.name,
-            email: userData.email,
-            membership: userData.membership,
-            verified: userData.verified,
-          }
+              id: userSnap.id,
+              name: userData.profile.name,
+              email: userData.email,
+              membership: userData.membership,
+              verified: userData.verified,
+            }
           : null,
       };
     }),
@@ -204,35 +205,61 @@ export const fetchRecommendedJobs = async () => {
   return jobsWithUserInfo;
 };
 
-
-type Job = {
-  id: string;
-  type?: string;
-  createdAt?: any;
-  [key: string]: any;
-};
-
 export const fetchFullTimeJobs = async (): Promise<Job[]> => {
   const db = getFirestore();
 
   // Fetch all jobs
   const snapshot = await getDocs(collection(db, 'jobs'));
 
-  // Map Firestore docs
-  const jobs: Job[] = snapshot.docs.map((doc: { id: any; data: () => any; }) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
+  // Map jobs + attach user info
+  const jobsWithUser: Job[] = await Promise.all(
+    snapshot.docs.map(async (jobDoc: { data: () => any; id: any }) => {
+      const jobData = jobDoc.data();
 
-  // Client-side filter
-  const fullTimeJobs = jobs.filter(
-    job => job?.type === 'fulltime',
+      let user: UserInfo | null = null;
+
+      if (jobData?.userId) {
+        try {
+          const userRef = doc(db, 'users', jobData.userId);
+          const userSnap = await getDoc(userRef);
+
+          if (userSnap.exists()) {
+            const u = userSnap.data();
+            user = {
+              id: userSnap.id,
+              name: u?.profile?.name,
+              photo: u?.profile?.photo,
+            };
+          }
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (err: any) {
+          console.warn('Failed to fetch user:', jobData.userId);
+        }
+      }
+
+      return {
+        id: jobDoc.id,
+        ...jobData,
+        user,
+      };
+    }),
   );
 
-  // newest data first
+  // Filter fulltime jobs
+  const fullTimeJobs = jobsWithUser.filter(job => job?.type === 'fulltime');
+
+  // Sort newest first (safe)
   fullTimeJobs.sort((a, b) => {
     if (!a.createdAt || !b.createdAt) return 0;
-    return b.createdAt.seconds - a.createdAt.seconds;
+
+    // Firestore Timestamp safe check
+    const aSec =
+      typeof a.createdAt?.seconds === 'number' ? a.createdAt.seconds : 0;
+
+    const bSec =
+      typeof b.createdAt?.seconds === 'number' ? b.createdAt.seconds : 0;
+
+    return bSec - aSec;
   });
 
   return fullTimeJobs;

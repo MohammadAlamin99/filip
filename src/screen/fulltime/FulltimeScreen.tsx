@@ -1,4 +1,3 @@
-
 import React, { useCallback, useState } from 'react';
 import {
   View,
@@ -9,11 +8,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import {
-  Bell,
-  Search,
-  SlidersHorizontal,
-} from 'lucide-react-native';
+import { Bell, Search, SlidersHorizontal } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './style';
 import FilterItem from '../../components/FilterItem';
@@ -21,14 +16,11 @@ import { JobCard } from '../../components/fulltime/JobCard';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import { fetchFullTimeJobs } from '../../services/jobs';
-
-
 type Filter = {
   id: string;
   label: string;
   active: boolean;
 };
-
 const INITIAL_FILTERS: Filter[] = [
   { id: '1', label: 'All Jobs', active: true },
   { id: '2', label: 'Kitchen', active: false },
@@ -36,12 +28,11 @@ const INITIAL_FILTERS: Filter[] = [
   { id: '4', label: '$50k+', active: false },
   { id: '5', label: 'Immediate Starts', active: false },
 ];
-
 const FulltimeScreen = () => {
   const navigation = useNavigation<any>();
   const [filters, setFilters] = useState<Filter[]>(INITIAL_FILTERS);
 
-  const { data: jobs = [], isLoading } = useQuery({
+  const { data: jobs = [] } = useQuery({
     queryKey: ['jobs'],
     queryFn: fetchFullTimeJobs,
   });
@@ -71,15 +62,9 @@ const FulltimeScreen = () => {
     [],
   );
 
-  if (isLoading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <Text style={{ color: 'white', textAlign: 'center', marginTop: 40 }}>
-          Loading jobs...
-        </Text>
-      </SafeAreaView>
-    );
-  }
+  // if (isPending) {
+  //   return <FulltimeScreen />;
+  // }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -129,7 +114,7 @@ const FulltimeScreen = () => {
         keyExtractor={item => item.id}
         renderItem={renderJobItem}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingTop: 12 }}
+        contentContainerStyle={styles.listContent}
       />
     </SafeAreaView>
   );
