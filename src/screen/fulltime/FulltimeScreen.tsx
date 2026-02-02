@@ -1,24 +1,28 @@
+
 import React, { useCallback, useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
-  TouchableOpacity,
   StatusBar,
   FlatList,
   ListRenderItem,
+  TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import {
   Bell,
-  ChevronDown,
   Search,
   SlidersHorizontal,
 } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import FilterItem from '../../components/FilterItem';
 import { styles } from './style';
+import FilterItem from '../../components/FilterItem';
 import { JobCard } from '../../components/fulltime/JobCard';
 import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@tanstack/react-query';
+import { fetchFullTimeJobs } from '../../services/jobs';
+
+
 type Filter = {
   id: string;
   label: string;
@@ -32,57 +36,16 @@ const INITIAL_FILTERS: Filter[] = [
   { id: '4', label: '$50k+', active: false },
   { id: '5', label: 'Immediate Starts', active: false },
 ];
-const MOCK_JOBS = [
-  {
-    id: '1',
-    title: 'Head Chef',
-    company: 'The Golden Fork Bistro',
-    location: 'San Francisco, CA',
-    salary: '€85k - €95k/yr',
-    type: 'Full-Time',
-    image: 'https://images.pexels.com/photos/2102934/pexels-photo-2102934.jpeg',
-  },
-  {
-    id: '2',
-    title: 'Hotel Concierge',
-    company: 'Grand Plaza Hotel',
-    location: 'Austin, TX',
-    salary: '€45k - €55k/yr',
-    type: 'Full-Time',
-    image: 'https://images.pexels.com/photos/774448/pexels-photo-774448.jpeg',
-  },
-  {
-    id: '3',
-    title: 'Bar Manager',
-    company: 'The Night Owl',
-    location: 'New York, NY',
-    salary: '€45k - €55k/yr',
-    type: 'Full-Time',
-    image: 'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg',
-  },
-  {
-    id: '4',
-    title: 'Bar Manager',
-    company: 'The Night Owl',
-    location: 'New York, NY',
-    salary: '€45k - €55k/yr',
-    type: 'Full-Time',
-    image: 'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg',
-  },
-  {
-    id: '5',
-    title: 'Bar Manager',
-    company: 'The Night Owl',
-    location: 'New York, NY',
-    salary: '€45k - €55k/yr',
-    type: 'Full-Time',
-    image: 'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg',
-  },
-];
 
 const FulltimeScreen = () => {
-  const [filters, setFilters] = useState<Filter[]>(INITIAL_FILTERS);
   const navigation = useNavigation<any>();
+  const [filters, setFilters] = useState<Filter[]>(INITIAL_FILTERS);
+
+  const { data: jobs = [], isLoading } = useQuery({
+    queryKey: ['jobs'],
+    queryFn: fetchFullTimeJobs,
+  });
+
   const onFilterPress = useCallback((id: string) => {
     setFilters(prev =>
       prev.map(item => ({
@@ -91,6 +54,7 @@ const FulltimeScreen = () => {
       })),
     );
   }, []);
+
   const renderFilterItem: ListRenderItem<Filter> = useCallback(
     ({ item }) => (
       <FilterItem
@@ -102,6 +66,21 @@ const FulltimeScreen = () => {
     [onFilterPress],
   );
 
+  const renderJobItem: ListRenderItem<any> = useCallback(
+    ({ item }) => <JobCard job={item} />,
+    [],
+  );
+
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text style={{ color: 'white', textAlign: 'center', marginTop: 40 }}>
+          Loading jobs...
+        </Text>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -109,13 +88,16 @@ const FulltimeScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Full-Time roles</Text>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('notification')}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate('notification')}
+        >
           <Bell width={24} height={24} color="white" />
           <View style={styles.notifDot} />
         </TouchableOpacity>
       </View>
 
-      {/* Search */}
+      {/* Search (static) */}
       <View style={styles.searchContainerWrapper}>
         <View style={styles.searchContainer}>
           <Search width={24} height={24} color="white" />
@@ -131,7 +113,7 @@ const FulltimeScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Filters */}
+      {/* Filters (STATIC for now) */}
       <FlatList
         data={filters}
         horizontal
@@ -139,33 +121,18 @@ const FulltimeScreen = () => {
         keyExtractor={item => item.id}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.filterScroll}
-        removeClippedSubviews
-        initialNumToRender={5}
-        maxToRenderPerBatch={5}
-        windowSize={5}
       />
-      <View style={styles.listHeader}>
-        <Text style={styles.countText}>24 Available Candidate</Text>
-        <TouchableOpacity style={styles.sortRow}>
-          <Text style={styles.sortText}>Sort by</Text>
-          <ChevronDown size={14} color="#FFD700" />
-        </TouchableOpacity>
-      </View>
-      {/* job apply list */}
+
+      {/* Job List */}
       <FlatList
-        data={MOCK_JOBS}
+        data={jobs}
         keyExtractor={item => item.id}
+        renderItem={renderJobItem}
         showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <JobCard
-            job={item}
-            onApply={() => console.log(`Applying for ${item.title}`)}
-          />
-        )}
+        contentContainerStyle={{ paddingTop: 12 }}
       />
     </SafeAreaView>
   );
 };
 
 export default FulltimeScreen;
-

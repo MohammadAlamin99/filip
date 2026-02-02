@@ -205,22 +205,35 @@ export const fetchRecommendedJobs = async () => {
 };
 
 
-// full time jobs
+type Job = {
+  id: string;
+  type?: string;
+  createdAt?: any;
+  [key: string]: any;
+};
 
-export const fetchFullTimeJobs = async () => {
+export const fetchFullTimeJobs = async (): Promise<Job[]> => {
   const db = getFirestore();
 
-  const q = query(
-    collection(db, 'jobs'),
-    where('type', '==', 'fulltime'),
-    orderBy('createdAt', 'desc')
-  );
+  // Fetch all jobs
+  const snapshot = await getDocs(collection(db, 'jobs'));
 
-  const snap = await getDocs(q);
-
-  return snap.docs.map((doc: { id: any; data: () => any; }) => ({
+  // Map Firestore docs
+  const jobs: Job[] = snapshot.docs.map((doc: { id: any; data: () => any; }) => ({
     id: doc.id,
     ...doc.data(),
   }));
-};
 
+  // Client-side filter
+  const fullTimeJobs = jobs.filter(
+    job => job?.type === 'fulltime',
+  );
+
+  // newest data first
+  fullTimeJobs.sort((a, b) => {
+    if (!a.createdAt || !b.createdAt) return 0;
+    return b.createdAt.seconds - a.createdAt.seconds;
+  });
+
+  return fullTimeJobs;
+};
