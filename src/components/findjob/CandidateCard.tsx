@@ -3,29 +3,29 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { Calendar, Lock, SendHorizontal, MapPin } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { styles } from '../../screen/seasonAvailabilty/style';
-export interface Candidate {
-  id: string;
-  name: string;
-  avatar: string;
-  location: string;
-  image: string;
-  status: 'Available' | 'Starts Soon';
-  statusText: string;
-  tags: string[];
-  availabilityType: string;
-  dates: string;
-  isLocked: boolean;
-}
+import Worker from '../../@types/Worker.type';
+
 interface CandidateCardProps {
-  candidate: Candidate;
+  candidate: Worker;
 }
 const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
   const navigation = useNavigation<any>();
-  console.log('candidate', candidate);
+  const formatCustomDate = (timestamp: { _seconds: number }) => {
+    if (!timestamp || !timestamp._seconds) return '';
+    const date = new Date(timestamp._seconds * 1000);
+
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+    });
+  };
   return (
     <View style={styles.card}>
       {/* Cover Image */}
-      <Image source={{ uri: candidate.image }} style={styles.candidateImage} />
+      <Image
+        source={{ uri: candidate?.banner || '' }}
+        style={styles.candidateImage}
+      />
 
       {/* Status Badge */}
       <View
@@ -40,25 +40,19 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
           style={[
             styles.dot,
             {
-              backgroundColor:
-                candidate.status === 'Available' ? '#4ADE80' : '#F59E0B',
+              backgroundColor: candidate?.isAvailable ? '#4ADE80' : '#F59E0B',
             },
           ]}
         />
-        <Text
-          style={[
-            styles.statusText,
-            { color: candidate.status === 'Available' ? '#000' : '#FFF' },
-          ]}
-        >
-          {candidate.statusText}
+        <Text style={styles.statusText}>
+          {candidate?.isAvailable ? 'Available' : 'Starts Soon'}
         </Text>
       </View>
 
       {/* Profile Info */}
       <View style={styles.profileRow}>
         <Image
-          source={{ uri: candidate.avatar }}
+          source={{ uri: candidate.image }}
           style={styles.avatarPlaceholder}
         />
         <View>
@@ -84,9 +78,12 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
           <Calendar size={24} color="#FFF" />
           <View>
             <Text style={styles.availabilityTitle}>
-              {candidate.availabilityType}
+              {candidate?.seasonLabel || ''}
             </Text>
-            <Text style={styles.availabilityDates}>{candidate.dates}</Text>
+            <Text style={styles.availabilityDates}>
+              {formatCustomDate(candidate?.date?.start)} -{' '}
+              {formatCustomDate(candidate?.date?.end)}
+            </Text>
           </View>
         </View>
 

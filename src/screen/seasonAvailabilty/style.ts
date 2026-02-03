@@ -143,6 +143,7 @@ export const styles = StyleSheet.create({
     fontFamily: 'InterDisplayMedium',
     fontWeight: 500,
     lineHeight: 16,
+    color: '#FFF',
   },
   profileRow: {
     flexDirection: 'row',

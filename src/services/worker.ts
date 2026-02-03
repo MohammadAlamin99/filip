@@ -28,6 +28,11 @@ export const fetchWorkers = async (): Promise<Worker[]> => {
       bio: data.workerProfile?.aboutMe ?? '',
       tags: data.workerProfile?.skills ?? [],
       image: data.profile?.photo,
+      banner: data.workerProfile?.banner ?? '',
+      date: data.workerProfile?.availability?.dateRange,
+      type: data.workerProfile?.availability?.type,
+      location: data.profile?.city ?? '',
+      seasonLabel: data.workerProfile?.availability?.seasonLabel ?? '',
     };
   });
 };
