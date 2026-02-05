@@ -5,16 +5,21 @@ import { Check, Dot } from 'lucide-react-native';
 import Worker from '../@types/Worker.type';
 import StarIcon from './svg/StarIcon';
 import { useNavigation } from '@react-navigation/native';
+import WorkerCardSkeleton from './skeleton/WorkerCardSkeleton';
 
 const WorkerCard = ({
+  isLoading,
   worker,
   onPress,
 }: {
+  isLoading: boolean;
   worker: Worker;
   onPress: () => void;
 }) => {
   const navigation = useNavigation<any>();
-  console.log('kormocari', worker);
+  if (isLoading) {
+    return <WorkerCardSkeleton />;
+  }
   return (
     <View style={styles.card}>
       <View style={styles.cardTopRow}>

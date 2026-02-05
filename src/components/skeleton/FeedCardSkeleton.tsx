@@ -2,8 +2,14 @@ import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
 import styles from '../../screen/feed/style';
 
-const FeedCardSkeleton = () => {
-  const pulseAnim = useRef(new Animated.Value(0.3)).current; // initial opacity
+const BASE_SKELETON_COLOR = '#2A2A2A';
+
+type Props = {
+  count?: number;
+};
+
+const FeedCardSkeleton = ({ count = 3 }: Props) => {
+  const pulseAnim = useRef(new Animated.Value(0.3)).current;
 
   useEffect(() => {
     const pulse = Animated.loop(
@@ -21,105 +27,101 @@ const FeedCardSkeleton = () => {
       ]),
     );
     pulse.start();
-
     return () => pulse.stop();
   }, [pulseAnim]);
 
-  const PulseView = (props: any) => (
-    <Animated.View {...props} style={[props.style, { opacity: pulseAnim }]} />
+  const PulseView = ({ style }: { style?: any }) => (
+    <Animated.View style={[style, { opacity: pulseAnim }]} />
   );
 
   return (
-    <View style={styles.recCard}>
-      {/* Image Skeleton */}
-      <PulseView style={[styles.cardImage, skeletonStyles.image]} />
+    <>
+      {[...Array(count)].map((_, index) => (
+        <View key={index} style={styles.recCard}>
+          {/* Image */}
+          <PulseView style={[styles.cardImage, skeleton.image]} />
 
-      {/* Profile Row Skeleton */}
-      <View style={styles.profileRow}>
-        <PulseView style={[styles.avatarCircle, skeletonStyles.avatar]} />
-        <View style={{ marginLeft: 10, flex: 1 }}>
-          <PulseView
-            style={[
-              skeletonStyles.text,
-              { width: 120, height: 16, marginBottom: 4 },
-            ]}
-          />
-          <PulseView style={[skeletonStyles.text, { width: 60, height: 14 }]} />
-        </View>
-      </View>
+          {/* Profile */}
+          <View style={styles.profileRow}>
+            <PulseView style={[styles.avatarCircle, skeleton.avatar]} />
+            <View style={{ marginLeft: 10, flex: 1 }}>
+              <PulseView style={[skeleton.text, { width: 120, height: 16 }]} />
+              <PulseView
+                style={[skeleton.text, { width: 60, height: 14, marginTop: 6 }]}
+              />
+            </View>
+          </View>
 
-      {/* Card Info Skeleton */}
-      <View style={styles.cardInfo}>
-        <View style={styles.rowBetween}>
-          <PulseView
-            style={[skeletonStyles.text, { width: 100, height: 18 }]}
-          />
-          <PulseView style={[skeletonStyles.text, { width: 50, height: 18 }]} />
-        </View>
+          {/* Info */}
+          <View style={styles.cardInfo}>
+            <View style={styles.rowBetween}>
+              <PulseView style={[skeleton.text, { width: 100, height: 18 }]} />
+              <PulseView style={[skeleton.text, { width: 50, height: 18 }]} />
+            </View>
 
-        <PulseView
-          style={[
-            skeletonStyles.text,
-            { width: 80, height: 14, marginVertical: 4 },
-          ]}
-        />
-
-        {/* Availability Skeleton */}
-        <View style={styles.availabilityBox}>
-          <PulseView
-            style={[skeletonStyles.avatar, { width: 24, height: 24 }]}
-          />
-          <View style={{ marginLeft: 8 }}>
             <PulseView
               style={[
-                skeletonStyles.text,
-                { width: 100, height: 14, marginBottom: 4 },
+                skeleton.text,
+                { width: 80, height: 14, marginVertical: 6 },
               ]}
             />
-            <PulseView
-              style={[skeletonStyles.text, { width: 80, height: 14 }]}
-            />
+
+            {/* Availability */}
+            <View style={styles.availabilityBox}>
+              <PulseView style={[skeleton.avatar, { width: 24, height: 24 }]} />
+              <View style={{ marginLeft: 8 }}>
+                <PulseView
+                  style={[skeleton.text, { width: 100, height: 14 }]}
+                />
+                <PulseView
+                  style={[
+                    skeleton.text,
+                    { width: 80, height: 14, marginTop: 4 },
+                  ]}
+                />
+              </View>
+            </View>
+
+            {/* Tags */}
+            <View style={styles.tagRow}>
+              <PulseView style={[skeleton.tag, { width: 60 }]} />
+              <PulseView style={[skeleton.tag, { width: 50 }]} />
+              <PulseView style={[skeleton.tag, { width: 70 }]} />
+            </View>
+
+            {/* Button */}
+            <PulseView style={skeleton.button} />
           </View>
         </View>
-
-        {/* Tags Skeleton */}
-        <View style={styles.tagRow}>
-          <PulseView style={[skeletonStyles.tag, { width: 60 }]} />
-          <PulseView style={[skeletonStyles.tag, { width: 50 }]} />
-          <PulseView style={[skeletonStyles.tag, { width: 70 }]} />
-        </View>
-
-        {/* Button Skeleton */}
-        <PulseView style={skeletonStyles.button} />
-      </View>
-    </View>
+      ))}
+    </>
   );
 };
 
-const skeletonStyles = StyleSheet.create({
+export default FeedCardSkeleton;
+
+const skeleton = StyleSheet.create({
   image: {
-    backgroundColor: '#e0e0e0',
+    backgroundColor: BASE_SKELETON_COLOR,
   },
   avatar: {
-    backgroundColor: '#e0e0e0',
+    backgroundColor: BASE_SKELETON_COLOR,
     borderRadius: 50,
   },
   text: {
-    backgroundColor: '#e0e0e0',
+    backgroundColor: BASE_SKELETON_COLOR,
     borderRadius: 4,
   },
   tag: {
     height: 24,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: BASE_SKELETON_COLOR,
     borderRadius: 12,
     marginRight: 6,
   },
   button: {
     height: 40,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: BASE_SKELETON_COLOR,
     borderRadius: 8,
     marginTop: 10,
   },
 });
-
-export default FeedCardSkeleton;

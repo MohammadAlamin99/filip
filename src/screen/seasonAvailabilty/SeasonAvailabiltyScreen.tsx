@@ -14,6 +14,7 @@ import { useNavigation } from '@react-navigation/native';
 import CandidateCard from '../../components/findjob/CandidateCard';
 import { useQuery } from '@tanstack/react-query';
 import { fetchSeasonalJobs } from '../../services/jobs';
+import CandidateCardSkeleton from '../../components/skeleton/CandidateCardSkeleton';
 
 const SeasonAvailabilityScreen = () => {
   const navigation = useNavigation<any>();
@@ -23,10 +24,11 @@ const SeasonAvailabilityScreen = () => {
     navigation.goBack();
   };
 
-  const { data: workers } = useQuery({
+  const { data: workers, isPending } = useQuery({
     queryKey: ['workers'],
     queryFn: fetchSeasonalJobs,
   });
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -108,11 +110,16 @@ const SeasonAvailabilityScreen = () => {
 
       {/* Candidate List */}
       <FlatList
-        data={workers}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => <CandidateCard candidate={item} />}
+        data={isPending ? Array(5).fill({}) : workers}
+        keyExtractor={(item, index) => (isPending ? index.toString() : item.id)}
+        renderItem={({ item }) =>
+          isPending ? (
+            <CandidateCardSkeleton />
+          ) : (
+            <CandidateCard candidate={item} />
+          )
+        }
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.listContent}
       />
     </SafeAreaView>
   );

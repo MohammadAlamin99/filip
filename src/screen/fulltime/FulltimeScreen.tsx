@@ -17,6 +17,7 @@ import { styles } from './style';
 import FilterItem from '../../components/FilterItem';
 import { JobCard } from '../../components/fulltime/JobCard';
 import { fetchRecommendedJobs } from '../../services/jobs';
+import JobCardSkeleton from '../../components/skeleton/JobCardSkeleton';
 
 // TYPES
 type Filter = {
@@ -87,7 +88,6 @@ const FulltimeScreen = () => {
         if (activeFilter === 'Immediate Starts') {
           return job.priority === 'active';
         }
-
         return true;
       },
     );
@@ -163,16 +163,20 @@ const FulltimeScreen = () => {
 
       {/* Job List */}
       <FlatList
-        data={filteredJobs}
+        data={isLoading ? [] : filteredJobs}
         keyExtractor={item => item.id}
         renderItem={renderJobItem}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          !isLoading ? (
-            <Text style={{ color: '#9CA3AF', textAlign: 'center' }}>
+          isLoading ? (
+            <JobCardSkeleton />
+          ) : (
+            <Text
+              style={{ color: '#9CA3AF', textAlign: 'center', marginTop: 50 }}
+            >
               No jobs found
             </Text>
-          ) : null
+          )
         }
       />
     </SafeAreaView>

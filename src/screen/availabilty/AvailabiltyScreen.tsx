@@ -13,21 +13,22 @@ import Worker from '../../@types/Worker.type';
 
 const AvailabilityScreen = () => {
   const navigation = useNavigation<any>();
-  const { data: workers = [] } = useQuery({
+  const { data: workers = [], isLoading } = useQuery({
     queryKey: ['fulltime'],
     queryFn: fetchFullTimeJobs,
   });
-  console.log(workers);
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
       <AvailabilityHeader />
       <FlatList
-        data={workers}
-        keyExtractor={item => item.id}
+        data={isLoading ? Array(5).fill({}) : workers} // show 5 placeholders while loading
+        keyExtractor={(item, index) => (item.id ? item.id : index.toString())}
         renderItem={({ item }) => (
           <WorkerCard
             worker={item as Worker}
+            isLoading={isLoading}
             onPress={() => navigation.navigate('sendoffer')}
           />
         )}
