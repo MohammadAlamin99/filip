@@ -18,14 +18,14 @@ import FilterItem from '../../components/FilterItem';
 import { JobCard } from '../../components/fulltime/JobCard';
 import { fetchRecommendedJobs } from '../../services/jobs';
 
-// ---------------- TYPES ----------------
+// TYPES
 type Filter = {
   id: string;
   label: string;
   active: boolean;
 };
 
-// ---------------- FILTERS ----------------
+// FILTERS
 const INITIAL_FILTERS: Filter[] = [
   { id: '1', label: 'All Jobs', active: true },
   { id: '2', label: 'Kitchen', active: false },
@@ -40,19 +40,19 @@ const FulltimeScreen = () => {
   const [filters, setFilters] = useState<Filter[]>(INITIAL_FILTERS);
   const [searchText, setSearchText] = useState('');
 
-  // ---------------- FETCH JOBS ----------------
+  // FETCH JOBS
   const { data: jobs = [], isLoading } = useQuery({
     queryKey: ['fulltime-jobs'],
     queryFn: fetchRecommendedJobs,
   });
 
-  // ---------------- ACTIVE FILTER ----------------
+  // ACTIVE FILTER
   const activeFilter = useMemo(
     () => filters.find(f => f.active)?.label,
     [filters],
   );
 
-  // ---------------- FILTER LOGIC ----------------
+  // FILTER LOGIC
   const filteredJobs = useMemo(() => {
     return jobs.filter(
       (job: {
@@ -93,7 +93,7 @@ const FulltimeScreen = () => {
     );
   }, [jobs, searchText, activeFilter]);
 
-  // ---------------- FILTER HANDLER ----------------
+  //FILTER HANDLER
   const onFilterPress = useCallback((id: string) => {
     setFilters(prev =>
       prev.map(item => ({
@@ -123,7 +123,7 @@ const FulltimeScreen = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      {/* ---------- Header ---------- */}
+      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Full-Time roles</Text>
         <TouchableOpacity onPress={() => navigation.navigate('notification')}>
@@ -132,7 +132,8 @@ const FulltimeScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* ---------- Search ---------- */}
+      {/* Search */}
+
       <View style={styles.searchContainerWrapper}>
         <View style={styles.searchContainer}>
           <Search width={24} height={24} color="white" />
@@ -150,7 +151,7 @@ const FulltimeScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* ---------- Filters ---------- */}
+      {/* Filters */}
       <FlatList
         data={filters}
         horizontal
@@ -160,13 +161,12 @@ const FulltimeScreen = () => {
         contentContainerStyle={styles.filterScroll}
       />
 
-      {/* ---------- Job List ---------- */}
+      {/* Job List */}
       <FlatList
         data={filteredJobs}
         keyExtractor={item => item.id}
         renderItem={renderJobItem}
         showsVerticalScrollIndicator={false}
-        // contentContainerStyle={styles.listContent}
         ListEmptyComponent={
           !isLoading ? (
             <Text style={{ color: '#9CA3AF', textAlign: 'center' }}>
