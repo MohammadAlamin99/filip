@@ -38,7 +38,13 @@ const CandidateCardSkeleton: React.FC<{ count?: number }> = ({ count = 3 }) => {
   return (
     <>
       {[...Array(count)].map((_, idx) => (
-        <View key={idx} style={styles.card}>
+        <View
+          key={idx}
+          style={[
+            styles.card,
+            { borderWidth: 1, borderColor: BASE_SKELETON_COLOR },
+          ]}
+        >
           {/* Cover Image Skeleton */}
           <PulseView style={styles.candidateImage} />
 

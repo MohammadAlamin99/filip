@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'InterDisplayRegular',
     fontWeight: 400,
+    textTransform: 'capitalize',
   },
   profileRow: {
     flexDirection: 'row',
@@ -199,13 +200,14 @@ const styles = StyleSheet.create({
     fontWeight: 600,
     fontFamily: 'InterDisplaySemiBold',
   },
-  perHr: { fontSize: 12 },
+  perHr: { fontSize: 12, textTransform: 'capitalize' },
   locationText: {
     color: COLORS.yellow,
     fontSize: 14,
     marginTop: 4,
     fontFamily: 'InterDisplayRegular',
     fontWeight: 400,
+    textTransform: 'capitalize',
   },
 
   availabilityBox: {

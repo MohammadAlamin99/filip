@@ -8,6 +8,7 @@ export interface JobCardProps {
     location: string;
     rate: {
       amount: number;
+      unit: string;
     };
     type: string;
     image: string;

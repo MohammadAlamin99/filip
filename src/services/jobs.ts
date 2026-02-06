@@ -254,9 +254,9 @@ export const fetchRecommendedJobs = async () => {
               id: userSnap.id,
               name: userData.profile.name,
               photo: userData.profile.photo,
+              verified: userData?.profile.verified,
               email: userData.email,
               membership: userData.membership,
-              verified: userData.verified,
             }
           : null,
       };

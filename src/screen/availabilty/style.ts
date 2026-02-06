@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 400,
     fontFamily: 'InterDisplayRegular',
+    textTransform: 'capitalize',
   },
   distanceText: {
     color: COLORS.white,

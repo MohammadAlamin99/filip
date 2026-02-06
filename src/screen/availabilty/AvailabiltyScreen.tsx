@@ -23,7 +23,7 @@ const AvailabilityScreen = () => {
       <StatusBar barStyle="light-content" />
       <AvailabilityHeader />
       <FlatList
-        data={isLoading ? Array(5).fill({}) : workers} // show 5 placeholders while loading
+        data={isLoading ? Array(5).fill({}) : workers} 
         keyExtractor={(item, index) => (item.id ? item.id : index.toString())}
         renderItem={({ item }) => (
           <WorkerCard

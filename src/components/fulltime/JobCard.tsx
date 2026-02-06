@@ -43,9 +43,7 @@ const InfoTag = ({
 };
 
 export const JobCard: React.FC<JobCardProps> = ({ job, onBookmark }) => {
-  console.log(job, 'jobs');
   const navigation = useNavigation<any>();
-
   const handleTost = () => {
     const message = 'Apply successfully';
 
@@ -81,10 +79,18 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onBookmark }) => {
       <View style={styles.tagsWrapper}>
         <View style={styles.row}>
           <InfoTag text={job.location} iconType="location" />
-          <InfoTag text={`€ ${job?.rate?.amount}/yr`} iconType="salary" />
+          <InfoTag
+            text={`€ ${job?.rate?.amount}/${
+              job?.rate?.unit.charAt(0).toUpperCase() + job?.rate?.unit.slice(1)
+            }`}
+            iconType="salary"
+          />
         </View>
         <View style={styles.row}>
-          <InfoTag text={job.type} iconType="time" />
+          <InfoTag
+            text={job.type.charAt(0).toUpperCase() + job.type.slice(1)}
+            iconType="time"
+          />
         </View>
       </View>
 
@@ -143,6 +149,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     gap: 21,
+    textTransform: 'capitalize',
   },
   tagContainer: {
     flexDirection: 'row',

@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Feedtype } from '../../@types/Feed.type';
 
 const FeedCard = ({ item }: { item: Feedtype }) => {
+  console.log(item);
   const navigation = useNavigation<any>();
   const [liked, setLiked] = useState<boolean>(false);
   const formatDate = (dateString?: string) => {

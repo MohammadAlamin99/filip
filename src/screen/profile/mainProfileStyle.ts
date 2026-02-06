@@ -28,24 +28,23 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '600',
+    paddingBottom: 20,
   },
 
-  photoSection: {
-    alignItems: 'center',
-    marginVertical: 20,
-  },
   avatar: {
-    width: 72,
-    height: 72,
+    width: 92,
+    height: 92,
     borderRadius: 50,
     backgroundColor: '#1D1D1D',
     alignItems: 'center',
     justifyContent: 'center',
   },
   avatarImage: {
-    width: 90,
-    height: 90,
+    width: 92,
+    height: 92,
     borderRadius: 45,
+    borderWidth: 2,
+    borderColor: '#FFD900',
   },
   cameraIcon: {
     position: 'absolute',
@@ -272,6 +271,12 @@ const styles = StyleSheet.create({
   },
   activeChipText: {
     color: '#1F2937', // gray-800
+  },
+  photoSection: {
+    alignItems: 'center',
+    marginTop: -60, // Banner এর সাথে overlap করবে
+    marginBottom: 24,
+    zIndex: 1, // Profile photo সামনে থাকবে
   },
 });
 

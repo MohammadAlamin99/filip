@@ -43,7 +43,13 @@ const FeedCardSkeleton = ({ count = 3 }: Props) => {
 
           {/* Profile */}
           <View style={styles.profileRow}>
-            <PulseView style={[styles.avatarCircle, skeleton.avatar]} />
+            <PulseView
+              style={[
+                styles.avatarCircle,
+                { borderColor: '#1D1D1D' },
+                skeleton.avatar,
+              ]}
+            />
             <View style={{ marginLeft: 10, flex: 1 }}>
               <PulseView style={[skeleton.text, { width: 120, height: 16 }]} />
               <PulseView
