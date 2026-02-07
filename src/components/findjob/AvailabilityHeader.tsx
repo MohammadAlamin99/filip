@@ -3,6 +3,8 @@ import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { Bell, Search } from 'lucide-react-native';
 import styles from '../../screen/availabilty/style';
 import { useNavigation } from '@react-navigation/native';
+import { useQuery } from '@tanstack/react-query';
+import { fetchMyNotifications } from '../../services/notification';
 
 const COLORS = {
   secondaryText: '#9E9E9E',
@@ -10,13 +12,24 @@ const COLORS = {
 
 const AvailabilityHeader = () => {
   const navigation = useNavigation<any>();
+  // notification get for dot
+  const { data: notifications = [] } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: fetchMyNotifications,
+  });
+
+  const unreadCount = notifications.filter(n => !n.isRead).length;
   return (
     <View>
       <View style={styles.header}>
         <Text style={styles.title}>Find Workers</Text>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('notification')}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate('notification')}
+        >
           <Bell width={24} height={24} color="white" />
-          <View style={styles.notifDot} />
+
+          {unreadCount > 0 && <View style={styles.notifDot} />}
         </TouchableOpacity>
       </View>
 

@@ -18,6 +18,7 @@ import FilterItem from '../../components/FilterItem';
 import { JobCard } from '../../components/fulltime/JobCard';
 import { fetchRecommendedJobs } from '../../services/jobs';
 import JobCardSkeleton from '../../components/skeleton/JobCardSkeleton';
+import { fetchMyNotifications } from '../../services/notification';
 
 // TYPES
 type Filter = {
@@ -119,6 +120,14 @@ const FulltimeScreen = () => {
     [],
   );
 
+  // notification get for dot
+  const { data: notifications = [] } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: fetchMyNotifications,
+  });
+
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -126,9 +135,13 @@ const FulltimeScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Full-Time roles</Text>
-        <TouchableOpacity onPress={() => navigation.navigate('notification')}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate('notification')}
+        >
           <Bell width={24} height={24} color="white" />
-          <View style={styles.notifDot} />
+
+          {unreadCount > 0 && <View style={styles.notifDot} />}
         </TouchableOpacity>
       </View>
 

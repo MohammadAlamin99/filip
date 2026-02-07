@@ -15,6 +15,7 @@ import CandidateCard from '../../components/findjob/CandidateCard';
 import { useQuery } from '@tanstack/react-query';
 import { fetchSeasonalJobs } from '../../services/jobs';
 import CandidateCardSkeleton from '../../components/skeleton/CandidateCardSkeleton';
+import { fetchMyNotifications } from '../../services/notification';
 
 const SeasonAvailabilityScreen = () => {
   const navigation = useNavigation<any>();
@@ -28,6 +29,14 @@ const SeasonAvailabilityScreen = () => {
     queryKey: ['workers'],
     queryFn: fetchSeasonalJobs,
   });
+
+  // notification get for dot
+  const { data: notifications = [] } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: fetchMyNotifications,
+  });
+
+  const unreadCount = notifications.filter(n => !n.isRead).length;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -46,7 +55,8 @@ const SeasonAvailabilityScreen = () => {
           onPress={() => navigation.navigate('notification')}
         >
           <Bell width={24} height={24} color="white" />
-          <View style={styles.notifDot} />
+
+          {unreadCount > 0 && <View style={styles.notifDot} />}
         </TouchableOpacity>
       </View>
 

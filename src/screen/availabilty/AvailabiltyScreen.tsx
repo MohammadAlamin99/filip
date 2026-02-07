@@ -18,6 +18,8 @@ const AvailabilityScreen = () => {
     queryFn: fetchFullTimeJobs,
   });
 
+  
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />

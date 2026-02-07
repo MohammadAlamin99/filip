@@ -15,6 +15,7 @@ import MainDrawer from '../../components/feed/MainDrawer';
 import Gig from '../../components/feed/Gig';
 import { useQuery } from '@tanstack/react-query';
 import { fetchCurrentUser } from '../../services/user';
+import { fetchMyNotifications } from '../../services/notification';
 
 const COLORS = {
   secondaryText: '#9E9E9E',
@@ -46,6 +47,13 @@ const FeedContent = ({ navigation }: any) => {
     queryKey: ['currentUser'],
     queryFn: fetchCurrentUser,
   });
+  // notification get for dot
+  const { data: notifications = [] } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: fetchMyNotifications,
+  });
+
+  const unreadCount = notifications.filter(n => !n.isRead).length;
   // get current time
   const getGreeting = () => {
     const hours = new Date().getHours();
@@ -76,12 +84,14 @@ const FeedContent = ({ navigation }: any) => {
             <Text style={styles.nameText}>{user?.profile?.name}</Text>
           </View>
         </TouchableOpacity>
+        {/* notification dot */}
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => navigation.navigate('notification')}
         >
           <Bell width={24} height={24} color="white" />
-          <View style={styles.notifDot} />
+
+          {unreadCount > 0 && <View style={styles.notifDot} />}
         </TouchableOpacity>
       </View>
       <View style={styles.searchContainer}>
