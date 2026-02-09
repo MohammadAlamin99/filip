@@ -137,7 +137,7 @@ export const fetchReceivedOffers = async () => {
   const snap = await firestore()
     .collection('offers')
     .where('toUserId', '==', user.uid)
-    // .orderBy('createdAt', 'desc')
+    .orderBy('createdAt', 'desc')
     .get();
 
   return snap.docs.map(doc => ({
@@ -154,7 +154,7 @@ export const fetchSentOffers = async () => {
   const snap = await firestore()
     .collection('offers')
     .where('fromUserId', '==', user.uid)
-    // .orderBy('createdAt', 'desc')
+    .orderBy('createdAt', 'desc')
     .get();
 
   return snap.docs.map(doc => ({

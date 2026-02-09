@@ -6,9 +6,6 @@ import {
   TouchableOpacity,
   StatusBar,
   ActivityIndicator,
-  Alert,
-  ToastAndroid,
-  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ArrowLeft, Clock4 } from 'lucide-react-native';
@@ -26,6 +23,7 @@ import {
   fetchSentOffers,
 } from '../../services/offer';
 import AcceptDeclineBtn from '../../components/AcceptDeclineBtn';
+import Toast from 'react-native-toast-message';
 
 const EngagementScreen = () => {
   const navigation = useNavigation<any>();
@@ -37,9 +35,7 @@ const EngagementScreen = () => {
     navigation.goBack();
   };
 
-  // --------------------------
-  // Queries
-  // --------------------------
+  // query
   const {
     data: receivedOffers = [],
     isLoading: receivedLoading,
@@ -66,43 +62,38 @@ const EngagementScreen = () => {
 
   const isLoading = activeTab === 'received' ? receivedLoading : sentLoading;
 
-  // --------------------------
-  // Toast helper
-  // --------------------------
-  const showToast = (msg: string) => {
-    if (Platform.OS === 'android') {
-      ToastAndroid.showWithGravity(
-        msg,
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM,
-      );
-    } else {
-      Alert.alert('Info', msg);
-    }
-  };
-
-  // --------------------------
-  // Mutations (Accept / Decline)
-  // --------------------------
   const { mutate: acceptMutation } = useMutation({
     mutationFn: acceptOffer,
     onSuccess: () => {
-      showToast('Offer accepted');
+      Toast.show({
+        type: 'success',
+        text1: 'Offer accepted',
+      });
+
       queryClient.invalidateQueries({ queryKey: ['receivedOffers'] });
     },
     onError: (error: any) => {
-      showToast(error?.message || 'Accept failed');
+      Toast.show({
+        type: 'error',
+        text1: error?.message || 'Accept failed',
+      });
     },
   });
 
   const { mutate: declineMutation } = useMutation({
     mutationFn: declineOffer,
     onSuccess: () => {
-      showToast('Offer declined');
+      Toast.show({
+        type: 'success',
+        text1: 'Offer declined',
+      });
       queryClient.invalidateQueries({ queryKey: ['receivedOffers'] });
     },
     onError: (error: any) => {
-      showToast(error?.message || 'Decline failed');
+      Toast.show({
+        type: 'error',
+        text1: error?.message || 'Decline failed',
+      });
     },
   });
 
