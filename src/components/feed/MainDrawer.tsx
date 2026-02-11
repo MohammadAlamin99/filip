@@ -1,3 +1,4 @@
+
 // import {
 //   Bookmark,
 //   MapPin,
@@ -9,54 +10,85 @@
 //   X,
 //   PlusCircleIcon,
 // } from 'lucide-react-native';
-// import { View, Text, ScrollView, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
-// import React, { useState } from 'react';
+
+// import {
+//   View,
+//   Text,
+//   ScrollView,
+//   Image,
+//   TouchableOpacity,
+// } from 'react-native';
+
+// import React, { useEffect, useState } from 'react';
 // import styles from '../../screen/feed/style';
 // import { useNavigation } from '@react-navigation/native';
 // import UsersAddIcon from '../svg/UsersAddIcon';
 // import UpgradeIcon from '../svg/UpgradeIcon';
-// import { useQuery } from '@tanstack/react-query';
-// import { fetchCurrentUser } from '../../services/user';
+
+// import auth from '@react-native-firebase/auth';
+// import firestore from '@react-native-firebase/firestore';
 
 // const MainDrawer = () => {
 //   const navigation = useNavigation<any>();
 //   const [showBanner, setShowBanner] = useState(true);
-//   const { data: user, isLoading, isError } = useQuery({
-//     queryKey: ['currentUser'],
-//     queryFn: fetchCurrentUser,
-//   });
 
+//   const [userData, setUserData] = useState<any>(null);
 
+//   const firebaseUser = auth().currentUser;
 
-//   if (isLoading) {
-//     return (
-//       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//         <ActivityIndicator size="large" color="#000" />
-//       </View>
-//     );
-//   }
+//   useEffect(() => {
+//     const loadUserData = async () => {
+//       if (!firebaseUser) return;
 
-//   if (isError || !user) {
-//     return (
-//       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-//         <Text>Error loading user data</Text>
-//       </View>
-//     );
-//   }
+//       try {
+//         const snap = await firestore()
+//           .collection('users')
+//           .doc(firebaseUser.uid)
+//           .get();
+
+//         if (snap.exists()) {
+//           setUserData(snap.data());
+//         }
+//       } catch (err) {
+//         console.log('Failed to load user firestore data:', err);
+//       }
+//     };
+
+//     loadUserData();
+//   }, [firebaseUser]);
+
+//   // fallback data
+//   const profilePhoto =
+//     userData?.profile?.photo ||
+//     firebaseUser?.photoURL ||
+//     'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png';
+
+//   const profileName =
+//     userData?.profile?.name ||
+//     firebaseUser?.displayName ||
+//     firebaseUser?.email?.split('@')[0] ||
+//     'Unknown User';
+
+//   const profileSkills =
+//     userData?.profile?.skills?.length > 0
+//       ? userData.profile.skills.join(', ')
+//       : 'No skills';
+
+//   const profileCity = userData?.profile?.city || 'Not set';
 
 //   return (
 //     <View style={styles.drawerContainer}>
 //       <ScrollView showsVerticalScrollIndicator={false}>
 //         <View style={styles.drawerHeader}>
-//           <Image
-//             source={{ uri: user?.profile?.photo || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png' }}
-//             style={styles.drawerAvatar}
-//           />
-//           <Text style={styles.drawerName}>{user?.profile?.name}</Text>
-//           <Text style={styles.drawerRole}>{user?.profile?.skills.join(', ')}</Text>
+//           <Image source={{ uri: profilePhoto }} style={styles.drawerAvatar} />
+
+//           <Text style={styles.drawerName}>{profileName}</Text>
+
+//           <Text style={styles.drawerRole}>{profileSkills}</Text>
+
 //           <View style={styles.locationRow}>
 //             <MapPin width={16} height={16} fill="#ffffff" />
-//             <Text style={styles.locationText_drawer}>{user?.profile?.city}</Text>
+//             <Text style={styles.locationText_drawer}>{profileCity}</Text>
 //           </View>
 //         </View>
 
@@ -65,10 +97,12 @@
 //             <Text style={styles.statValue}>142</Text>
 //             <Text style={styles.statLabel}>Gigs Done</Text>
 //           </View>
+
 //           <View style={styles.statCard}>
 //             <Text style={styles.statValue}>98%</Text>
 //             <Text style={styles.statLabel}>Success</Text>
 //           </View>
+
 //           <View style={styles.statCard}>
 //             <Text style={styles.statValue}>26</Text>
 //             <Text style={styles.statLabel}>Repeats</Text>
@@ -116,20 +150,22 @@
 //         <View style={styles.drawerSection}>
 //           <Text style={styles.sectionHeader}>Professional</Text>
 
-//           <TouchableOpacity style={styles.menuItem} activeOpacity={0.7} onPress={() => navigation.navigate('postAvailabilites')}>
+//           <TouchableOpacity
+//             style={styles.menuItem}
+//             activeOpacity={0.7}
+//             onPress={() => navigation.navigate('postAvailabilites')}
+//           >
 //             <View style={styles.menuLeft}>
 //               <View style={styles.iconCircle}>
 //                 <PlusCircleIcon width={20} height={18} color="#FFF" />
 //               </View>
-//               <TouchableOpacity
-//                 onPress={() => navigation.navigate('postAvailabilites')}
-//               >
+
+//               <View>
 //                 <Text style={styles.menuText}>My Posted Availability</Text>
-//                 <Text style={styles.menuSubtext}>
-//                   Post & See Availabilities
-//                 </Text>
-//               </TouchableOpacity>
+//                 <Text style={styles.menuSubtext}>Post & See Availabilities</Text>
+//               </View>
 //             </View>
+
 //             <ChevronRight width={20} height={20} color="#9CA3AF" />
 //           </TouchableOpacity>
 
@@ -138,11 +174,13 @@
 //               <View style={styles.iconCircle}>
 //                 <FileText width={20} height={18} color="#FFF" />
 //               </View>
+
 //               <View>
 //                 <Text style={styles.menuText}>Resume & Docs</Text>
 //                 <Text style={styles.menuSubtext}>Last Updated 2 Days Ago</Text>
 //               </View>
 //             </View>
+
 //             <ChevronRight width={20} height={20} color="#9CA3AF" />
 //           </TouchableOpacity>
 //         </View>
@@ -156,16 +194,23 @@
 //             >
 //               <X width={16} height={16} color="white" />
 //             </TouchableOpacity>
+
 //             <View style={styles.medalIconWrapper}>
 //               <UpgradeIcon width={24} height={24} color="#374151" />
 //             </View>
+
 //             <View>
 //               <Text style={styles.bannerTitle}>Upgrade To Pro</Text>
+
 //               <Text style={styles.bannerSubtitle}>
 //                 Get Priority On High-Paying{'\n'}Gigs At Luxury Hotels
 //               </Text>
-//               <TouchableOpacity style={styles.viewPlansBtn} activeOpacity={0.7}
-//                 onPress={() => navigation.navigate('membership')}>
+
+//               <TouchableOpacity
+//                 style={styles.viewPlansBtn}
+//                 activeOpacity={0.7}
+//                 onPress={() => navigation.navigate('membership')}
+//               >
 //                 <Text style={styles.viewPlansText}>View Plans</Text>
 //               </TouchableOpacity>
 //             </View>
@@ -173,7 +218,11 @@
 //         )}
 
 //         <View style={styles.drawerFooter}>
-//           <TouchableOpacity style={styles.footerItem} activeOpacity={0.7} onPress={() => navigation.navigate('profile')}>
+//           <TouchableOpacity
+//             style={styles.footerItem}
+//             activeOpacity={0.7}
+//             onPress={() => navigation.navigate('profile')}
+//           >
 //             <Settings width={20} height={20} color="#FFF" />
 //             <Text style={styles.footerText}>Settings</Text>
 //           </TouchableOpacity>
@@ -181,7 +230,10 @@
 //           <TouchableOpacity
 //             style={styles.footerItem}
 //             activeOpacity={0.7}
-//             onPress={() => navigation.navigate('Login')}
+//             onPress={async () => {
+//               await auth().signOut();
+//               navigation.replace('Login');
+//             }}
 //           >
 //             <LogOut width={20} height={20} color="#EF4444" />
 //             <Text style={styles.logoutText}>Log Out</Text>
@@ -193,7 +245,6 @@
 // };
 
 // export default MainDrawer;
-
 import {
   Bookmark,
   MapPin,
@@ -220,27 +271,27 @@ import { useNavigation } from '@react-navigation/native';
 import UsersAddIcon from '../svg/UsersAddIcon';
 import UpgradeIcon from '../svg/UpgradeIcon';
 
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+import { getApp } from '@react-native-firebase/app';
+import { getAuth, signOut } from '@react-native-firebase/auth';
+import { getFirestore, doc, getDoc } from '@react-native-firebase/firestore';
 
 const MainDrawer = () => {
   const navigation = useNavigation<any>();
   const [showBanner, setShowBanner] = useState(true);
-
   const [userData, setUserData] = useState<any>(null);
-  console.log('userData', userData?.profile.photo);
 
-  const firebaseUser = auth().currentUser;
+  const app = getApp();
+  const authInstance = getAuth(app);
+  const db = getFirestore(app);
+
+  const firebaseUser = authInstance.currentUser;
 
   useEffect(() => {
     const loadUserData = async () => {
       if (!firebaseUser) return;
 
       try {
-        const snap = await firestore()
-          .collection('users')
-          .doc(firebaseUser.uid)
-          .get();
+        const snap = await getDoc(doc(db, 'users', firebaseUser.uid));
 
         if (snap.exists()) {
           setUserData(snap.data());
@@ -251,7 +302,7 @@ const MainDrawer = () => {
     };
 
     loadUserData();
-  }, [firebaseUser]);
+  }, [firebaseUser, db]);
 
   // fallback data
   const profilePhoto =
@@ -427,7 +478,7 @@ const MainDrawer = () => {
             style={styles.footerItem}
             activeOpacity={0.7}
             onPress={async () => {
-              await auth().signOut();
+              await signOut(authInstance);
               navigation.replace('Login');
             }}
           >
