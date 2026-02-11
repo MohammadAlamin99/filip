@@ -105,14 +105,14 @@ const MemberShipScreen = () => {
         <View style={styles.planCard}>
           <Text style={styles.planName}>Standard</Text>
           <View style={styles.priceContainer}>
-            <Text style={styles.priceAmount}>€10</Text>
+            <Text style={styles.priceAmount}>€7.99</Text>
             <Text style={styles.priceUnit}>/mo</Text>
           </View>
 
           <View style={styles.featuresList}>
             <View style={styles.featureItem}>
               <Check width={22} height={22} color="#FFD900" />
-              <Text style={styles.featureText}>50 Monthly Credits</Text>
+              <Text style={styles.featureText}>10 Monthly Credits</Text>
             </View>
             <View style={styles.featureItem}>
               <Check width={22} height={22} color="#FFD900" />
@@ -140,7 +140,7 @@ const MemberShipScreen = () => {
 
           <Text style={styles.premiumName}>Premium</Text>
           <View style={styles.priceContainer}>
-            <Text style={styles.priceAmount}>€17</Text>
+            <Text style={styles.priceAmount}>€24.99</Text>
             <Text style={styles.priceUnit}>/mo</Text>
           </View>
 

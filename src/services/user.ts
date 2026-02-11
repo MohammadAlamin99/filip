@@ -14,6 +14,7 @@ import {
 import { UpdateProfilePayload } from '../@types/UpdateProfile.type';
 import { UserInfo } from '../@types/userInfo.type';
 import { WorkerUser } from '../@types/WorkerUser.type';
+import { UserType } from '../@types/ViewProfile.type';
 
 // The role of the current user
 export const fetchUserRole = async () => {
@@ -126,4 +127,23 @@ export const fetchFullTimeJobs = async (): Promise<WorkerUser[]> => {
   );
 
   return jobsWithUser;
+};
+
+
+// get user by id
+
+export const getUserById = async (userId: string): Promise<UserType> => {
+  if (!userId) throw new Error("User ID is required");
+  const db = getFirestore();
+  const userRef = doc(db, "users", userId);
+  const snap = await getDoc(userRef);
+
+  if (!snap.exists()) {
+    throw new Error("User not found");
+  }
+
+  return {
+    id: snap.id,
+    ...(snap.data() as Omit<UserType, "id">),
+  };
 };

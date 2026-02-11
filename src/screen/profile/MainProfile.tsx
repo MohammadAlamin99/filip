@@ -113,6 +113,7 @@ const MainProfile: React.FC = () => {
     if (localPhoto && localPhoto.startsWith('file://')) {
       try {
         finalPhotoUrl = await uploadProfilePhoto(localPhoto);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
         Toast.show({
           type: 'error',

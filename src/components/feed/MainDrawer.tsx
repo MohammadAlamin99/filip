@@ -320,7 +320,6 @@ const MainDrawer = () => {
     userData?.profile?.skills?.length > 0
       ? userData.profile.skills.join(', ')
       : 'No skills';
-
   const profileCity = userData?.profile?.city || 'Not set';
 
   return (

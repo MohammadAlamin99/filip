@@ -4,6 +4,8 @@ import { Calendar, Lock, SendHorizontal, MapPin } from 'lucide-react-native';
 import { useNavigation } from '@react-navigation/native';
 import { styles } from '../../screen/seasonAvailabilty/style';
 import Worker from '../../@types/Worker.type';
+import { useQuery } from '@tanstack/react-query';
+import { fetchCurrentUser } from '../../services/user';
 
 interface CandidateCardProps {
   candidate: Worker;
@@ -20,6 +22,13 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
       day: 'numeric',
     });
   };
+
+  // current user
+  const { data: user } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: fetchCurrentUser,
+  });
+  const isPremium = user?.membership?.tier === 'premium';
 
   return (
     <View style={styles.card}>
@@ -92,7 +101,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
         </View>
 
         {/* Buttons */}
-        {candidate.isLocked ? (
+        {!isPremium ? (
           <TouchableOpacity
             style={styles.lockButton}
             onPress={() => navigation.navigate('membership')}
