@@ -65,175 +65,204 @@ export const fetchMyJobs = async () => {
 };
 
 // create jobs
+
+type JobType = 'seasonal' | 'fulltime';
+
+interface CreateJobPayload {
+  title: string;
+  type?: JobType;
+
+  description?: string;
+  bannerImage?: string;
+
+  schedule?: { start: string; end: string };
+  location?: string[];
+
+  rate?: { amount: number; unit: string };
+  requiredSkills?: string[];
+
+  positions?: { total: number; filled: number };
+
+  visibility?: {
+    priority?: 'active' | 'consumed' | 'withdrawn' | 'expired';
+  };
+
+  contact?: { phone: string; email: string };
+  daysPerWeek?: number;
+}
+
+const jobMothlykey = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  return `${year}-${month}`;
+};
+
+// fallback-safe priority
+const computePrioritySafe = (
+  visibility?: { priority?: string },
+  _schedule?: { start: string; end: string },
+) => {
+  return visibility?.priority ?? 'active';
+};
+
+
 export const createJob = async ({
   title,
   type = 'seasonal',
   description = 'No description provided.',
   bannerImage = '',
+
   schedule = { start: '', end: '' },
-  location = [] as string[],
+  location = [],
+
   rate = { amount: 0, unit: 'hour' },
-  requiredSkills = [] as string[],
+  requiredSkills = [],
+
   positions = { total: 5, filled: 0 },
+
   visibility = { priority: 'active' },
+
   contact = { phone: '', email: '' },
   daysPerWeek = 0,
-}: {
-  title: string;
-  type?: 'seasonal' | 'fulltime';
-  description?: string;
-  bannerImage?: string;
-  schedule?: { start: string; end: string };
-  location?: string[];
-  rate?: { amount: number; unit: string };
-  requiredSkills?: string[];
-  positions?: { total: number; filled: number };
-  visibility?: {
-    priority: 'active' | 'consumed' | 'withdrawn' | 'expired';
-    creditUsed?: number;
-    consumed?: number;
-    withdrawn?: number;
-  };
-  contact?: { phone: string; email: string };
-  daysPerWeek?: number;
-}) => {
+}: CreateJobPayload) => {
   const auth = getAuth();
   const user = auth.currentUser;
+
   if (!user) throw new Error('User not authenticated');
+  if (!title.trim()) throw new Error('Job title is required');
 
   const db = getFirestore();
   const userRef = doc(db, 'users', user.uid);
   const jobRef = doc(collection(db, 'jobs'));
 
-  const priority = computePriority(visibility, schedule);
-
-  // helper: monthKey
-  const getMonthKey = () => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    return `${year}-${month}`; // "2026-02"
-  };
-
-  // client requirement credit cost
+  const priority = computePrioritySafe(visibility, schedule);
   const SEASONAL_JOB_CREDIT_COST = 5;
 
-  await runTransaction(db, async transaction => {
-    const userSnap = await transaction.get(userRef);
+  try {
+    await runTransaction(db, async transaction => {
+      const userSnap = await transaction.get(userRef);
 
-    if (!userSnap.exists()) throw new Error('User profile not found');
-
-    const userData = userSnap.data();
-    if (!userData) throw new Error('User data undefined');
-
-    const membershipTier: 'free' | 'basic' | 'premium' =
-      userData?.membership?.tier || 'free';
-
-    const membershipExpiry = userData?.membership?.expiresAt?.toDate?.();
-    const credits = userData?.credits?.balance ?? 0;
-
-    const now = new Date();
-    const currentMonthKey = getMonthKey();
-
-    // -----------------------------
-    // Membership expiry check
-    // -----------------------------
-    if (
-      membershipTier !== 'free' &&
-      membershipExpiry &&
-      now > membershipExpiry
-    ) {
-      throw new Error('Your membership has expired.');
-    }
-
-    // -----------------------------
-    // FULLTIME JOB LOGIC (Membership-based)
-    // -----------------------------
-    if (type === 'fulltime') {
-      if (membershipTier === 'free') {
-        throw new Error(
-          'Free users cannot post Full-Time jobs. Please upgrade membership.',
-        );
+      if (!userSnap.exists()) {
+        throw new Error('User profile not found');
       }
 
-      const storedMonthKey = userData?.membership?.monthKey || currentMonthKey;
+      const userData = userSnap.data() || {};
 
-      let postedThisMonth =
-        userData?.membership?.fullTimeAdsPostedThisMonth ?? 0;
+      const membershipTier: 'free' | 'basic' | 'premium' =
+        userData?.membership?.tier ?? 'free';
 
-      // reset monthly count if month changed
-      if (storedMonthKey !== currentMonthKey) {
-        postedThisMonth = 0;
+      const membershipExpiry =
+        userData?.membership?.expiresAt &&
+          typeof userData.membership.expiresAt.toDate === 'function'
+          ? userData.membership.expiresAt.toDate()
+          : null;
+
+      const credits = Number(userData?.credits?.balance ?? 0);
+      const usedCredits = Number(userData?.credits?.used ?? 0);
+
+      const now = new Date();
+      const currentMonthKey = jobMothlykey();
+
+      /* ---------- MEMBERSHIP EXPIRY ---------- */
+      if (
+        membershipTier !== 'free' &&
+        membershipExpiry &&
+        now > membershipExpiry
+      ) {
+        throw new Error('Your membership has expired.');
+      }
+
+      /* ---------- FULL-TIME LOGIC ---------- */
+      if (type === 'fulltime') {
+        if (membershipTier === 'free') {
+          throw new Error(
+            'Free users cannot post Full-Time jobs. Please upgrade.',
+          );
+        }
+
+        const storedMonthKey =
+          userData?.membership?.monthKey ?? currentMonthKey;
+
+        let postedThisMonth =
+          Number(userData?.membership?.fullTimeAdsPostedThisMonth ?? 0);
+
+        if (storedMonthKey !== currentMonthKey) {
+          postedThisMonth = 0;
+          transaction.update(userRef, {
+            'membership.monthKey': currentMonthKey,
+            'membership.fullTimeAdsPostedThisMonth': 0,
+          });
+        }
+
+        if (membershipTier === 'basic' && postedThisMonth >= 1) {
+          throw new Error(
+            'Monthly Full-Time posting limit reached (Basic plan).',
+          );
+        }
 
         transaction.update(userRef, {
-          'membership.monthKey': currentMonthKey,
-          'membership.fullTimeAdsPostedThisMonth': 0,
+          'membership.fullTimeAdsPostedThisMonth': postedThisMonth + 1,
         });
       }
 
-      // Basic membership limit = 1
-      if (membershipTier === 'basic' && postedThisMonth >= 1) {
-        throw new Error(
-          'You have reached your monthly Full-Time job posting limit.',
-        );
+      /* ---------- SEASONAL LOGIC ---------- */
+      if (type === 'seasonal') {
+        const newBalance = credits - SEASONAL_JOB_CREDIT_COST;
+
+        if (newBalance < 0) {
+          throw new Error('Not enough credits to post this job.');
+        }
+
+        transaction.update(userRef, {
+          'credits.balance': newBalance,
+          'credits.used': usedCredits + SEASONAL_JOB_CREDIT_COST,
+        });
       }
 
-      // increment monthly counter
-      transaction.update(userRef, {
-        'membership.fullTimeAdsPostedThisMonth': postedThisMonth + 1,
-      });
-    }
+      /* ---------- JOB OBJECT ---------- */
+      const jobPost: any = {
+        userId: user.uid,
+        title,
+        type,
+        description,
+        bannerImage,
 
-    // -----------------------------
-    // SEASONAL JOB LOGIC (Credit-based)
-    // -----------------------------
-    if (type === 'seasonal') {
-      if (credits < SEASONAL_JOB_CREDIT_COST) {
-        throw new Error('Not enough credits to post a seasonal job');
+        location,
+        rate,
+        requiredSkills,
+        positions,
+
+        visibility: {
+          priority,
+          creditUsed: type === 'seasonal' ? SEASONAL_JOB_CREDIT_COST : 0,
+        },
+
+        applicationsCount: 0,
+        status: 'active',
+
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      };
+
+      if (type === 'seasonal') {
+        jobPost.schedule = schedule;
       }
 
-      transaction.update(userRef, {
-        'credits.balance': credits - SEASONAL_JOB_CREDIT_COST,
-        'credits.used':
-          (userData?.credits?.used || 0) + SEASONAL_JOB_CREDIT_COST,
-      });
-    }
+      if (type === 'fulltime') {
+        jobPost.contact = contact;
+        jobPost.daysPerWeek = daysPerWeek;
+      }
 
-    // -----------------------------
-    // Job Object
-    // -----------------------------
-    const jobPost: any = {
-      userId: user.uid,
-      title: title,
-      type,
-      description,
-      bannerImage,
-      location,
-      rate,
-      requiredSkills,
-      positions,
-      visibility: {
-        ...visibility,
-        priority,
-        creditUsed: type === 'seasonal' ? SEASONAL_JOB_CREDIT_COST : 0,
-      },
-      applicationsCount: 0,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    };
+      transaction.set(jobRef, jobPost);
+    });
 
-    if (type === 'seasonal') jobPost.schedule = schedule;
-
-    if (type === 'fulltime') {
-      jobPost.contact = contact;
-      jobPost.daysPerWeek = daysPerWeek;
-    }
-
-    // Create the job
-    transaction.set(jobRef, jobPost);
-  });
+    return { success: true };
+  } catch (error: any) {
+    console.log('CREATE JOB FAILED FULL:', error);
+    throw error;
+  }
 };
-
 export const fetchRecommendedJobs = async () => {
   const db = getFirestore();
   const jobsCol = collection(db, 'jobs');
@@ -251,13 +280,13 @@ export const fetchRecommendedJobs = async () => {
         ...jobData,
         user: userData
           ? {
-              id: userSnap.id,
-              name: userData.profile.name,
-              photo: userData.profile.photo,
-              verified: userData?.profile.verified,
-              email: userData.email,
-              membership: userData.membership,
-            }
+            id: userSnap.id,
+            name: userData.profile.name,
+            photo: userData.profile.photo,
+            verified: userData?.profile.verified,
+            email: userData.email,
+            membership: userData.membership,
+          }
           : null,
       };
     }),
@@ -395,3 +424,7 @@ export const fetchSeasonalJobs = async () => {
 
   return results;
 };
+function getMonthKey() {
+  throw new Error('Function not implemented.');
+}
+

@@ -23,12 +23,11 @@ import { addItemToList, removeItemFromList } from '../../helper/listHelper';
 import UploadBanner from '../../components/availiability/UploadBanner';
 import AvailabilityPrice from '../../components/availiability/AvailabilityPrice';
 import { createJob } from '../../services/jobs';
+import { uploadJobBanner } from '../../services/uploadPhoto';
 
 const SeasonalAvailabilityCreationScreen = () => {
   const navigation = useNavigation<any>();
   const queryClient = useQueryClient();
-
-  // States
   const [bannerImage, setBannerImage] = useState<string | null>(null);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -69,12 +68,19 @@ const SeasonalAvailabilityCreationScreen = () => {
 
   // Mutation for posting job (Seasonal Availability)
   const mutation = useMutation({
-    mutationFn: () =>
-      createJob({
+    mutationFn: async () => {
+      let finalBannerImage = '';
+
+      // local image selected
+      if (bannerImage && bannerImage.startsWith('file://')) {
+        finalBannerImage = await uploadJobBanner(bannerImage);
+      }
+
+      return createJob({
         title,
         type: 'seasonal',
         description: aboutText,
-        bannerImage: bannerImage || '',
+        bannerImage: finalBannerImage,
         schedule: {
           start: `${startDate}T00:00:00Z`,
           end: `${endDate}T23:59:59Z`,
@@ -86,7 +92,9 @@ const SeasonalAvailabilityCreationScreen = () => {
         },
         requiredSkills: categories,
         positions: { total: 5, filled: 0 },
-      }),
+      });
+    },
+
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['my-jobs'] });
 
@@ -98,6 +106,7 @@ const SeasonalAvailabilityCreationScreen = () => {
 
       navigation.goBack();
     },
+
     onError: (error: any) => {
       Toast.show({
         type: 'error',
@@ -106,6 +115,7 @@ const SeasonalAvailabilityCreationScreen = () => {
       });
     },
   });
+
 
   const handlePost = () => {
     if (!title.trim()) {
