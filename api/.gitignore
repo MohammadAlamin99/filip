@@ -1,3 +1,5 @@
 node_modules/
 *.local
 .env
+passwords.txt
+firebase-debug.log
