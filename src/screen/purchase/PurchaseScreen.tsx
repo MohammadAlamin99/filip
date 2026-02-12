@@ -133,8 +133,7 @@
 // };
 
 // export default PurchaseScreen;
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -142,27 +141,34 @@ import {
   TouchableOpacity,
   StatusBar,
   Alert,
-} from 'react-native';
-import { ArrowRight, BadgeCheck, Infinity, Zap } from 'lucide-react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import styles from './style';
-import PremiumIcon from '../../components/svg/PremiumIcon';
-import PlanListCard from '../../components/purchase/PlanListCard';
-import StarIcon from '../../components/svg/StarIcon';
-import PlanToggle from '../../components/purchase/PlanToggle';
-import PlanHeader from '../../components/purchase/PlanHeader';
-import CommissionIcon from '../../components/svg/CommissionIcon';
+  ActivityIndicator,
+} from "react-native";
+import { ArrowRight, BadgeCheck, Infinity, Zap } from "lucide-react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
+import styles from "./style";
 
-import functions from '@react-native-firebase/functions';
-import { useStripe } from '@stripe/stripe-react-native';
+import PremiumIcon from "../../components/svg/PremiumIcon";
+import PlanListCard from "../../components/purchase/PlanListCard";
+import PlanToggle from "../../components/purchase/PlanToggle";
+import PlanHeader from "../../components/purchase/PlanHeader";
+import CommissionIcon from "../../components/svg/CommissionIcon";
+
+import { getApp } from "@react-native-firebase/app";
+import { getAuth } from "@react-native-firebase/auth";
+import {
+  getFunctions,
+  httpsCallable,
+} from "@react-native-firebase/functions";
+
+import { useStripe } from "@stripe/stripe-react-native";
 
 const PurchaseScreen = () => {
   const navigation = useNavigation<any>();
   const { confirmPayment } = useStripe();
 
-  const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>(
-    'monthly',
+  const [selectedPlan, setSelectedPlan] = useState<"monthly" | "yearly">(
+    "monthly"
   );
   const [loading, setLoading] = useState(false);
 
@@ -170,37 +176,67 @@ const PurchaseScreen = () => {
     try {
       setLoading(true);
 
-      const createSub = functions().httpsCallable('createSubscription');
+      console.log("====== DEBUG START ======");
 
-      const response: any = await createSub({
-        plan: 'premium', // চাইলে selectedPlan অনুযায়ী dynamic করো
+      // 🔥 Ensure user logged in
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        Alert.alert("Error", "User not logged in");
+        return;
+      }
+
+      console.log("User UID:", user.uid);
+
+      // 🔥 Get Firebase App
+      const app = getApp();
+      console.log("Project ID:", app.options.projectId);
+
+      // 🔥 Get Functions with region
+      const functions = getFunctions(app, "us-central1");
+
+      // 🔥 Callable reference
+      const createSubscription = httpsCallable(
+        functions,
+        "createSubscription"
+      );
+
+      console.log("Callable ready");
+
+      // 🔥 Call backend
+      const response: any = await createSubscription({
+        plan: "premium",
       });
 
       const clientSecret = response?.data?.clientSecret;
 
       if (!clientSecret) {
-        throw new Error('Failed to get client secret');
+        throw new Error("No client secret received");
       }
 
+      console.log("Client secret received");
+
+      // 🔥 Confirm Stripe payment
       const { error, paymentIntent } = await confirmPayment(clientSecret, {
-        paymentMethodType: 'Card',
+        paymentMethodType: "Card",
       });
 
       if (error) {
-        Alert.alert('Payment Failed', error.message);
-        setLoading(false);
+        Alert.alert("Payment Failed", error.message);
         return;
       }
 
       if (paymentIntent) {
-        Alert.alert('Success', 'Premium plan purchased successfully');
+        Alert.alert("Success", "Premium plan purchased successfully");
         navigation.goBack();
       }
 
     } catch (error: any) {
-      console.log('Upgrade Error:', error);
-      Alert.alert('Error', error?.message || 'Something went wrong');
+      console.log("🔥 FULL ERROR:", error);
+      Alert.alert("Error", error?.message || "Something went wrong");
     } finally {
+      console.log("====== DEBUG END ======");
       setLoading(false);
     }
   };
@@ -254,21 +290,6 @@ const PurchaseScreen = () => {
             subtitle="See gigs 1 hour before free users."
           />
 
-          <View style={styles.reviewContainer}>
-            <View style={styles.reviewStarContainer}>
-              <StarIcon width={16} height={16} />
-              <StarIcon width={16} height={16} />
-              <StarIcon width={16} height={16} />
-              <StarIcon width={16} height={16} />
-              <StarIcon width={16} height={16} />
-            </View>
-            <Text style={styles.reviewText}>
-              "I found a job within 2 days of upgrading. The early access
-              feature is a game changer!"
-            </Text>
-            <Text style={styles.reviewTextAuthor}>— Sarah Jenkins</Text>
-          </View>
-
           <View style={styles.priceContainer}>
             <Text style={styles.priceText}>Total today</Text>
             <Text style={styles.priceTextActive}>
@@ -281,21 +302,15 @@ const PurchaseScreen = () => {
             onPress={handleUpgrade}
             disabled={loading}
           >
-            <Text style={styles.upgradeButtonText}>
-              {loading ? 'Processing...' : 'Upgrade Now'}
-            </Text>
-            <ArrowRight />
+            {loading ? (
+              <ActivityIndicator color="#000" />
+            ) : (
+              <>
+                <Text style={styles.upgradeButtonText}>Upgrade Now</Text>
+                <ArrowRight />
+              </>
+            )}
           </TouchableOpacity>
-
-          <View style={styles.termsContainer}>
-            <TouchableOpacity>
-              <Text style={styles.termsText}>Terms of Service</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity>
-              <Text style={styles.termsText}>Restore Purchase</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

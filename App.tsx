@@ -139,7 +139,7 @@ const App = () => {
 
   return (
     <StripeProvider
-      publishableKey="pk_test_51SL7SXPpMtwKwUIt6XVhyBG4UgkIPHp71xysDtUtTTXjMmUSaEuZwrUIxqwmrgEccVpsGCz2jBqZ1s4ImYJa47yF00tF5TZJcf"
+      publishableKey="pk_test_51SL7SOLT7u05bl0T7ycIXtQ087oy07qqZxzYrTMR1JjpxGrs8jVcKRtZCte98moBU053lCoqt8aWoXiCT5iNUaRn00AGBjmxrR"
     >
       <QueryClientProvider client={queryClient}>
         <NavigationContainer>
