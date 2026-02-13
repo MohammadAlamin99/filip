@@ -27,12 +27,12 @@ const MemberShipScreen = () => {
   const navigation = useNavigation<any>();
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
 
-  const [selectedPlan, setSelectedPlan] = useState<'monthly' | 'yearly'>(
-    'monthly',
-  );
+  const [selectedPlan, setSelectedPlan] =
+    useState<'monthly' | 'yearly'>('monthly');
+
   const [loading, setLoading] = useState(false);
 
-  const handlePurchase = async (plan: 'basic' | 'premium') => {
+  const handlePurchase = async (planType: 'standard' | 'premium') => {
     try {
       setLoading(true);
 
@@ -54,7 +54,13 @@ const MemberShipScreen = () => {
         'createPaymentIntent',
       );
 
-      const response: any = await createPaymentIntent({ plan });
+      // ✅ ONLY SEND backend supported plans
+      const finalPlan =
+        planType === 'standard' ? 'basic' : 'premium';
+
+      const response: any = await createPaymentIntent({
+        plan: finalPlan,
+      });
 
       const clientSecret = response?.data?.clientSecret;
 
@@ -79,7 +85,10 @@ const MemberShipScreen = () => {
         return;
       }
 
-      Alert.alert('Success 🎉', 'Subscription successful');
+      Alert.alert(
+        'Payment Success 🎉',
+        'Your membership will activate shortly.'
+      );
 
     } catch (err: any) {
       console.log('FULL ERROR:', err);
@@ -89,14 +98,14 @@ const MemberShipScreen = () => {
     }
   };
 
+
   const handleChooseStandard = () => {
-    handlePurchase('basic');
+    handlePurchase('standard');
   };
 
   const handleGoPremium = () => {
     handlePurchase('premium');
   };
-
 
   const handleBack = () => {
     navigation.goBack();
@@ -114,9 +123,6 @@ const MemberShipScreen = () => {
           </View>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Membership Plans</Text>
-        {/* <TouchableOpacity onPress={handleRestore}>
-          <Text style={styles.restoreText}>Restore</Text>
-        </TouchableOpacity> */}
         <View />
       </View>
 
@@ -138,14 +144,16 @@ const MemberShipScreen = () => {
           <TouchableOpacity
             style={[
               styles.toggleButton,
-              selectedPlan === 'monthly' && styles.toggleButtonActive,
+              selectedPlan === 'monthly' &&
+              styles.toggleButtonActive,
             ]}
             onPress={() => setSelectedPlan('monthly')}
           >
             <Text
               style={[
                 styles.toggleText,
-                selectedPlan === 'monthly' && styles.toggleTextActive,
+                selectedPlan === 'monthly' &&
+                styles.toggleTextActive,
               ]}
             >
               Monthly
@@ -155,20 +163,24 @@ const MemberShipScreen = () => {
           <TouchableOpacity
             style={[
               styles.toggleButton,
-              selectedPlan === 'yearly' && styles.toggleButtonActive,
+              selectedPlan === 'yearly' &&
+              styles.toggleButtonActive,
             ]}
             onPress={() => setSelectedPlan('yearly')}
           >
             <Text
               style={[
                 styles.toggleText,
-                selectedPlan === 'yearly' && styles.toggleTextActive,
+                selectedPlan === 'yearly' &&
+                styles.toggleTextActive,
               ]}
             >
               Yearly
             </Text>
             <View style={styles.saveBadge}>
-              <Text style={styles.saveBadgeText}>Save 20%</Text>
+              <Text style={styles.saveBadgeText}>
+                Save 20%
+              </Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -181,6 +193,7 @@ const MemberShipScreen = () => {
             <Text style={styles.priceAmount}>€7.99</Text>
             <Text style={styles.priceUnit}>/mo</Text>
           </View>
+
 
           <View style={styles.featuresList}>
             <View style={styles.featureItem}>
@@ -195,7 +208,6 @@ const MemberShipScreen = () => {
               <Text style={styles.featureTextDisabled}>Direct Messaging</Text>
             </View>
           </View>
-
           <TouchableOpacity
             style={styles.standardButton}
             onPress={handleChooseStandard}
@@ -209,17 +221,12 @@ const MemberShipScreen = () => {
 
         {/* Premium Plan */}
         <View style={styles.premiumCard}>
-          <View style={styles.popularBadge}>
-            <Text style={styles.popularBadgeText}>Most Popular</Text>
-          </View>
-
           <Text style={styles.premiumName}>Premium</Text>
 
           <View style={styles.priceContainer}>
             <Text style={styles.priceAmount}>€24.99</Text>
             <Text style={styles.priceUnit}>/mo</Text>
           </View>
-
           <View style={styles.featuresList}>
             <View style={styles.featureItem}>
               <Check width={22} height={22} color="#FFD900" />
@@ -238,7 +245,6 @@ const MemberShipScreen = () => {
               <Text style={styles.featureText}>Priority Support</Text>
             </View>
           </View>
-
           <TouchableOpacity
             style={styles.premiumButton}
             onPress={handleGoPremium}
@@ -251,7 +257,6 @@ const MemberShipScreen = () => {
         </View>
 
         {loading && <ActivityIndicator style={styles.loading} />}
-
       </ScrollView>
     </SafeAreaView>
   );
