@@ -37,7 +37,72 @@
 
 // export default Gig;
 
-import React from 'react';
+// import React from 'react';
+// import {
+//   View,
+//   Text,
+//   FlatList,
+//   TouchableOpacity,
+//   ActivityIndicator,
+// } from 'react-native';
+// import styles from '../../screen/feed/style';
+// import FeedCard from './FeedCard';
+
+// import { useInfiniteQuery } from '@tanstack/react-query';
+// import FeedCardSkeleton from '../skeleton/FeedCardSkeleton';
+// import { fetchRecommendedJobsPaginated } from '../../services/jobs';
+
+// const Gig = () => {
+//   const { data, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =
+//     useInfiniteQuery({
+//       queryKey: ['recommendedJobs'],
+//       queryFn: ({ pageParam }) => fetchRecommendedJobsPaginated(pageParam, 10),
+//       initialPageParam: null,
+//       getNextPageParam: lastPage => {
+//         return lastPage?.hasMore ? lastPage?.lastDoc : undefined;
+//       },
+//     });
+
+//   const recommendedData = data?.pages?.flatMap(page => page.jobs) ?? [];
+
+//   if (isPending) {
+//     return <FeedCardSkeleton />;
+//   }
+
+//   return (
+//     <View>
+//       <View style={styles.headerRow}>
+//         <Text style={styles.sectionTitle}>Recommended For You</Text>
+//       </View>
+
+//       <FlatList
+//         data={recommendedData}
+//         keyExtractor={item => item.id}
+//         renderItem={({ item }) => <FeedCard item={item} />}
+//         showsVerticalScrollIndicator={false}
+//         ListFooterComponent={
+//           <View style={{ marginVertical: 10 }}>
+//             {hasNextPage ? (
+//               <TouchableOpacity
+//                 onPress={() => fetchNextPage()}
+//                 activeOpacity={0.7}
+//               >
+//                 {isFetchingNextPage ? (
+//                   <ActivityIndicator color="#fcd303" />
+//                 ) : (
+//                   <Text style={styles.seeAllText}>See More</Text>
+//                 )}
+//               </TouchableOpacity>
+//             ) : null}
+//           </View>
+//         }
+//       />
+//     </View>
+//   );
+// };
+
+// export default Gig;
+import React, { useMemo } from 'react';
 import {
   View,
   Text,
@@ -45,27 +110,46 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native';
+
 import styles from '../../screen/feed/style';
 import FeedCard from './FeedCard';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import FeedCardSkeleton from '../skeleton/FeedCardSkeleton';
+
 import { fetchRecommendedJobsPaginated } from '../../services/jobs';
+import { fetchWishlistIds } from '../../services/wishlist';
+
 
 const Gig = () => {
-  const { data, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ['recommendedJobs'],
-      queryFn: ({ pageParam }) => fetchRecommendedJobsPaginated(pageParam, 10),
-      initialPageParam: null,
-      getNextPageParam: lastPage => {
-        return lastPage?.hasMore ? lastPage?.lastDoc : undefined;
-      },
-    });
+  /* ---------------- RECOMMENDED JOBS PAGINATION ---------------- */
+  const {
+    data,
+    isPending,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['recommendedJobs'],
+    queryFn: ({ pageParam }) => fetchRecommendedJobsPaginated(pageParam, 10),
+    initialPageParam: null,
+    getNextPageParam: lastPage => {
+      return lastPage?.hasMore ? lastPage?.lastDoc : undefined;
+    },
+  });
 
-  const recommendedData = data?.pages?.flatMap(page => page.jobs) ?? [];
+  /* ---------------- FETCH WISHLIST IDS ---------------- */
+  const { data: wishlistIds = [], isLoading: wishlistLoading } = useQuery({
+    queryKey: ['wishlistIds'],
+    queryFn: fetchWishlistIds,
+  });
 
-  if (isPending) {
+  /* ---------------- FLATTEN JOBS ---------------- */
+  const recommendedData = useMemo(() => {
+    return data?.pages?.flatMap(page => page.jobs) ?? [];
+  }, [data]);
+
+  if (isPending || wishlistLoading) {
     return <FeedCardSkeleton />;
   }
 
@@ -78,10 +162,12 @@ const Gig = () => {
       <FlatList
         data={recommendedData}
         keyExtractor={item => item.id}
-        renderItem={({ item }) => <FeedCard item={item} />}
+        renderItem={({ item }) => (
+          <FeedCard item={item} wishlistIds={wishlistIds} />
+        )}
         showsVerticalScrollIndicator={false}
         ListFooterComponent={
-          <View style={{ marginVertical: 10 }}>
+          <View style={{ marginVertical: 10, alignItems: 'center' }}>
             {hasNextPage ? (
               <TouchableOpacity
                 onPress={() => fetchNextPage()}
