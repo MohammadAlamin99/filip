@@ -1,7 +1,7 @@
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
-/* ---------------- ADD TO WISHLIST ---------------- */
+// wishlist create
 export const addToWishlist = async (jobId: string) => {
     const user = auth().currentUser;
     if (!user) throw new Error('User not logged in');
@@ -19,7 +19,7 @@ export const addToWishlist = async (jobId: string) => {
     return true;
 };
 
-/* ---------------- REMOVE FROM WISHLIST ---------------- */
+// delete wishlist
 export const removeFromWishlist = async (jobId: string) => {
     const user = auth().currentUser;
     if (!user) throw new Error('User not logged in');
@@ -34,7 +34,7 @@ export const removeFromWishlist = async (jobId: string) => {
     return true;
 };
 
-/* ---------------- FETCH WISHLIST IDS ---------------- */
+// fetchwishlist
 export const fetchWishlistIds = async (): Promise<string[]> => {
     const user = auth().currentUser;
     if (!user) return [];
