@@ -16,7 +16,6 @@ import {
 import { UserInfo } from '../@types/userInfo.type';
 import { Job } from '../@types/job.type';
 
-// Compute priority based on end date & visibility
 const computePriority = (
   visibility: {
     priority: 'active' | 'consumed' | 'withdrawn' | 'expired';
@@ -34,7 +33,6 @@ const computePriority = (
   return 'active';
 };
 
-// fetch my jobs
 export const fetchMyJobs = async () => {
   const user = getAuth().currentUser;
   if (!user) return [];
@@ -66,28 +64,21 @@ export const fetchMyJobs = async () => {
   });
 };
 
-// create jobs
 type JobType = 'seasonal' | 'fulltime';
 
 interface CreateJobPayload {
   title: string;
   type?: JobType;
-
   description?: string;
   bannerImage?: string;
-
   schedule?: { start: string; end: string };
   location?: string[];
-
   rate?: { amount: number; unit: string };
   requiredSkills?: string[];
-
   positions?: { total: number; filled: number };
-
   visibility?: {
     priority?: 'active' | 'consumed' | 'withdrawn' | 'expired';
   };
-
   contact?: { phone: string; email: string };
   daysPerWeek?: number;
 }
@@ -99,7 +90,6 @@ const jobMothlykey = () => {
   return `${year}-${month}`;
 };
 
-// fallback-safe priority
 const computePrioritySafe = (
   visibility?: { priority?: string },
   _schedule?: { start: string; end: string },
@@ -112,17 +102,12 @@ export const createJob = async ({
   type = 'seasonal',
   description = 'No description provided.',
   bannerImage = '',
-
   schedule = { start: '', end: '' },
   location = [],
-
   rate = { amount: 0, unit: 'hour' },
   requiredSkills = [],
-
   positions = { total: 5, filled: 0 },
-
   visibility = { priority: 'active' },
-
   contact = { phone: '', email: '' },
   daysPerWeek = 0,
 }: CreateJobPayload) => {
@@ -164,7 +149,6 @@ export const createJob = async ({
       const now = new Date();
       const currentMonthKey = jobMothlykey();
 
-      /* ---------- MEMBERSHIP EXPIRY ---------- */
       if (
         membershipTier !== 'free' &&
         membershipExpiry &&
@@ -173,7 +157,6 @@ export const createJob = async ({
         throw new Error('Your membership has expired.');
       }
 
-      /* ---------- FULL-TIME LOGIC ---------- */
       if (type === 'fulltime') {
         if (membershipTier === 'free') {
           throw new Error(
@@ -207,7 +190,6 @@ export const createJob = async ({
         });
       }
 
-      /* ---------- SEASONAL LOGIC ---------- */
       if (type === 'seasonal') {
         const newBalance = credits - SEASONAL_JOB_CREDIT_COST;
 
@@ -221,27 +203,22 @@ export const createJob = async ({
         });
       }
 
-      /* ---------- JOB OBJECT ---------- */
       const jobPost: any = {
         userId: user.uid,
         title,
         type,
         description,
         bannerImage,
-
         location,
         rate,
         requiredSkills,
         positions,
-
         visibility: {
           priority,
           creditUsed: type === 'seasonal' ? SEASONAL_JOB_CREDIT_COST : 0,
         },
-
         applicationsCount: 0,
         status: 'active',
-
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),
       };
@@ -318,12 +295,9 @@ export const fetchRecommendedJobsPaginated = async (
   };
 };
 
-// fetch full timne jobs
 export const fetchFullTimeJobs = async (): Promise<Job[]> => {
   const db = getFirestore();
-  // Fetch all jobs
   const snapshot = await getDocs(collection(db, 'jobs'));
-  // Map jobs + attach user info
   const jobsWithUser: Job[] = await Promise.all(
     snapshot.docs.map(async (jobDoc: { data: () => any; id: any }) => {
       const jobData = jobDoc.data();
@@ -347,7 +321,6 @@ export const fetchFullTimeJobs = async (): Promise<Job[]> => {
               reviewsCount: u?.profile?.reviewsCount ?? 0,
             };
           }
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (err: any) {
           console.warn('Failed to fetch user:', jobData.userId);
         }
@@ -361,14 +334,11 @@ export const fetchFullTimeJobs = async (): Promise<Job[]> => {
     }),
   );
 
-  // Filter fulltime jobs
   const fullTimeJobs = jobsWithUser.filter(job => job?.type === 'fulltime');
 
-  // Sort newest first (safe)
   fullTimeJobs.sort((a, b) => {
     if (!a.createdAt || !b.createdAt) return 0;
 
-    // Firestore Timestamp safe check
     const aSec =
       typeof a.createdAt?.seconds === 'number' ? a.createdAt.seconds : 0;
 
@@ -381,15 +351,11 @@ export const fetchFullTimeJobs = async (): Promise<Job[]> => {
   return fullTimeJobs;
 };
 
-// fetch seasonal jobs
+// ✅ UPDATED: Return complete job data for chat context
 export const fetchSeasonalJobs = async () => {
   const db = getFirestore();
 
-  const q = query(
-    collection(db, 'jobs'),
-    where('type', '==', 'seasonal'),
-    // orderBy('createdAt', 'desc'),
-  );
+  const q = query(collection(db, 'jobs'), where('type', '==', 'seasonal'));
 
   const snap = await getDocs(q);
   const results = await Promise.all(
@@ -430,16 +396,24 @@ export const fetchSeasonalJobs = async () => {
         },
 
         bannerImage: jobData.bannerImage ?? null,
-
         title: jobData.title ?? 'Seasonal Availability',
 
+        // ✅ ADDED: Complete schedule object for chat context
+        schedule: jobData.schedule ?? { start: null, end: null },
+
+        // ✅ ADDED: Rate data for chat context
+        rate: jobData.rate ?? { amount: 0, unit: 'hour' },
+
+        // ✅ ADDED: Location array for chat context
+        location: jobData.location ?? [],
+
+        // Keep for display
         dateRange: {
           start: jobData?.schedule?.start ?? null,
           end: jobData?.schedule?.end ?? null,
         },
 
         tags: jobData.requiredSkills ?? [],
-
         locationText,
       };
     }),
@@ -448,7 +422,6 @@ export const fetchSeasonalJobs = async () => {
   return results;
 };
 
-// search recomanded jobs
 export const searchJobs = async (searchText: string) => {
   if (!searchText.trim()) return [];
 

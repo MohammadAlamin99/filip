@@ -1,4 +1,3 @@
-// types/chat.ts
 export type ChatMessage = {
   id: string;
   text: string;
@@ -6,4 +5,6 @@ export type ChatMessage = {
   sender: string;
   isMe: boolean;
   avatar?: string;
+  type?: 'text' | 'job_attachment' | 'system';
+  metadata?: any;
 };

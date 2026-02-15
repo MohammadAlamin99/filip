@@ -6,39 +6,70 @@ import { styles } from '../../screen/seasonAvailabilty/style';
 import Worker from '../../@types/Worker.type';
 import { useQuery } from '@tanstack/react-query';
 import { fetchCurrentUser } from '../../services/user';
+import { createOrGetChat } from '../../services/chat';
+import Toast from 'react-native-toast-message';
 
 interface CandidateCardProps {
   candidate: Worker;
 }
+
 const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
   const navigation = useNavigation<any>();
+
   const formatCustomDate = (dateString?: string) => {
     if (!dateString) return '';
-
     const date = new Date(dateString);
-
     return date.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
     });
   };
 
-  // current user
   const { data: user } = useQuery({
     queryKey: ['currentUser'],
     queryFn: fetchCurrentUser,
   });
+
   const isPremium = user?.membership?.tier === 'premium';
+
+  const handleEngage = async () => {
+    try {
+      // ✅ Create job context from candidate data
+      const jobContext = {
+        jobId: candidate.id,
+        title: candidate.title || 'Seasonal Job',
+        type: 'seasonal' as const,
+        rate: candidate.rate,
+        location: candidate.location,
+        schedule: {
+          start: candidate.dateRange?.start || '',
+          end: candidate.dateRange?.end || '',
+        },
+      };
+
+      // ✅ Pass job context when creating chat
+      const chatId = await createOrGetChat(candidate.user.id, jobContext);
+
+      navigation.navigate('ChatDetailScreen', {
+        chatId,
+        otherUserId: candidate.user.id,
+      });
+    } catch (error: any) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: error.message || 'Failed to start chat',
+      });
+    }
+  };
 
   return (
     <View style={styles.card}>
-      {/* Cover Image */}
       <Image
         source={{ uri: candidate?.bannerImage || 'n/a' }}
         style={styles.candidateImage}
       />
 
-      {/* Status Badge */}
       <View
         style={[
           styles.statusBadge,
@@ -60,7 +91,6 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
         </Text>
       </View>
 
-      {/* Profile Info */}
       <View style={styles.profileRow}>
         <Image
           source={{
@@ -77,7 +107,6 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
         </View>
       </View>
 
-      {/* Tags & Availability */}
       <View style={styles.cardContent}>
         <View style={styles.tagContainer}>
           {candidate.tags.map((tag, index) => (
@@ -100,7 +129,6 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
           </View>
         </View>
 
-        {/* Buttons */}
         {!isPremium ? (
           <TouchableOpacity
             style={styles.lockButton}
@@ -110,10 +138,7 @@ const CandidateCard: React.FC<CandidateCardProps> = ({ candidate }) => {
             <Text style={styles.lockButtonText}>Upgrade To Contact</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity
-            style={styles.engageButton}
-            onPress={() => navigation.navigate('chat')}
-          >
+          <TouchableOpacity style={styles.engageButton} onPress={handleEngage}>
             <Text style={styles.engageButtonText}>Engage Candidate</Text>
             <SendHorizontal width={18} height={18} color="#1F2937" />
           </TouchableOpacity>

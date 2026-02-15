@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -9,98 +9,88 @@ import {
   KeyboardAvoidingView,
   Platform,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  ChevronLeft,
-  MoreVertical,
-  Info,
-  Coffee,
-  Plus,
-  Send,
-} from 'lucide-react-native';
-import { useNavigation } from '@react-navigation/native';
+import { ChevronLeft, MoreVertical, Send } from 'lucide-react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { styles } from './chatDetailStyle';
 import ChatMessageItem from '../../components/message/ChatMessageItem';
-
-// Mock Data
-const MESSAGES = [
-  {
-    id: '1',
-    text: 'Hi! Thanks For Picking Up The Shift, Are You Available To Arrive 15 Minutes Early For A Quick Briefing',
-    time: '4:30 PM',
-    sender: 'Alex',
-    isMe: false,
-    avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-  },
-  {
-    id: '2',
-    text: 'Hey Alex! Yes, I Can Definitely Make It By 5:45, Looking Forward To It.',
-    time: '4:30 PM',
-    sender: 'Me',
-    isMe: true,
-  },
-  {
-    id: '3',
-    text: 'Just To Confirm, Is The Dress Code All Black?',
-    time: '4:30 PM',
-    sender: 'Me',
-    isMe: true,
-  },
-  {
-    id: '4',
-    text: 'Yes, Exactly! Black Shirt, Black Trousers, And Non Slip Shoes If You Have Them. See You Soon',
-    time: '4:30 PM',
-    sender: 'Alex',
-    isMe: false,
-    avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-  },
-  {
-    id: '5',
-    text: 'Hey Alex! Yes, I Can Definitely Make It By 5:45, Looking Forward To It.',
-    time: '4:30 PM',
-    sender: 'Me',
-    isMe: true,
-  },
-  {
-    id: '6',
-    text: 'Just To Confirm, Is The Dress Code All Black?',
-    time: '4:30 PM',
-    sender: 'Me',
-    isMe: true,
-  },
-  {
-    id: '7',
-    text: 'Yes, Exactly! Black Shirt, Black Trousers, And Non Slip Shoes If You Have Them. See You Soon',
-    time: '4:30 PM',
-    sender: 'Alex',
-    isMe: false,
-    avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-  },
-];
+import {
+  subscribeToMessages,
+  sendMessage,
+  markAsRead,
+  getOtherUserInfo,
+} from '../../services/chat';
+import { ChatMessage } from '../../@types/Chat.type';
+import { getAuth } from '@react-native-firebase/auth';
 
 const ChatDetailScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute<any>();
+  const { chatId } = route.params;
+
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [message, setMessage] = useState('');
+  const [otherUser, setOtherUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const flatListRef = useRef<FlatList>(null);
+
+  useEffect(() => {
+    getOtherUserInfo(chatId).then(user => {
+      setOtherUser(user);
+      setLoading(false);
+    });
+
+    const unsubscribe = subscribeToMessages(chatId, msgs => {
+      setMessages(msgs);
+      setTimeout(() => {
+        flatListRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+    });
+
+    markAsRead(chatId);
+
+    return () => unsubscribe();
+  }, [chatId]);
+
+  const handleSend = async () => {
+    if (!message.trim()) return;
+
+    try {
+      await sendMessage(chatId, message.trim());
+      setMessage('');
+    } catch (error) {
+      console.error('Failed to send message:', error);
+    }
+  };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <ActivityIndicator size="large" color="#FFD900" />
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="light-content" />
 
-      {/* --- HEADER --- */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <ChevronLeft color="#fff" size={24} />
           </TouchableOpacity>
           <Image
-            source={{ uri: 'https://randomuser.me/api/portraits/men/32.jpg' }}
+            source={{
+              uri: otherUser?.photo || 'https://via.placeholder.com/50',
+            }}
             style={styles.headerAvatar}
           />
           <View>
-            <Text style={styles.headerName}>Alex</Text>
-            <Text style={styles.headerStatus}>
-              Barista. <Text>Online</Text>
-            </Text>
+            <Text style={styles.headerName}>{otherUser?.name || 'User'}</Text>
+            {/* <Text style={styles.headerStatus}>Online</Text> */}
           </View>
         </View>
         <TouchableOpacity>
@@ -108,60 +98,56 @@ const ChatDetailScreen = () => {
         </TouchableOpacity>
       </View>
 
-      {/* --- SHIFT CARD --- */}
-      <View style={styles.shiftCard}>
-        <View style={styles.shiftIconContainer}>
-          <Coffee color="#C5A35E" size={20} />
-        </View>
-        <View style={styles.shiftDetails}>
-          <Text style={styles.shiftTitle}>
-            Barista Shifts @ The Grand Hotel
-          </Text>
-          <Text style={styles.shiftSubtitle}>
-            Today, 6:00 PM-10:00PM . $22/Hr
-          </Text>
-        </View>
-        <TouchableOpacity>
-          <Info color="#F59E0B" size={24} />
-        </TouchableOpacity>
-      </View>
-
-      {/* --- CHAT AREA --- */}
       <FlatList
-        data={MESSAGES}
-        showsVerticalScrollIndicator={false}
+        ref={flatListRef}
+        data={messages}
         keyExtractor={item => item.id}
-        renderItem={({ item }) => <ChatMessageItem message={item} />}
+        renderItem={({ item }) => {
+          const currentUserId = getAuth().currentUser?.uid || '';
+          return (
+            <ChatMessageItem
+              message={{
+                id: item.id,
+                text: item.text,
+                time:
+                  item.createdAt?.toDate().toLocaleTimeString('en-US', {
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true,
+                  }) || '',
+                sender:
+                  item.senderId === currentUserId
+                    ? 'Me'
+                    : otherUser?.name || 'User',
+                isMe: item.senderId === currentUserId,
+                avatar:
+                  item.senderId === currentUserId
+                    ? undefined
+                    : otherUser?.photo,
+                type: item.type,
+                metadata: item.metadata,
+              }}
+            />
+          );
+        }}
         contentContainerStyle={styles.listContent}
-        ListHeaderComponent={() => (
-          <View style={styles.centeredInfo}>
-            <Text style={styles.dateSeparator}>Today</Text>
-            <Text style={styles.matchText}>
-              You Matched With Sarah! Say Hello To Coordinate The Shift.
-            </Text>
-          </View>
-        )}
+        showsVerticalScrollIndicator={false}
       />
 
-      {/* --- INPUT BAR --- */}
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         keyboardVerticalOffset={10}
       >
         <View style={styles.inputContainer}>
-          <TouchableOpacity style={styles.plusButton}>
-            <Plus color="#fff" size={24} />
-          </TouchableOpacity>
-
           <TextInput
             style={styles.textInput}
-            placeholder=""
+            placeholder="Type a message..."
+            placeholderTextColor="#666"
             value={message}
             onChangeText={setMessage}
-            placeholderTextColor="#666"
           />
 
-          <TouchableOpacity style={styles.sendButton}>
+          <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
             <Send width={14} height={14} color="#fff" />
           </TouchableOpacity>
         </View>

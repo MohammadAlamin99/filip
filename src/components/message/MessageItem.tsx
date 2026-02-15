@@ -3,45 +3,53 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { MessageData } from '../../@types/MessageData.type';
 import { useNavigation } from '@react-navigation/native';
 
-interface MessageItemProps {
+type MessageItemProps = {
   item: MessageData;
-}
+  chatId?: string;
+  otherUserId?: string;
+};
 
-const MessageItem: React.FC<MessageItemProps> = React.memo(({ item }) => {
-  const navigation = useNavigation<any>();
-  return (
-    <TouchableOpacity
-      style={styles.card}
-      activeOpacity={0.7}
-      onPress={() =>
-        navigation.navigate('ChatDetailScreen', { userId: item.id })
-      }
-    >
-      <Image source={{ uri: item.image }} style={styles.avatar} />
-      <View style={styles.contentContainer}>
-        <View style={styles.row}>
-          <Text style={styles.nameText}>{item.name}</Text>
-          <Text style={styles.timeText}>{item.time}</Text>
-        </View>
+const MessageItem: React.FC<MessageItemProps> = React.memo(
+  ({ item, chatId, otherUserId }) => {
+    const navigation = useNavigation<any>();
 
-        <View style={styles.statusRow}>
-          <View style={[styles.badge, { backgroundColor: item.statusColor }]}>
-            <Text style={[styles.badgeText, { color: item.statusTextColor }]}>
-              {item.status}
-            </Text>
+    return (
+      <TouchableOpacity
+        style={styles.card}
+        activeOpacity={0.7}
+        onPress={() =>
+          navigation.navigate('ChatDetailScreen', {
+            chatId: chatId || item.id,
+            otherUserId: otherUserId || '',
+          })
+        }
+      >
+        <Image source={{ uri: item.image }} style={styles.avatar} />
+        <View style={styles.contentContainer}>
+          <View style={styles.row}>
+            <Text style={styles.nameText}>{item.name}</Text>
+            <Text style={styles.timeText}>{item.time}</Text>
           </View>
-          {item.role !== '' && (
-            <Text style={styles.roleText}> • {item.role}</Text>
-          )}
-        </View>
 
-        <Text numberOfLines={1} style={styles.messageSnippet}>
-          {item.message}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
-});
+          <View style={styles.statusRow}>
+            <View style={[styles.badge, { backgroundColor: item.statusColor }]}>
+              <Text style={[styles.badgeText, { color: item.statusTextColor }]}>
+                {item.status}
+              </Text>
+            </View>
+            {item.role !== '' && (
+              <Text style={styles.roleText}> • {item.role}</Text>
+            )}
+          </View>
+
+          <Text numberOfLines={1} style={styles.messageSnippet}>
+            {item.message}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  },
+);
 
 export default MessageItem;
 
@@ -59,7 +67,6 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: 100,
     backgroundColor: '#333',
-    objectFit: 'cover',
   },
   contentContainer: {
     flex: 1,
@@ -74,13 +81,13 @@ const styles = StyleSheet.create({
   nameText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 600,
+    fontWeight: '600',
     fontFamily: 'InterDisplayMedium',
   },
   timeText: {
     color: '#FFD900',
     fontSize: 13,
-    fontWeight: 500,
+    fontWeight: '500',
     fontFamily: 'InterDisplayMedium',
   },
   statusRow: {
@@ -94,26 +101,24 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#383119',
-    backgroundColor: '#383119',
   },
   badgeText: {
-    color: '#fff',
     fontSize: 14,
-    fontWeight: 400,
+    fontWeight: '400',
     fontFamily: 'InterDisplayRegular',
   },
   roleText: {
     color: '#fff',
     fontSize: 13,
     marginLeft: 4,
-    fontWeight: 400,
+    fontWeight: '400',
     fontFamily: 'InterDisplayRegular',
   },
   messageSnippet: {
     color: '#fff',
     fontSize: 14,
     marginTop: 12,
-    fontWeight: 400,
+    fontWeight: '400',
     fontFamily: 'InterDisplayRegular',
   },
 });

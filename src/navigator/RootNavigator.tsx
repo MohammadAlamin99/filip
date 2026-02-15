@@ -1,8 +1,9 @@
-
 import React from 'react';
-import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
 import { getAuth } from '@react-native-firebase/auth';
-
 
 import SplashScreen from '../screen/splash/SplashScreen';
 import LoginScreen from '../screen/login/LoginScreen';
@@ -39,7 +40,7 @@ export type RootStackParamList = {
   Seasonal: undefined;
   fulltime: undefined;
   chat: undefined;
-  ChatDetailScreen: undefined;
+  ChatDetailScreen: { chatId: string; otherUserId: string };
   credit: undefined;
   offer: undefined;
   language: undefined;
@@ -65,7 +66,10 @@ type PrivateScreenProps = {
   children: React.ReactNode;
 };
 
-const PrivateScreen: React.FC<PrivateScreenProps> = ({ navigation, children }) => {
+const PrivateScreen: React.FC<PrivateScreenProps> = ({
+  navigation,
+  children,
+}) => {
   const user = getAuth().currentUser;
 
   if (!user) {
@@ -77,7 +81,9 @@ const PrivateScreen: React.FC<PrivateScreenProps> = ({ navigation, children }) =
 };
 
 const withPrivate = <T extends object>(Screen: React.ComponentType<T>) => {
-  return (props: T & { navigation: NativeStackNavigationProp<RootStackParamList> }) => (
+  return (
+    props: T & { navigation: NativeStackNavigationProp<RootStackParamList> },
+  ) => (
     <PrivateScreen navigation={props.navigation}>
       <Screen {...props} />
     </PrivateScreen>
@@ -86,33 +92,64 @@ const withPrivate = <T extends object>(Screen: React.ComponentType<T>) => {
 
 const RootNavigator: React.FC = () => {
   return (
-    <Stack.Navigator initialRouteName="Splash" screenOptions={{ headerShown: false }}>
-      {/* Public screens */}
+    <Stack.Navigator
+      initialRouteName="Splash"
+      screenOptions={{ headerShown: false }}
+    >
       <Stack.Screen name="Splash" component={SplashScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="signup" component={SignUpScreen} />
 
-      {/* Private screens */}
       <Stack.Screen name="BottomTabs" component={withPrivate(BottomTabs)} />
-      <Stack.Screen name="membership" component={withPrivate(MemberShipScreen)} />
+      <Stack.Screen
+        name="membership"
+        component={withPrivate(MemberShipScreen)}
+      />
       <Stack.Screen name="purchase" component={withPrivate(PurchaseScreen)} />
       <Stack.Screen name="fulltime" component={withPrivate(ChatScreen)} />
       <Stack.Screen name="chat" component={withPrivate(ChatScreen)} />
-      <Stack.Screen name="ChatDetailScreen" component={withPrivate(ChatDetailScreen)} />
+      <Stack.Screen
+        name="ChatDetailScreen"
+        component={withPrivate(ChatDetailScreen)}
+      />
       <Stack.Screen name="credit" component={withPrivate(CreditsScreen)} />
       <Stack.Screen name="offer" component={withPrivate(OfferScreen)} />
       <Stack.Screen name="language" component={withPrivate(LanguageScreen)} />
-      <Stack.Screen name="engagement" component={withPrivate(EngagementScreen)} />
-      <Stack.Screen name="notification" component={withPrivate(NotificationScreen)} />
-      <Stack.Screen name="HelpSupport" component={withPrivate(HelpSupportScreen)} />
-      <Stack.Screen name="TermsConditions" component={withPrivate(TermsConditionsScreen)} />
+      <Stack.Screen
+        name="engagement"
+        component={withPrivate(EngagementScreen)}
+      />
+      <Stack.Screen
+        name="notification"
+        component={withPrivate(NotificationScreen)}
+      />
+      <Stack.Screen
+        name="HelpSupport"
+        component={withPrivate(HelpSupportScreen)}
+      />
+      <Stack.Screen
+        name="TermsConditions"
+        component={withPrivate(TermsConditionsScreen)}
+      />
       <Stack.Screen name="sendoffer" component={withPrivate(SendOfferScreen)} />
       <Stack.Screen name="referral" component={withPrivate(ReferralScreen)} />
       <Stack.Screen name="profile" component={withPrivate(SettingScreen)} />
-      <Stack.Screen name="viewProfile" component={withPrivate(ViewProfileScreen)} />
-      <Stack.Screen name="postAvailabilites" component={withPrivate(PostedAvailabilitiesScreen)} />
-      <Stack.Screen name="SeosonalAvailabilityCreation" component={withPrivate(SeosonalAvailabilityCreation)} />
-      <Stack.Screen name="FullTimeAvailabilityCreation" component={withPrivate(FullTimeAvailabilityCreation)} />
+      <Stack.Screen
+        name="viewProfile"
+        component={withPrivate(ViewProfileScreen)}
+      />
+      <Stack.Screen
+        name="postAvailabilites"
+        component={withPrivate(PostedAvailabilitiesScreen)}
+      />
+      <Stack.Screen
+        name="SeosonalAvailabilityCreation"
+        component={withPrivate(SeosonalAvailabilityCreation)}
+      />
+      <Stack.Screen
+        name="FullTimeAvailabilityCreation"
+        component={withPrivate(FullTimeAvailabilityCreation)}
+      />
       <Stack.Screen name="GetProfile" component={withPrivate(MainProfile)} />
       <Stack.Screen name="role" component={withPrivate(RoleScreen)} />
     </Stack.Navigator>

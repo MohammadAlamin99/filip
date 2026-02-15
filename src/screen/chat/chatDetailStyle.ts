@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#111' },
 
-  // Header
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -27,17 +26,16 @@ export const styles = StyleSheet.create({
   headerName: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: 500,
+    fontWeight: '500',
     fontFamily: 'InterDisplayMedium',
   },
   headerStatus: {
     color: '#FDE68A',
     fontSize: 12,
     fontFamily: 'InterDisplayMedium',
-    fontWeight: 500,
+    fontWeight: '500',
   },
 
-  // Shift Card
   shiftCard: {
     flexDirection: 'row',
     backgroundColor: '#1D1D1D',
@@ -61,7 +59,7 @@ export const styles = StyleSheet.create({
   shiftDetails: { flex: 1, marginLeft: 12 },
   shiftTitle: {
     color: '#fff',
-    fontWeight: 500,
+    fontWeight: '500',
     fontFamily: 'InterDisplayMedium',
     fontSize: 16,
   },
@@ -69,12 +67,11 @@ export const styles = StyleSheet.create({
     color: '#F5F5F5',
     fontSize: 12,
     marginTop: 2,
-    fontWeight: 400,
+    fontWeight: '400',
     fontFamily: 'InterDisplayMedium',
     opacity: 0.7,
   },
 
-  // Messages
   listContent: { padding: 16 },
   centeredInfo: { alignItems: 'center', marginBottom: 20 },
   dateSeparator: {
@@ -82,14 +79,14 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     marginBottom: 8,
     fontFamily: 'InterDisplayRegular',
-    fontWeight: 400,
+    fontWeight: '400',
   },
   matchText: {
     color: '#fff',
     fontSize: 12,
     textAlign: 'center',
     fontFamily: 'InterDisplayRegular',
-    fontWeight: 400,
+    fontWeight: '400',
     maxWidth: 210,
   },
 
@@ -100,7 +97,7 @@ export const styles = StyleSheet.create({
     marginLeft: 50,
     marginBottom: 8,
     fontFamily: 'InterDisplayRegular',
-    fontWeight: 400,
+    fontWeight: '400',
     opacity: 0.8,
   },
   otherMessageRow: { flexDirection: 'row', alignItems: 'flex-end' },
@@ -126,18 +123,17 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     fontFamily: 'InterDisplayRegular',
-    fontWeight: 400,
+    fontWeight: '400',
   },
   timeText: {
     color: '#F5F5F5',
     fontSize: 12,
     marginTop: 4,
     fontFamily: 'InterDisplayRegular',
-    fontWeight: 400,
+    fontWeight: '400',
     opacity: 0.82,
   },
 
-  // Input
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -171,5 +167,35 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     borderColor: '#FDE68A',
     borderWidth: 1,
+  },
+  jobCardMe: {
+    backgroundColor: '#FFD900',
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 4,
+    maxWidth: '80%',
+    alignSelf: 'flex-end',
+  },
+  jobCardOther: {
+    backgroundColor: '#2A2A2A',
+    borderRadius: 12,
+    padding: 12,
+    maxWidth: '80%',
+  },
+  jobTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1F2937',
+    marginBottom: 8,
+  },
+  jobRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+    gap: 6,
+  },
+  jobDetail: {
+    fontSize: 13,
+    color: '#666',
   },
 });
