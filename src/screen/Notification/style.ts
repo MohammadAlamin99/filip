@@ -139,7 +139,6 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
     fontFamily: 'InterDisplayRegular',
     textAlign: 'center',
-    marginTop: 40,
   },
 });
 

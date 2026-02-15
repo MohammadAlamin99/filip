@@ -119,7 +119,9 @@ const SettingScreen = () => {
         <View style={styles.profileSection}>
           <Image
             source={{
-              uri: user?.profile?.photo || '',
+              uri:
+                user?.profile?.photo ||
+                'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1906669723.jpg',
             }}
             style={styles.profileImage}
           />

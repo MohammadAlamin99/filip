@@ -122,6 +122,7 @@
 // };
 
 // export default FeedCard;
+
 import React, { useMemo } from 'react';
 import {
   Text,
@@ -139,7 +140,6 @@ import { Feedtype } from '../../@types/Feed.type';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { addToWishlist, removeFromWishlist } from '../../services/wishlist';
 
-
 type Props = {
   item: Feedtype;
   wishlistIds: string[];
@@ -149,7 +149,7 @@ const FeedCard = ({ item, wishlistIds }: Props) => {
   const navigation = useNavigation<any>();
   const queryClient = useQueryClient();
 
-  /* ---------------- CHECK IF LIKED ---------------- */
+  //  CHECK IF LIKED
   const liked = useMemo(() => {
     return wishlistIds.includes(item.id);
   }, [wishlistIds, item.id]);
@@ -165,7 +165,7 @@ const FeedCard = ({ item, wishlistIds }: Props) => {
     });
   };
 
-  /* ---------------- TOGGLE WISHLIST MUTATION ---------------- */
+  //  TOGGLE WISHLIST MUTATION
   const wishlistMutation = useMutation({
     mutationFn: async () => {
       if (liked) {
@@ -186,7 +186,7 @@ const FeedCard = ({ item, wishlistIds }: Props) => {
     wishlistMutation.mutate();
   };
 
-  /* ---------------- SAFE LOCATION TEXT ---------------- */
+  // location
   const locationText = Array.isArray(item.location)
     ? item.location.join(', ')
     : item.location;
@@ -195,9 +195,7 @@ const FeedCard = ({ item, wishlistIds }: Props) => {
     <View key={item.id} style={styles.recCard}>
       <ImageBackground
         source={{
-          uri:
-            item?.bannerImage ||
-            'https://dummyimage.com/600x400/000/fff&text=No+Image',
+          uri: item?.bannerImage || 'n/a',
         }}
         style={styles.cardImage}
       >
@@ -227,7 +225,7 @@ const FeedCard = ({ item, wishlistIds }: Props) => {
               source={{
                 uri:
                   item?.user?.photo ||
-                  'https://dummyimage.com/100x100/000/fff&text=User',
+                  'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1906669723.jpg',
               }}
             />
           </View>
@@ -269,8 +267,8 @@ const FeedCard = ({ item, wishlistIds }: Props) => {
             <Text style={styles.availValue}>
               {item?.schedule?.start && item?.schedule?.end
                 ? `${formatDate(item.schedule.start)} - ${formatDate(
-                  item.schedule.end,
-                )}`
+                    item.schedule.end,
+                  )}`
                 : 'Date not available'}
             </Text>
 

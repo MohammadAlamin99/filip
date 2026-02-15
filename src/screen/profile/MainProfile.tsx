@@ -147,7 +147,10 @@ const MainProfile: React.FC = () => {
               <View style={styles.avatar}>
                 <Image
                   source={{
-                    uri: photo || user?.profile?.photo || 'n/a',
+                    uri:
+                      photo ||
+                      user?.profile?.photo ||
+                      'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1906669723.jpg',
                   }}
                   style={styles.avatarImage}
                 />

@@ -1,4 +1,3 @@
-
 // import {
 //   Bookmark,
 //   MapPin,
@@ -257,13 +256,7 @@ import {
   PlusCircleIcon,
 } from 'lucide-react-native';
 
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import { View, Text, ScrollView, Image, TouchableOpacity } from 'react-native';
 
 import React, { useEffect, useState } from 'react';
 import styles from '../../screen/feed/style';
@@ -308,7 +301,7 @@ const MainDrawer = () => {
   const profilePhoto =
     userData?.profile?.photo ||
     firebaseUser?.photoURL ||
-    'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png';
+    'https://www.shutterstock.com/image-vector/default-avatar-profile-icon-social-600nw-1906669723.jpg';
 
   const profileName =
     userData?.profile?.name ||
@@ -408,7 +401,9 @@ const MainDrawer = () => {
 
               <View>
                 <Text style={styles.menuText}>My Posted Availability</Text>
-                <Text style={styles.menuSubtext}>Post & See Availabilities</Text>
+                <Text style={styles.menuSubtext}>
+                  Post & See Availabilities
+                </Text>
               </View>
             </View>
 
